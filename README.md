@@ -35,4 +35,5 @@ The following are optional user stories:
   * [ ] These quip's are not necessarily from friends/contacts so to allow a quip to appear in these feeds, it must be posted using the 'public' view level.
   * [ ] Popular quip's are ones that are liked the most.
 
-
+## Wireframes
+The wireframes PDF can be found [here](docs/wireframes.pdf).
