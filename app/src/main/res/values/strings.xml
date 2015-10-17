@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">QuipIt</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="login_with_facebook">Login with Facebook</string>
+
+    <string name="action_new_quip">New Quip</string>
+    <string name="action_new_circle">New Circle</string>
 </resources>
