@@ -1,9 +1,12 @@
 package it.quip.android.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class User {
+public class User implements Parcelable {
 
     private long uid;
     private long facebookId;
@@ -48,4 +51,38 @@ public class User {
         return user;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.uid);
+        dest.writeLong(this.facebookId);
+        dest.writeString(this.firstName);
+        dest.writeString(this.lastName);
+        dest.writeString(this.email);
+    }
+
+    public User() {
+    }
+
+    private User(Parcel in) {
+        this.uid = in.readLong();
+        this.facebookId = in.readLong();
+        this.firstName = in.readString();
+        this.lastName = in.readString();
+        this.email = in.readString();
+    }
+
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+        public User createFromParcel(Parcel source) {
+            return new User(source);
+        }
+
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 }

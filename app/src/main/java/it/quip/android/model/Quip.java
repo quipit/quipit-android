@@ -1,5 +1,8 @@
 package it.quip.android.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -7,7 +10,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Quip {
+public class Quip implements Parcelable {
 
     private long uid;
     private String text;
@@ -74,4 +77,38 @@ public class Quip {
         return quips;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.uid);
+        dest.writeString(this.text);
+        dest.writeLong(this.sourceId);
+        dest.writeString(this.sourceName);
+        dest.writeParcelable(this.circle, flags);
+    }
+
+    public Quip() {
+    }
+
+    private Quip(Parcel in) {
+        this.uid = in.readLong();
+        this.text = in.readString();
+        this.sourceId = in.readLong();
+        this.sourceName = in.readString();
+        this.circle = in.readParcelable(Circle.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Quip> CREATOR = new Parcelable.Creator<Quip>() {
+        public Quip createFromParcel(Parcel source) {
+            return new Quip(source);
+        }
+
+        public Quip[] newArray(int size) {
+            return new Quip[size];
+        }
+    };
 }

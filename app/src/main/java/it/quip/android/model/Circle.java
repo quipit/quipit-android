@@ -1,5 +1,8 @@
 package it.quip.android.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -7,7 +10,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Circle {
+public class Circle implements Parcelable {
 
     private long uid;
     private String name;
@@ -62,4 +65,35 @@ public class Circle {
         return circles;
 
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.uid);
+        dest.writeString(this.name);
+        dest.writeTypedList(quips);
+    }
+
+    public Circle() {
+    }
+
+    private Circle(Parcel in) {
+        this.uid = in.readLong();
+        this.name = in.readString();
+        in.readTypedList(quips, Quip.CREATOR);
+    }
+
+    public static final Parcelable.Creator<Circle> CREATOR = new Parcelable.Creator<Circle>() {
+        public Circle createFromParcel(Parcel source) {
+            return new Circle(source);
+        }
+
+        public Circle[] newArray(int size) {
+            return new Circle[size];
+        }
+    };
 }
