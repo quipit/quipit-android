@@ -16,6 +16,7 @@
         android:name="it.quip.android.permission.C2D_MESSAGE" />
     <uses-permission android:name="it.quip.android.permission.C2D_MESSAGE" />
     <application
+        android:name=".QuipitApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -29,7 +30,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".actvitiy.QuipitHomeActivity" >
+        <activity
+            android:name=".actvitiy.QuipitHomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <service android:name="com.parse.PushService" />
         <receiver android:name="com.parse.ParsePushBroadcastReceiver"
