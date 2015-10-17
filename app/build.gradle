@@ -26,4 +26,8 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     // Android Async Http for sending async network requests
     compile 'com.loopj.android:android-async-http:1.4.8'
+    dependencies {
+        compile 'com.parse.bolts:bolts-android:1.+'
+        compile 'com.parse:parse-android:1.+'
+    }
 }
