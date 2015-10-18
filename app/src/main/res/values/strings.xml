@@ -12,4 +12,8 @@
     <string name="action_new_circle">New Circle</string>
     <string name="notifications">Notifications</string>
     <string name="circles">Circles</string>
+
+
+    <!-- Fragment Titles -->
+    <string name="NOTIFICATION_FRAGMENT_TITLE">Notifications</string>
 </resources>
