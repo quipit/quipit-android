@@ -5,6 +5,11 @@
 
     <string name="login_with_facebook">Login with Facebook</string>
 
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
     <string name="action_new_quip">New Quip</string>
     <string name="action_new_circle">New Circle</string>
+    <string name="notifications">Notifications</string>
+    <string name="circles">Circles</string>
 </resources>
