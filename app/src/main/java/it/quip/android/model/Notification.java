@@ -104,7 +104,7 @@ public class Notification implements Parcelable {
                 "<b>Edgard Juarez</b> just quipped in circle <b><i>@darkness</i></b>",
                 "http://laaficion.milenio.com/beisbol/Toros_MILIMA20140326_0343_11.jpg",
                 1445205839,
-                false
+                true
         ));
 
         return stubs;

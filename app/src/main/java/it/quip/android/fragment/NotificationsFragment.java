@@ -11,13 +11,18 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
 import it.quip.android.adapter.NotificationAdapter;
+import it.quip.android.adapter.NotificationHandler;
+import it.quip.android.model.Circle;
 import it.quip.android.model.Notification;
+import it.quip.android.model.Quip;
+import it.quip.android.model.User;
 
-public class NotificationsFragment extends BaseFragment {
+public class NotificationsFragment extends BaseFragment implements NotificationHandler {
 
     private View mView;
     private SwipeRefreshLayout swipeContainer;
@@ -42,7 +47,7 @@ public class NotificationsFragment extends BaseFragment {
     private void attachNotificationAdapter(View view) {
         rvContacts = (RecyclerView) view.findViewById(R.id.rvNotifications);
         // Create adapter passing in the sample user data
-        notificationAdapter= new NotificationAdapter(Notification.getNotifcations(0));
+        notificationAdapter= new NotificationAdapter(Notification.getNotifcations(0), this, this.getContext());
         // Attach the adapter to the recyclerview to populate items
         rvContacts.setAdapter(notificationAdapter);
         // Set layout manager to position the items
@@ -77,5 +82,30 @@ public class NotificationsFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onClickNotificationUser(User selectedUser) {
+        // TODO: Sprint 2 hookups
+        Toast.makeText(this.getContext(), selectedUser.getFirstName(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onClickNotificationCircle(Circle selectedCircle) {
+        // TODO: sprint 2 hookups
+        Toast.makeText(this.getContext(), selectedCircle.getName(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onClickNotificationQuip(Quip selectedQuip) {
+        // TODO: sprint 2 hookups
+        Toast.makeText(this.getContext(), selectedQuip.getText(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onClickNotification(int position, Notification selectedNotification) {
+        // TODO: sprint 2 hookups
+        Toast.makeText(this.getContext(), selectedNotification.getText(), Toast.LENGTH_LONG).show();
+
     }
 }

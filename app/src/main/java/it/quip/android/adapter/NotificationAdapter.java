@@ -1,89 +1,119 @@
 package it.quip.android.adapter;
-
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import it.quip.android.R;
 import it.quip.android.model.Notification;
+import it.quip.android.model.User;
+import it.quip.android.view.NotificationBaseViewHolder;
 
 /**
  * Created by danbuscaglia on 10/18/15.
  */
-public class NotificationAdapter extends
-        RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
+public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView headLineText;
-        public TextView timestampText;
-        public ImageView notificationImage;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            // "its the ... u know... viewholer pattern...anyone else wanna take a stab at this?"
-            headLineText = (TextView) itemView.findViewById(R.id.tvNotificationHeadline);
-            timestampText = (TextView) itemView.findViewById(R.id.tvNotificationTimestamp);
-            notificationImage = (ImageView) itemView.findViewById(R.id.ivNotificationImage);
-        }
-
-    }
+    private final int UNREAD = 0, READ = 1;  // State
 
     // Store a member variable for the notifications
     private List<Notification> mNotifications;
+    // Handler to call back when events happen
+    private NotificationHandler mHandler;
+    // Context at which to act upon
+    private Context mContext;
 
     // Pass in the contact array into the constructor
-    public NotificationAdapter(List<Notification> notifications) {
+    public NotificationAdapter(List<Notification> notifications, NotificationHandler handler, Context context) {
         mNotifications = notifications;
+        mHandler = handler;
+        mContext = context;
 
     }
+
+    public List<Notification> getItems() {
+        return mNotifications;
+    }
+
+    // Return the size of your dataset (invoked by the layout manager)
     @Override
-    public NotificationAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
+    public int getItemCount() {
+        return this.mNotifications.size();
+    }
 
-        // Inflate the notification layout
-        View notificationView = inflater.inflate(R.layout.layout_navigation_card_unread,
-                                                 parent,
-                                                 false);
+    //Returns the view type of the item at position for the purposes of view recycling.
+    @Override
+    public int getItemViewType(int position) {
+        if (mNotifications.get(position).isViewed()) {
+            return READ;
+        } else {
+            return UNREAD;
+        }
+    }
 
-        // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(notificationView);
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        RecyclerView.ViewHolder viewHolder;
+        LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
+
+        switch (viewType) {
+            case READ:
+                View v1 = inflater.inflate(R.layout.layout_navigation_card_read, viewGroup, false);
+                viewHolder = new NotificationBaseViewHolder(v1, mHandler, this);
+                break;
+            case UNREAD:
+                View v2 = inflater.inflate(R.layout.layout_navigation_card_unread, viewGroup, false);
+                viewHolder = new NotificationBaseViewHolder(v2, mHandler, this);
+                break;
+            default:
+                View v3 = inflater.inflate(R.layout.layout_navigation_card_unread, viewGroup, false);
+                viewHolder = new NotificationBaseViewHolder(v3, mHandler, this);
+                break;
+        }
         return viewHolder;
     }
 
-    // Involves populating data into the item through holder
     @Override
-    public void onBindViewHolder(NotificationAdapter.ViewHolder viewHolder, int position) {
-        // Get the data model based on position
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        switch (viewHolder.getItemViewType()) {
+            case READ:
+                NotificationBaseViewHolder vh1 = (NotificationBaseViewHolder) viewHolder;
+                configureViewHolder(vh1, position);
+                break;
+            case UNREAD:
+                NotificationBaseViewHolder vh2 = (NotificationBaseViewHolder) viewHolder;
+                configureViewHolder(vh2, position);
+                break;
+            default:
+                NotificationBaseViewHolder vh3 = (NotificationBaseViewHolder) viewHolder;
+                configureViewHolder(vh3, position);
+                break;
+        }
+    }
+
+    public void configureViewHolder(NotificationBaseViewHolder vh, int position) {
+        /**
+         * Right now, both notifications style mostly the same.  This is left in case
+         * during polishing we want to do anything unique.
+         */
         Notification notification = mNotifications.get(position);
+        vh.getHeadLineText().setText(Html.fromHtml(notification.getText()));
+        vh.getTimestampText().setText(notification.getTimestampString());
 
-        TextView headline = viewHolder.headLineText;
-        TextView timestamp = viewHolder.timestampText;
-        headline.setText(Html.fromHtml(notification.getText()));
-        //timestamp.setText(notification.getTimestampString());
-
-        if (notification.isViewed()) {
-            // TODO: multi view
-        }
-        else {
-            // TODO: multi view
-        }
-
-
+        vh.getNotificationImage().setImageResource(0);
+        // Lookup view for data population
+        Picasso.with(mContext)
+                .load(notification.getNotificationImageUrl())
+                .fit()
+                .into(vh.getNotificationImage());
 
     }
 
-    // Return the total count of items
-    @Override
-    public int getItemCount() {
-        return mNotifications.size();
-    }
+
 }
