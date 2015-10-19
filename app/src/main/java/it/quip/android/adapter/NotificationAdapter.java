@@ -5,15 +5,12 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import it.quip.android.R;
 import it.quip.android.model.Notification;
-import it.quip.android.model.User;
-import it.quip.android.view.NotificationBaseViewHolder;
 
 /**
  * Created by danbuscaglia on 10/18/15.
