@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView android:id="@+id/tv_name"
+    <TextView android:id="@+id/tvName"
         android:text="Jonathan Como"
         android:textSize="16sp"
         android:textColor="@android:color/black"

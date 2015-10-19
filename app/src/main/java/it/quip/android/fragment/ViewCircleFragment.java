@@ -48,7 +48,7 @@ public class ViewCircleFragment extends BaseFragment {
         // TODO: drop in the fragment for displaying quips
 
         getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fl_header, circleHeader)
+                .replace(R.id.flHeader, circleHeader)
                 .commit();
     }
 

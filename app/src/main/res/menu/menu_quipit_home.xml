@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".LoginActivity">
 
-    <item android:id="@+id/mi_new_quip"
-        android:title="@string/action_new_quip"
+    <item android:id="@+id/miNewQuip"
+        android:title="@string/actionNewQuip"
         android:icon="@drawable/ic_quip_new"
         android:orderInCategory="5"
         app:showAsAction="ifRoom" />
 
-    <item android:id="@+id/mi_new_circle"
-        android:title="@string/action_new_circle"
+    <item android:id="@+id/miNewCircle"
+        android:title="@string/actionNewCircle"
         android:icon="@drawable/ic_circle_new"
         android:orderInCategory="10"
         app:showAsAction="ifRoom" />

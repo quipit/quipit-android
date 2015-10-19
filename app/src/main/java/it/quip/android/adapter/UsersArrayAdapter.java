@@ -34,7 +34,7 @@ public class UsersArrayAdapter extends ArrayAdapter<User> {
                     .inflate(R.layout.item_user, parent, false);
 
             holder = new ViewHolder();
-            holder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
+            holder.tvName = (TextView) convertView.findViewById(R.id.tvName);
 
             convertView.setTag(holder);
         } else {

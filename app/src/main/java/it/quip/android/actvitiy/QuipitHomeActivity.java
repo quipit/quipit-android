@@ -55,7 +55,7 @@ public class QuipitHomeActivity extends AppCompatActivity {
         mDrawerToggle = setupDrawerToggle();
         dlDrawer.setDrawerListener(mDrawerToggle);
 
-        nvDrawer = (NavigationView) findViewById(R.id.nv_view);
+        nvDrawer = (NavigationView) findViewById(R.id.nvView);
         setupDrawerContent();
         updateSidebarMenu();
 
@@ -64,7 +64,7 @@ public class QuipitHomeActivity extends AppCompatActivity {
 
     private ActionBarDrawerToggle setupDrawerToggle() {
         return new ActionBarDrawerToggle(
-                this, dlDrawer, mToolbar, R.string.drawer_open, R.string.drawer_close);
+                this, dlDrawer, mToolbar, R.string.drawerOpen, R.string.drawerClose);
     }
 
     private void setupDrawerContent() {
@@ -78,7 +78,7 @@ public class QuipitHomeActivity extends AppCompatActivity {
     }
 
     private void updateSidebarMenu() {
-        Menu circlesSubMenu = nvDrawer.getMenu().findItem(R.id.nav_circles).getSubMenu();
+        Menu circlesSubMenu = nvDrawer.getMenu().findItem(R.id.navCircles).getSubMenu();
         circlesSubMenu.clear();
 
         for (Circle circle : user.getCircles()) {
@@ -91,7 +91,7 @@ public class QuipitHomeActivity extends AppCompatActivity {
 
         int itemId = menuItem.getItemId();
         switch (itemId) {
-            case R.id.nav_notifications:
+            case R.id.navNotifications:
                 fragment = new NotificationsFragment();
                 break;
             default:
@@ -120,7 +120,7 @@ public class QuipitHomeActivity extends AppCompatActivity {
 
     private FragmentTransaction prepareFragment(Fragment fragment, boolean addToBackStack) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fl_content, fragment);
+        ft.replace(R.id.flContent, fragment);
         if (addToBackStack) {
             ft.addToBackStack(null);
         }
@@ -145,7 +145,7 @@ public class QuipitHomeActivity extends AppCompatActivity {
             case android.R.id.home:
                 dlDrawer.openDrawer(GravityCompat.START);
                 return true;
-            case R.id.mi_new_circle:
+            case R.id.miNewCircle:
                 createCircle();
                 return true;
         }

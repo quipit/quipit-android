@@ -40,10 +40,10 @@ public class CircleHeaderFragment extends Fragment {
     }
 
     private void setupViews(View v) {
-        TextView tvName = (TextView) v.findViewById(R.id.tv_name);
+        TextView tvName = (TextView) v.findViewById(R.id.tvName);
         tvName.setText(circle.getName());
 
-        TextView tvQuipsters = (TextView) v.findViewById(R.id.tv_quipsters);
+        TextView tvQuipsters = (TextView) v.findViewById(R.id.tvQuipsters);
         tvQuipsters.setText(circle.getMembers().size() + " quipsters");
     }
 

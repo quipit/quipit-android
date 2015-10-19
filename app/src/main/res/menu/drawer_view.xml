@@ -3,14 +3,14 @@
 
     <group android:checkableBehavior="single">
 
-        <item android:id="@+id/nav_notifications"
+        <item android:id="@+id/navNotifications"
             android:icon="@drawable/ic_notification"
             android:title="@string/notifications" />
 
-        <item android:id="@+id/nav_circles"
+        <item android:id="@+id/navCircles"
             android:title="@string/circles">
 
-            <menu android:id="@+id/menu_circles">
+            <menu android:id="@+id/menuCircles">
                 <item android:title="#somethangs" />
                 <item android:title="SF crew" />
             </menu>

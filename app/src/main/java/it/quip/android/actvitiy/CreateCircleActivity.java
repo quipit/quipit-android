@@ -39,8 +39,8 @@ public class CreateCircleActivity extends AppCompatActivity {
         inviteFriendsFragment = InviteFriendsFragment.newInstance();
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fl_circle_info, createCircleFragment);
-        ft.replace(R.id.fl_circle_friends, inviteFriendsFragment);
+        ft.replace(R.id.flCircleInfo, createCircleFragment);
+        ft.replace(R.id.flCircleFriends, inviteFriendsFragment);
         ft.commit();
     }
 
@@ -53,7 +53,7 @@ public class CreateCircleActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.mi_create_circle:
+            case R.id.miCreateCircle:
                 createCircle();
                 return true;
         }

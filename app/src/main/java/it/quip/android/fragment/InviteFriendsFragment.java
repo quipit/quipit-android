@@ -43,9 +43,9 @@ public class InviteFriendsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_invite_friends, container, false);
 
-        etFriendName = (EditText) v.findViewById(R.id.et_friend_name);
+        etFriendName = (EditText) v.findViewById(R.id.etFriendName);
 
-        OverlayListView friendsOverlay = (OverlayListView) v.findViewById(R.id.overlay_friends);
+        OverlayListView friendsOverlay = (OverlayListView) v.findViewById(R.id.overlayFriends);
         friendsOverlay.setAdapter(aFilteredFriends);
         friendsOverlay.setOnItemSelectedListener(new OverlayListView.OnItemSelectedListener() {
             @Override
@@ -54,7 +54,7 @@ public class InviteFriendsFragment extends Fragment {
             }
         });
 
-        ListView lvInvitedFriends = (ListView) v.findViewById(R.id.lv_invited_friends);
+        ListView lvInvitedFriends = (ListView) v.findViewById(R.id.lvInvitedFriends);
         lvInvitedFriends.setAdapter(aInvitedFriends);
 
         setupFriendNameField();

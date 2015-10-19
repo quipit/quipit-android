@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="it.quip.android.actvitiy.CreateCircleActivity">
 
-    <FrameLayout android:id="@+id/fl_circle_info"
+    <FrameLayout android:id="@+id/flCircleInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -16,11 +16,11 @@
         android:layout_height="1dp" />
 
     <TextView
-        android:text="@string/label_members"
+        android:text="@string/labelMembers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <FrameLayout android:id="@+id/fl_circle_friends"
+    <FrameLayout android:id="@+id/flCircleFriends"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

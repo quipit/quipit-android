@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/mi_create_circle"
-        android:title="@string/action_create"
+    <item android:id="@+id/miCreateCircle"
+        android:title="@string/actionCreate"
         android:orderInCategory="5"
         app:showAsAction="ifRoom"/>
 
