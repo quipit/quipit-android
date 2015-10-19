@@ -2,20 +2,13 @@ package it.quip.android.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import it.quip.android.R;
-import it.quip.android.adapter.NotificationAdapter;
-import it.quip.android.adapter.NotificationHandler;
+import it.quip.android.interfaces.NotificationHandler;
 import it.quip.android.model.Notification;
-import it.quip.android.model.User;
 
-/**
- * Created by danbuscaglia on 10/18/15.
- */
 public class NotificationBaseViewHolder extends RecyclerView.ViewHolder {
 
     public TextView headLineText;

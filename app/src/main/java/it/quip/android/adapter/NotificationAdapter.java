@@ -5,28 +5,19 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.squareup.picasso.Picasso;
 import java.util.List;
-
 import it.quip.android.R;
+import it.quip.android.interfaces.NotificationHandler;
 import it.quip.android.model.Notification;
 
-/**
- * Created by danbuscaglia on 10/18/15.
- */
 public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final int UNREAD = 0, READ = 1;  // State
-
-    // Store a member variable for the notifications
+    private final int UNREAD = 0, READ = 1;
     private List<Notification> mNotifications;
-    // Handler to call back when events happen
     private NotificationHandler mHandler;
-    // Context at which to act upon
     private Context mContext;
 
-    // Pass in the contact array into the constructor
     public NotificationAdapter(List<Notification> notifications, NotificationHandler handler, Context context) {
         mNotifications = notifications;
         mHandler = handler;
@@ -38,13 +29,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return mNotifications;
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return this.mNotifications.size();
     }
 
-    //Returns the view type of the item at position for the purposes of view recycling.
     @Override
     public int getItemViewType(int position) {
         if (mNotifications.get(position).isViewed()) {
@@ -58,53 +47,52 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         RecyclerView.ViewHolder viewHolder;
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-
+        int layout;
         switch (viewType) {
             case READ:
-                View v1 = inflater.inflate(R.layout.layout_navigation_card_read, viewGroup, false);
-                viewHolder = new NotificationBaseViewHolder(v1, mHandler, this);
+                layout = R.layout.layout_navigation_card_read;
                 break;
             case UNREAD:
-                View v2 = inflater.inflate(R.layout.layout_navigation_card_unread, viewGroup, false);
-                viewHolder = new NotificationBaseViewHolder(v2, mHandler, this);
+                layout = R.layout.layout_navigation_card_unread;
                 break;
             default:
-                View v3 = inflater.inflate(R.layout.layout_navigation_card_unread, viewGroup, false);
-                viewHolder = new NotificationBaseViewHolder(v3, mHandler, this);
+                layout = R.layout.layout_navigation_card_read;
                 break;
         }
+
+        View v1 = inflater.inflate(layout, viewGroup, false);
+        viewHolder = new NotificationBaseViewHolder(v1, mHandler, this);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        NotificationBaseViewHolder vh;
         switch (viewHolder.getItemViewType()) {
             case READ:
-                NotificationBaseViewHolder vh1 = (NotificationBaseViewHolder) viewHolder;
-                configureViewHolder(vh1, position);
+                vh = (NotificationBaseViewHolder) viewHolder;
                 break;
             case UNREAD:
-                NotificationBaseViewHolder vh2 = (NotificationBaseViewHolder) viewHolder;
-                configureViewHolder(vh2, position);
+                vh = (NotificationBaseViewHolder) viewHolder;
                 break;
             default:
-                NotificationBaseViewHolder vh3 = (NotificationBaseViewHolder) viewHolder;
-                configureViewHolder(vh3, position);
+                vh = (NotificationBaseViewHolder) viewHolder;
                 break;
         }
+        configureViewHolder(vh, position);
     }
 
     public void configureViewHolder(NotificationBaseViewHolder vh, int position) {
         /**
          * Right now, both notifications style mostly the same.  This is left in case
          * during polishing we want to do anything unique.
+         *
+         * TODO: style the different views
          */
         Notification notification = mNotifications.get(position);
         vh.getHeadLineText().setText(Html.fromHtml(notification.getText()));
         vh.getTimestampText().setText(notification.getTimestampString());
-
         vh.getNotificationImage().setImageResource(0);
-        // Lookup view for data population
         Picasso.with(mContext)
                 .load(notification.getNotificationImageUrl())
                 .fit()

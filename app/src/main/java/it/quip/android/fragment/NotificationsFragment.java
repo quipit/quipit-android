@@ -6,17 +6,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
-import it.quip.android.QuipitApplication;
 import it.quip.android.R;
 import it.quip.android.adapter.NotificationAdapter;
-import it.quip.android.adapter.NotificationHandler;
+import it.quip.android.interfaces.NotificationHandler;
 import it.quip.android.model.Circle;
 import it.quip.android.model.Notification;
 import it.quip.android.model.Quip;
@@ -25,9 +21,9 @@ import it.quip.android.model.User;
 public class NotificationsFragment extends BaseFragment implements NotificationHandler {
 
     private View mView;
-    private SwipeRefreshLayout swipeContainer;
-    private NotificationAdapter notificationAdapter;
-    private RecyclerView rvContacts;
+    private SwipeRefreshLayout mSwipeContainer;
+    private NotificationAdapter mNotificationAdapter;
+    private RecyclerView mRvContacts;
 
     @Override
     public CharSequence getTitle() {
@@ -45,27 +41,22 @@ public class NotificationsFragment extends BaseFragment implements NotificationH
     }
 
     private void attachNotificationAdapter(View view) {
-        rvContacts = (RecyclerView) view.findViewById(R.id.rvNotifications);
-        // Create adapter passing in the sample user data
-        notificationAdapter= new NotificationAdapter(Notification.getNotifcations(0), this, this.getContext());
-        // Attach the adapter to the recyclerview to populate items
-        rvContacts.setAdapter(notificationAdapter);
-        // Set layout manager to position the items
-        rvContacts.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        rvContacts.setHasFixedSize(true);
+        mRvContacts = (RecyclerView) view.findViewById(R.id.rvNotifications);
+        mNotificationAdapter = new NotificationAdapter(Notification.getNotifcations(0), this, this.getContext());
+        mRvContacts.setAdapter(mNotificationAdapter);
+        mRvContacts.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+        mRvContacts.setHasFixedSize(true);
     }
 
     private void attachSwipeContainer(View view) {
-        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.scNotificationSwipeContainer);
-        // Setup refresh listener which triggers new data loading
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSwipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.scNotificationSwipeContainer);
+        mSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refreshNotifications();
             }
         });
-        // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(
+        mSwipeContainer.setColorSchemeResources(
                 // TODO: theme this
                 android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
@@ -75,8 +66,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationH
 
     public void refreshNotifications() {
         // TODO: implement
-
-        swipeContainer.setRefreshing(false);
+        mSwipeContainer.setRefreshing(false);
     }
 
     @Override

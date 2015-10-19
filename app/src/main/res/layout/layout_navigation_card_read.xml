@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <!-- Each notification is a card -->
+    <!-- Each notification is a card  TODO: we might end up not using a cardview -->
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -12,7 +12,9 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <!-- Inside the notification card -->
+            <!-- Inside the notification card
+             TODO: style the image view
+             -->
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"

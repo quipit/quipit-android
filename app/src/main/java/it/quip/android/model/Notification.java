@@ -81,14 +81,16 @@ public class Notification implements Parcelable {
         public Notification createFromParcel(Parcel source) {
             return new Notification(source);
         }
-
         public Notification[] newArray(int size) {
             return new Notification[size];
         }
     };
 
     public static List<Notification> getNotifcations(int page) {
-        // perform query, for now use stub data
+        /**
+         * Getting the notifications by page needs to be done in some helper or client
+         * TODO: implement this in sprint 2
+         */
 
         List<Notification> stubs = new ArrayList<>();
 
