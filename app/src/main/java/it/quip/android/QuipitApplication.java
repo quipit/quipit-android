@@ -5,6 +5,9 @@ import android.app.Application;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 
+import it.quip.android.model.User;
+import it.quip.android.util.MockUtils;
+
 public class QuipitApplication extends Application {
 
     @Override
@@ -19,6 +22,10 @@ public class QuipitApplication extends Application {
 
     public String stringRes(int resId) {
         return getResources().getString(resId);
+    }
+
+    public static User getCurrentUser() {
+        return MockUtils.getUsers().get(0);
     }
 
 }

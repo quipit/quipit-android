@@ -3,16 +3,20 @@ package it.quip.android.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class User implements Parcelable {
 
     private long uid;
     private long facebookId;
-    private String firstName;
-    private String lastName;
+    private String name;
     private String email;
+    private List<Circle> circles = new ArrayList<>();
 
     public long getUid() {
         return uid;
@@ -22,16 +26,30 @@ public class User implements Parcelable {
         return facebookId;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
+    public String getName() {
+        return name;
     }
 
     public String getEmail() {
         return email;
+    }
+
+    public List<Circle> getCircles() {
+        return circles;
+    }
+
+    public Circle getCircle(long circleId) {
+        for (Circle circle : circles) {
+            if (circle.getUid() == circleId) {
+                return circle;
+            }
+        }
+
+        return null;
+    }
+
+    public void addCircle(Circle circle) {
+        circles.add(circle);
     }
 
     public static User fromJSON(JSONObject userJson) {
@@ -39,16 +57,43 @@ public class User implements Parcelable {
         
         try {
             user.uid = userJson.getLong("id");
-            user.facebookId = userJson.getLong("facebook_id");
-            user.firstName = userJson.getString("first_name");
-            user.lastName = userJson.getString("last_name");
+            user.facebookId = userJson.optLong("facebook_id", -1);
+            user.name = userJson.getString("name");
             user.email = userJson.getString("email");
+
+            JSONArray circlesJson = userJson.optJSONArray("circles");
+            if (circlesJson != null) {
+                user.circles = Circle.fromJSONArray(circlesJson);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
         }
 
         return user;
+    }
+
+    public static List<User> fromJSONArray(JSONArray circlesJson) {
+        List<User> users = new ArrayList<>();
+
+        for (int i = 0; i < circlesJson.length(); i++) {
+
+            User user;
+            try {
+                JSONObject quipJson = circlesJson.getJSONObject(i);
+                user = User.fromJSON(quipJson);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                continue;
+            }
+
+            if (user != null) {
+                users.add(user);
+            }
+        }
+
+        return users;
+
     }
 
     @Override
@@ -60,8 +105,7 @@ public class User implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(this.uid);
         dest.writeLong(this.facebookId);
-        dest.writeString(this.firstName);
-        dest.writeString(this.lastName);
+        dest.writeString(this.name);
         dest.writeString(this.email);
     }
 
@@ -71,8 +115,7 @@ public class User implements Parcelable {
     private User(Parcel in) {
         this.uid = in.readLong();
         this.facebookId = in.readLong();
-        this.firstName = in.readString();
-        this.lastName = in.readString();
+        this.name = in.readString();
         this.email = in.readString();
     }
 

@@ -27,7 +27,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationH
 
     @Override
     public CharSequence getTitle() {
-        return stringRes(R.string.NOTIFICATION_FRAGMENT_TITLE);
+        return stringRes(R.string.title_notifications);
     }
 
 
