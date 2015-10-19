@@ -27,7 +27,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationH
 
     @Override
     public CharSequence getTitle() {
-        return stringRes(R.string.NOTIFICATION_FRAGMENT_TITLE);
+        return stringRes(R.string.titleNotifications);
     }
 
 
@@ -77,7 +77,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationH
     @Override
     public void onClickNotificationUser(User selectedUser) {
         // TODO: Sprint 2 hookups
-        Toast.makeText(this.getContext(), selectedUser.getFirstName(), Toast.LENGTH_LONG).show();
+        Toast.makeText(this.getContext(), selectedUser.getName(), Toast.LENGTH_LONG).show();
     }
 
     @Override

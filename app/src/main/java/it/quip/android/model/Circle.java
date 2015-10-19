@@ -14,7 +14,7 @@ public class Circle implements Parcelable {
 
     private long uid;
     private String name;
-    private List<Quip> quips;
+    private List<User> members = new ArrayList<>();
 
     public long getUid() {
         return uid;
@@ -24,8 +24,12 @@ public class Circle implements Parcelable {
         return name;
     }
 
-    public List<Quip> getQuips() {
-        return quips;
+    public List<User> getMembers() {
+        return members;
+    }
+
+    public void addMember(User member) {
+        members.add(member);
     }
 
     public static Circle fromJSON(JSONObject circleJson) {
@@ -34,7 +38,7 @@ public class Circle implements Parcelable {
         try {
             circle.uid = circleJson.getLong("id");
             circle.name = circleJson.getString("name");
-            circle.quips = Quip.fromJSONArray(circleJson.getJSONArray("quips"));
+            circle.members = User.fromJSONArray(circleJson.getJSONArray("members"));
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
@@ -75,7 +79,7 @@ public class Circle implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(this.uid);
         dest.writeString(this.name);
-        dest.writeTypedList(quips);
+        dest.writeTypedList(members);
     }
 
     public Circle() {
@@ -84,7 +88,7 @@ public class Circle implements Parcelable {
     private Circle(Parcel in) {
         this.uid = in.readLong();
         this.name = in.readString();
-        in.readTypedList(quips, Quip.CREATOR);
+        in.readTypedList(members, User.CREATOR);
     }
 
     public static final Parcelable.Creator<Circle> CREATOR = new Parcelable.Creator<Circle>() {
