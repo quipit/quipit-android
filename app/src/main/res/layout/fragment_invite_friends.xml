@@ -5,28 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText android:id="@+id/etFriendName"
-        android:hint="@string/hintFriendName"
+    <EditText android:id="@+id/et_friend_name"
+        android:hint="@string/hint_friend_name"
         android:singleLine="true"
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <it.quip.android.view.OverlayListView
-        android:id="@+id/overlayFriends"
+        android:id="@+id/overlay_friends"
         android:background="@android:color/white"
         custom:maxItems="5"
         android:layout_marginLeft="30dp"
         android:layout_marginStart="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginEnd="30dp"
-        android:layout_below="@id/etFriendName"
+        android:layout_below="@id/et_friend_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ListView android:id="@+id/lvInvitedFriends"
+    <ListView android:id="@+id/lv_invited_friends"
         android:layout_alignParentBottom="true"
-        android:layout_below="@id/etFriendName"
+        android:layout_below="@id/et_friend_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

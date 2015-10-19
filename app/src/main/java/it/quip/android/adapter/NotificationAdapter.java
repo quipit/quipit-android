@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import com.squareup.picasso.Picasso;
 import java.util.List;
 import it.quip.android.R;
-import it.quip.android.interfaces.NotificationHandler;
+import it.quip.android.partials.NotificationHandler;
 import it.quip.android.model.Notification;
 
 public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

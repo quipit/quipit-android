@@ -5,13 +5,13 @@
     tools:context=".LoginActivity">
 
     <item android:id="@+id/miNewQuip"
-        android:title="@string/actionNewQuip"
+        android:title="@string/action_new_quip"
         android:icon="@drawable/ic_quip_new"
         android:orderInCategory="5"
         app:showAsAction="ifRoom" />
 
     <item android:id="@+id/miNewCircle"
-        android:title="@string/actionNewCircle"
+        android:title="@string/action_new_circle"
         android:icon="@drawable/ic_circle_new"
         android:orderInCategory="10"
         app:showAsAction="ifRoom" />

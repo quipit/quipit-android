@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout android:id="@+id/flHeader"
+    <FrameLayout android:id="@+id/fl_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <FrameLayout android:id="@+id/flQuips"
-        android:layout_below="@id/flHeader"
+    <FrameLayout android:id="@+id/fl_quips"
+        android:layout_below="@id/fl_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

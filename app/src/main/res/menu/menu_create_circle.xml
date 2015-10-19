@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/miCreateCircle"
-        android:title="@string/actionCreate"
+        android:title="@string/action_create"
         android:orderInCategory="5"
         app:showAsAction="ifRoom"/>
 

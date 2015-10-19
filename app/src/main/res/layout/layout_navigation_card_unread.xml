@@ -6,7 +6,7 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/cvTweet"
+        android:id="@+id/cv_tweet"
         android:background="@color/notification_card_background_unread"
         >
         <RelativeLayout
@@ -19,7 +19,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/edgarjuarez"
-                android:id="@+id/ivNotificationImage"
+                android:id="@+id/iv_notification_image"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_centerVertical="true"
@@ -28,16 +28,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Edgar Juarez just quipped to the @thangs circle"
-                android:id="@+id/tvNotificationHeadline"
+                android:id="@+id/tv_notification_headline"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/ivNotificationImage"
-                android:layout_toEndOf="@+id/ivNotificationImage"
+                android:layout_toRightOf="@+id/iv_notification_image"
+                android:layout_toEndOf="@+id/iv_notification_image"
                 android:layout_margin="@dimen/small_margin"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2h"
-                android:id="@+id/tvNotificationTimestamp"
+                android:id="@+id/tv_notification_timestamp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:layout_margin="@dimen/small_margin" />
