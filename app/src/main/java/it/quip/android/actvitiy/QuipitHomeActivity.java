@@ -30,9 +30,9 @@ public class QuipitHomeActivity extends AppCompatActivity {
     private User user;
 
     private Toolbar mToolbar;
-    private DrawerLayout dlDrawer;
+    private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-    private NavigationView nvDrawer;
+    private NavigationView mNavDrawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +51,11 @@ public class QuipitHomeActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
-        dlDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = setupDrawerToggle();
-        dlDrawer.setDrawerListener(mDrawerToggle);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        nvDrawer = (NavigationView) findViewById(R.id.nvView);
+        mNavDrawer = (NavigationView) findViewById(R.id.nvView);
         setupDrawerContent();
         updateSidebarMenu();
 
@@ -64,11 +64,11 @@ public class QuipitHomeActivity extends AppCompatActivity {
 
     private ActionBarDrawerToggle setupDrawerToggle() {
         return new ActionBarDrawerToggle(
-                this, dlDrawer, mToolbar, R.string.drawerOpen, R.string.drawerClose);
+                this, mDrawerLayout, mToolbar, R.string.drawerOpen, R.string.drawerClose);
     }
 
     private void setupDrawerContent() {
-        nvDrawer.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        mNavDrawer.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 selectDrawerItem(menuItem);
@@ -78,7 +78,7 @@ public class QuipitHomeActivity extends AppCompatActivity {
     }
 
     private void updateSidebarMenu() {
-        Menu circlesSubMenu = nvDrawer.getMenu().findItem(R.id.navCircles).getSubMenu();
+        Menu circlesSubMenu = mNavDrawer.getMenu().findItem(R.id.navCircles).getSubMenu();
         circlesSubMenu.clear();
 
         for (Circle circle : user.getCircles()) {
@@ -107,12 +107,16 @@ public class QuipitHomeActivity extends AppCompatActivity {
 
         menuItem.setChecked(true);
         prepareFragment(fragment).commit();
-        dlDrawer.closeDrawers();
+        mDrawerLayout.closeDrawers();
     }
 
     /**
      * Prepares a fragment to be displayed, returning the fragment transaction. It is up to the
      * callee to decide what to do with it (commit the transaction or commit allowing state loss).
+     *
+     * In some cases, we'll want to use commitAllowingStateLoss. Specifically, after the state
+     * has been saved. See these docs for more info:
+     *  http://developer.android.com/reference/android/app/FragmentTransaction.html#commitAllowingStateLoss()
      */
     private FragmentTransaction prepareFragment(Fragment fragment) {
         return prepareFragment(fragment, true);
@@ -143,7 +147,7 @@ public class QuipitHomeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                dlDrawer.openDrawer(GravityCompat.START);
+                mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
             case R.id.miNewCircle:
                 createCircle();

@@ -21,8 +21,8 @@ public class CreateCircleActivity extends AppCompatActivity {
 
     public static final String CREATED_CIRCLE = "it.quip.android.CREATED_CIRCLE";
 
-    CreateCircleFragment createCircleFragment;
-    InviteFriendsFragment inviteFriendsFragment;
+    private CreateCircleFragment createCircleFragment;
+    private InviteFriendsFragment inviteFriendsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
