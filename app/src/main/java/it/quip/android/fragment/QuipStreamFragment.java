@@ -1,6 +1,5 @@
 package it.quip.android.fragment;
 
-
 public class QuipStreamFragment extends BaseFragment {
 
     @Override

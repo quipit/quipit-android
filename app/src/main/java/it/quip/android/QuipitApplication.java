@@ -17,7 +17,7 @@ public class QuipitApplication extends Application {
         ParseInstallation.getCurrentInstallation().saveInBackground();
     }
 
-    private String stringRes(int resId) {
+    public String stringRes(int resId) {
         return getResources().getString(resId);
     }
 

@@ -11,4 +11,8 @@ abstract public class BaseFragment extends Fragment {
         super.onResume();
         getActivity().setTitle(getTitle());
     }
+
+    public String stringRes(int resId) {
+        return getResources().getString(resId);
+    }
 }
