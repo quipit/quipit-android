@@ -8,7 +8,6 @@ import android.widget.Toast;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -20,8 +19,7 @@ public class LoginActivity extends AppCompatActivity {
     private CallbackManager mCallbackManager;
     private LoginButton mBtnLogin;
 
-    private void setupFacebookAuth() {
-        FacebookSdk.sdkInitialize(getApplicationContext());
+    private void setupLoginButton() {
         mCallbackManager = CallbackManager.Factory.create();
 
         setContentView(R.layout.activity_login);
@@ -49,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupFacebookAuth();
+        setupLoginButton();
     }
 
     @Override

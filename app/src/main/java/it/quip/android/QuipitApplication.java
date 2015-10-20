@@ -2,6 +2,7 @@ package it.quip.android;
 
 import android.app.Application;
 
+import com.facebook.FacebookSdk;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 
@@ -18,6 +19,8 @@ public class QuipitApplication extends Application {
                 stringRes(R.string.parse_application_id),
                 stringRes(R.string.parse_client_key));
         ParseInstallation.getCurrentInstallation().saveInBackground();
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
     }
 
     public String stringRes(int resId) {

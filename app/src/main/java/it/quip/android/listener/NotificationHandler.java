@@ -1,4 +1,4 @@
-package it.quip.android.partials;
+package it.quip.android.listener;
 
 import it.quip.android.model.Circle;
 import it.quip.android.model.Notification;

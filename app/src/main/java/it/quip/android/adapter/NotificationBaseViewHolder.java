@@ -6,7 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import it.quip.android.R;
-import it.quip.android.partials.NotificationHandler;
+import it.quip.android.listener.NotificationHandler;
 import it.quip.android.model.Notification;
 
 public class NotificationBaseViewHolder extends RecyclerView.ViewHolder {

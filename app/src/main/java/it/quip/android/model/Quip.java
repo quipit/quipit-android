@@ -14,7 +14,7 @@ public class Quip implements Parcelable {
 
     private long uid;
     private String text;
-    private User poster;
+    private User author;
     private User source;
     private Circle circle;
     private long timestamp;
@@ -31,8 +31,8 @@ public class Quip implements Parcelable {
         return text;
     }
 
-    public User getPoster() {
-        return poster;
+    public User getAuthor() {
+        return author;
     }
 
     public User getSource() {
@@ -50,7 +50,7 @@ public class Quip implements Parcelable {
             quip.uid = quipJson.getLong("id");
             quip.circle = Circle.fromJSON(quipJson.getJSONObject("circle"));
             quip.text = quipJson.getString("text");
-            quip.poster = User.fromJSON(quipJson.getJSONObject("poster"));
+            quip.author = User.fromJSON(quipJson.getJSONObject("author"));
             quip.source = User.fromJSON(quipJson.getJSONObject("source"));
             quip.timestamp = Long.parseLong(quipJson.getString("timestamp"));
         } catch (JSONException e) {
@@ -92,7 +92,7 @@ public class Quip implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(this.uid);
         dest.writeString(this.text);
-        dest.writeParcelable(this.poster, flags);
+        dest.writeParcelable(this.author, flags);
         dest.writeParcelable(this.source, flags);
         dest.writeParcelable(this.circle, flags);
         dest.writeLong(this.timestamp);
@@ -101,10 +101,10 @@ public class Quip implements Parcelable {
     public Quip() {
     }
 
-    public Quip(long uid, String text, User poster, User source, Circle circle, long timestamp) {
+    public Quip(long uid, String text, User author, User source, Circle circle, long timestamp) {
         this.uid = uid;
         this.text = text;
-        this.poster = poster;
+        this.author = author;
         this.source = source;
         this.circle = circle;
         this.timestamp = timestamp;
@@ -113,7 +113,7 @@ public class Quip implements Parcelable {
     private Quip(Parcel in) {
         this.uid = in.readLong();
         this.text = in.readString();
-        this.poster = in.readParcelable(User.class.getClassLoader());
+        this.author = in.readParcelable(User.class.getClassLoader());
         this.source = in.readParcelable(User.class.getClassLoader());
         this.circle = in.readParcelable(Circle.class.getClassLoader());
         this.timestamp = in.readLong();

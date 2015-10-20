@@ -14,7 +14,7 @@ import java.util.List;
 import it.quip.android.R;
 import it.quip.android.adapter.QuipsAdapter;
 import it.quip.android.model.Quip;
-import it.quip.android.partials.EndlessScrollHandler;
+import it.quip.android.listener.EndlessScrollListener;
 import it.quip.android.util.MockUtils;
 
 public class QuipFeedFragment extends BaseFragment {
@@ -56,7 +56,7 @@ public class QuipFeedFragment extends BaseFragment {
 
         mLlManager = new LinearLayoutManager(getContext());
         mRvFeed.setLayoutManager(mLlManager);
-        mRvFeed.addOnScrollListener(new EndlessScrollHandler(mLlManager) {
+        mRvFeed.addOnScrollListener(new EndlessScrollListener(mLlManager) {
 
             @Override
             public void onLoadMore(int currentPage) {

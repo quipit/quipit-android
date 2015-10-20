@@ -1,34 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <include
+        layout="@layout/profile_stub"
         android:id="@+id/quip_profile"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        >
-
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:id="@+id/iv_profile"
-            android:gravity="center_vertical"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_user_name"
-            android:gravity="center_vertical"
-            />
-
-    </LinearLayout>
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -42,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tv_quip_body"
-        android:layout_below="@+id/quip_profile"
+        android:layout_below="@id/quip_profile"
         />
 
     <TextView

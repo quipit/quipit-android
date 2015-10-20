@@ -1,10 +1,10 @@
-package it.quip.android.partials;
+package it.quip.android.listener;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 
-public abstract class EndlessScrollHandler extends RecyclerView.OnScrollListener {
+public abstract class EndlessScrollListener extends RecyclerView.OnScrollListener {
 
     private int mPreviousTotalItemCount = 0;
     private int mVisibleThreshold = 5;
@@ -15,7 +15,7 @@ public abstract class EndlessScrollHandler extends RecyclerView.OnScrollListener
 
     private LinearLayoutManager mLayoutManager;
 
-    public EndlessScrollHandler(LinearLayoutManager layoutManager) {
+    public EndlessScrollListener(LinearLayoutManager layoutManager) {
         this.mLayoutManager = layoutManager;
     }
 

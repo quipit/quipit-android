@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import it.quip.android.R;
 import it.quip.android.adapter.NotificationAdapter;
-import it.quip.android.partials.NotificationHandler;
+import it.quip.android.listener.NotificationHandler;
 import it.quip.android.model.Circle;
 import it.quip.android.model.Notification;
 import it.quip.android.model.Quip;

@@ -59,7 +59,7 @@ public class QuipsAdapter extends RecyclerView.Adapter<QuipsViewHolder> {
             Log.e("TweetsAdapter", "Unable to load: " + quip.getUid());
         }
 
-        viewHolder.mTvUserName.setText(quip.getPoster().getName());
+        viewHolder.mTvUserName.setText(quip.getAuthor().getName());
     }
 
     private void setupViews(Quip quip, QuipsViewHolder viewHolder) {
