@@ -44,6 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:id="@+id/bt_quip_create_share"
+        android:text="quip"
         />
 
 </RelativeLayout>

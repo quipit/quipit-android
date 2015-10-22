@@ -13,10 +13,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
+import it.quip.android.fragment.CreateQuipFragment;
 import it.quip.android.fragment.NotificationsFragment;
 import it.quip.android.fragment.QuipFeedFragment;
 import it.quip.android.fragment.ViewCircleFragment;
@@ -34,7 +34,6 @@ public class QuipitHomeActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationView mNavDrawer;
-    private FrameLayout mFlFeed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,6 +153,9 @@ public class QuipitHomeActivity extends AppCompatActivity {
             case R.id.miNewCircle:
                 createCircle();
                 return true;
+            case R.id.miNewQuip:
+                createQuip();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -174,6 +176,11 @@ public class QuipitHomeActivity extends AppCompatActivity {
         startActivityForResult(intent, CREATE_CIRCLE_REQUEST);
     }
 
+    private void createQuip() {
+        CreateQuipFragment f = CreateQuipFragment.newInstance(MockUtils.userWithName("Jon Como"));
+        f.show(getFragmentManager(), "create_quip");
+    }
+
     private void onCircleCreated(Circle createdCircle) {
         user.addCircle(createdCircle);
         updateSidebarMenu();
@@ -182,7 +189,6 @@ public class QuipitHomeActivity extends AppCompatActivity {
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
-
         super.onPostCreate(savedInstanceState);
         mDrawerToggle.syncState();
     }

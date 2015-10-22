@@ -19,7 +19,7 @@ public class NotificationBaseViewHolder extends RecyclerView.ViewHolder {
 
     public NotificationBaseViewHolder(View v, NotificationHandler handler, NotificationAdapter adapter) {
         super(v);
-        // "its the ... u know... viewholer pattern...anyone else wanna take a stab at this?"
+        // "its the ... u know... view holder pattern...anyone else wanna take a stab at this?"
         headLineText = (TextView) itemView.findViewById(R.id.tv_notification_headline);
         timestampText = (TextView) itemView.findViewById(R.id.tv_notification_timestamp);
         notificationImage = (ImageView) itemView.findViewById(R.id.iv_notification_image);

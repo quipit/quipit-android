@@ -33,10 +33,4 @@
         app:menu="@menu/drawer_view"
         app:headerLayout="@layout/nav_header" />
 
-
-    <FrameLayout
-        android:id="@+id/fl_feed"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
 </android.support.v4.widget.DrawerLayout>
