@@ -14,9 +14,10 @@ public class Quip implements Parcelable {
 
     private long uid;
     private String text;
-    private long sourceId;
-    private String sourceName;
+    private User author;
+    private User source;
     private Circle circle;
+    private long timestamp;
 
     public long getUid() {
         return uid;
@@ -30,12 +31,16 @@ public class Quip implements Parcelable {
         return text;
     }
 
-    public long getSourceId() {
-        return sourceId;
+    public User getAuthor() {
+        return author;
     }
 
-    public String getSourceName() {
-        return sourceName;
+    public User getSource() {
+        return source;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
     }
 
     public static Quip fromJSON(JSONObject quipJson) {
@@ -45,8 +50,9 @@ public class Quip implements Parcelable {
             quip.uid = quipJson.getLong("id");
             quip.circle = Circle.fromJSON(quipJson.getJSONObject("circle"));
             quip.text = quipJson.getString("text");
-            quip.sourceId = quipJson.getLong("source_id");
-            quip.sourceName = quipJson.getString("source_name");
+            quip.author = User.fromJSON(quipJson.getJSONObject("author"));
+            quip.source = User.fromJSON(quipJson.getJSONObject("source"));
+            quip.timestamp = Long.parseLong(quipJson.getString("timestamp"));
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
@@ -86,20 +92,31 @@ public class Quip implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(this.uid);
         dest.writeString(this.text);
-        dest.writeLong(this.sourceId);
-        dest.writeString(this.sourceName);
+        dest.writeParcelable(this.author, flags);
+        dest.writeParcelable(this.source, flags);
         dest.writeParcelable(this.circle, flags);
+        dest.writeLong(this.timestamp);
     }
 
     public Quip() {
     }
 
+    public Quip(long uid, String text, User author, User source, Circle circle, long timestamp) {
+        this.uid = uid;
+        this.text = text;
+        this.author = author;
+        this.source = source;
+        this.circle = circle;
+        this.timestamp = timestamp;
+    }
+
     private Quip(Parcel in) {
         this.uid = in.readLong();
         this.text = in.readString();
-        this.sourceId = in.readLong();
-        this.sourceName = in.readString();
+        this.author = in.readParcelable(User.class.getClassLoader());
+        this.source = in.readParcelable(User.class.getClassLoader());
         this.circle = in.readParcelable(Circle.class.getClassLoader());
+        this.timestamp = in.readLong();
     }
 
     public static final Parcelable.Creator<Quip> CREATOR = new Parcelable.Creator<Quip>() {

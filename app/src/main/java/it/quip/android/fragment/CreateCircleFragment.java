@@ -22,7 +22,7 @@ public class CreateCircleFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_create_circle, container, false);
-        etCircleName = (EditText) v.findViewById(R.id.etCircleName);
+        etCircleName = (EditText) v.findViewById(R.id.et_circle_name);
         return v;
     }
 

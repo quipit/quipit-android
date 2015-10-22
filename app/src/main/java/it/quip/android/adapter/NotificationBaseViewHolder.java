@@ -6,7 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import it.quip.android.R;
-import it.quip.android.interfaces.NotificationHandler;
+import it.quip.android.listener.NotificationHandler;
 import it.quip.android.model.Notification;
 
 public class NotificationBaseViewHolder extends RecyclerView.ViewHolder {
@@ -19,10 +19,10 @@ public class NotificationBaseViewHolder extends RecyclerView.ViewHolder {
 
     public NotificationBaseViewHolder(View v, NotificationHandler handler, NotificationAdapter adapter) {
         super(v);
-        // "its the ... u know... viewholer pattern...anyone else wanna take a stab at this?"
-        headLineText = (TextView) itemView.findViewById(R.id.tvNotificationHeadline);
-        timestampText = (TextView) itemView.findViewById(R.id.tvNotificationTimestamp);
-        notificationImage = (ImageView) itemView.findViewById(R.id.ivNotificationImage);
+        // "its the ... u know... view holder pattern...anyone else wanna take a stab at this?"
+        headLineText = (TextView) itemView.findViewById(R.id.tv_notification_headline);
+        timestampText = (TextView) itemView.findViewById(R.id.tv_notification_timestamp);
+        notificationImage = (ImageView) itemView.findViewById(R.id.iv_notification_image);
         mHandler = handler;
         mAdapter = adapter;
 

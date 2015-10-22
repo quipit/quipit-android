@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        layout="@layout/profile_stub"
+        android:id="@+id/quip_create_profile"/>
+
+    <EditText
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_below="@id/quip_create_profile"
+        android:lines="6"
+        android:lineSpacingExtra="2dp"
+        android:gravity="top"
+        android:textCursorDrawable="@null"
+        android:background="@null"
+        android:hint="@string/quip_create_hint"
+        android:inputType="textMultiLine"
+        android:id="@+id/et_quip_create_body"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/et_quip_create_body"
+        android:id="@+id/tv_quip_create_count"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/et_quip_create_body"
+        android:id="@+id/tv_quip_create_source"
+        android:text="@string/quip_create_source"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/bt_quip_create_share"
+        android:text="quip"
+        />
+
+</RelativeLayout>

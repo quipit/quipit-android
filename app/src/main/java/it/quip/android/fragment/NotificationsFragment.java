@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import it.quip.android.R;
 import it.quip.android.adapter.NotificationAdapter;
-import it.quip.android.interfaces.NotificationHandler;
+import it.quip.android.listener.NotificationHandler;
 import it.quip.android.model.Circle;
 import it.quip.android.model.Notification;
 import it.quip.android.model.Quip;
@@ -27,7 +27,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationH
 
     @Override
     public CharSequence getTitle() {
-        return stringRes(R.string.titleNotifications);
+        return stringRes(R.string.title_notifications);
     }
 
 
@@ -41,7 +41,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationH
     }
 
     private void attachNotificationAdapter(View view) {
-        mRvContacts = (RecyclerView) view.findViewById(R.id.rvNotifications);
+        mRvContacts = (RecyclerView) view.findViewById(R.id.rv_notifications);
         mNotificationAdapter = new NotificationAdapter(Notification.getNotifcations(0), this, this.getContext());
         mRvContacts.setAdapter(mNotificationAdapter);
         mRvContacts.setLayoutManager(new LinearLayoutManager(this.getActivity()));
@@ -49,7 +49,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationH
     }
 
     private void attachSwipeContainer(View view) {
-        mSwipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.scNotificationSwipeContainer);
+        mSwipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.srl_notifications);
         mSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

@@ -16,8 +16,9 @@ import android.view.MenuItem;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
+import it.quip.android.fragment.CreateQuipFragment;
 import it.quip.android.fragment.NotificationsFragment;
-import it.quip.android.fragment.QuipStreamFragment;
+import it.quip.android.fragment.QuipFeedFragment;
 import it.quip.android.fragment.ViewCircleFragment;
 import it.quip.android.model.Circle;
 import it.quip.android.model.User;
@@ -55,7 +56,7 @@ public class QuipitHomeActivity extends AppCompatActivity {
         mDrawerToggle = setupDrawerToggle();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        mNavDrawer = (NavigationView) findViewById(R.id.nvView);
+        mNavDrawer = (NavigationView) findViewById(R.id.nv_view);
         setupDrawerContent();
         updateSidebarMenu();
 
@@ -64,7 +65,7 @@ public class QuipitHomeActivity extends AppCompatActivity {
 
     private ActionBarDrawerToggle setupDrawerToggle() {
         return new ActionBarDrawerToggle(
-                this, mDrawerLayout, mToolbar, R.string.drawerOpen, R.string.drawerClose);
+                this, mDrawerLayout, mToolbar, R.string.drawer_open, R.string.drawer_close);
     }
 
     private void setupDrawerContent() {
@@ -124,7 +125,7 @@ public class QuipitHomeActivity extends AppCompatActivity {
 
     private FragmentTransaction prepareFragment(Fragment fragment, boolean addToBackStack) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.flContent, fragment);
+        ft.replace(R.id.fl_content, fragment);
         if (addToBackStack) {
             ft.addToBackStack(null);
         }
@@ -134,7 +135,7 @@ public class QuipitHomeActivity extends AppCompatActivity {
 
     private void displayDefaultQuipStream() {
         // TODO: We shouldn't be creating a new fragment each time. We should manage these
-        prepareFragment(new QuipStreamFragment(), false).commit();
+        prepareFragment(new QuipFeedFragment(), false).commit();
     }
 
     @Override
@@ -151,6 +152,9 @@ public class QuipitHomeActivity extends AppCompatActivity {
                 return true;
             case R.id.miNewCircle:
                 createCircle();
+                return true;
+            case R.id.miNewQuip:
+                createQuip();
                 return true;
         }
 
@@ -170,6 +174,11 @@ public class QuipitHomeActivity extends AppCompatActivity {
     private void createCircle() {
         Intent intent = new Intent(this, CreateCircleActivity.class);
         startActivityForResult(intent, CREATE_CIRCLE_REQUEST);
+    }
+
+    private void createQuip() {
+        CreateQuipFragment f = CreateQuipFragment.newInstance(MockUtils.userWithName("Jon Como"));
+        f.show(getFragmentManager(), "create_quip");
     }
 
     private void onCircleCreated(Circle createdCircle) {
