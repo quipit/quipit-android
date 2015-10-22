@@ -21,4 +21,6 @@
     <string name="hint_friend_name">Search for friends</string>
 
     <string name="label_members">Members</string>
+    <string name="quip_create_hint">some thangs?</string>
+    <string name="quip_create_source">anon</string>
 </resources>

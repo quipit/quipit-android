@@ -3,6 +3,7 @@ package it.quip.android.actvitiy;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
@@ -28,7 +29,12 @@ public class LoginActivity extends AppCompatActivity {
         mBtnLogin.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                FacebookClient.newInstance(loginResult);
+                try {
+                    FacebookClient.getInstance(loginResult);
+                } catch (FacebookClient.FacebookClientException facebookClientException) {
+                    Log.e("LoginActivity", "Unable to generate FacebookClient with result: " + loginResult);
+                }
+
                 startMainActivity();
             }
 

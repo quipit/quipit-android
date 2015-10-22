@@ -28,14 +28,13 @@ public class FacebookClient {
 
     private AccessToken accessToken;
 
-    public static FacebookClient newInstance(LoginResult loginResult) {
-        client = new FacebookClient(loginResult.getAccessToken());
-        return client;
-    }
-
-    public static FacebookClient getInstance() throws FacebookClientException {
+    public static FacebookClient getInstance(LoginResult loginResult) throws FacebookClientException {
         if (client == null) {
-            throw new FacebookClientException("thangs");
+            if (loginResult == null) {
+                throw new FacebookClientException("No loginResult found.");
+            }
+
+            client = new FacebookClient(loginResult.getAccessToken());
         }
 
         return client;
@@ -44,7 +43,6 @@ public class FacebookClient {
     public FacebookClient(AccessToken accessToken) {
         this.accessToken = accessToken;
     }
-
 
     public void getFacebookFriends(final OnFacebookResponse responseHandler) {
         new GraphRequest(
