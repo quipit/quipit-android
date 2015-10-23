@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import it.quip.android.listener.CircleTagClicked;
+import it.quip.android.util.FormatUtil;
 
 public class CircleTagTextView {
 
@@ -27,7 +28,7 @@ public class CircleTagTextView {
         mCircleColor = circleColor;
         mHypeLinkEnabled = useLink;
         mTagClick = TagClick;
-        Pattern circlePattern = Pattern.compile("(@[a-zA-Z0-9_-]+)");
+        Pattern circlePattern = FormatUtil.circlePattern;
 
         SpannableStringBuilder string = new SpannableStringBuilder(nTagString);
         CharSequence spanText;

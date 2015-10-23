@@ -15,20 +15,4 @@ public class FormatUtil {
     public static final Pattern circlePattern = Pattern.compile("(@[A-Za-z0-9_-]+)");
 
     public static final String CIRCLE_MENTION_COLOR = "#FD8917";
-
-    public static Spannable formatQuipitText(String unformattedText) {
-        StringBuffer sb = new StringBuffer(unformattedText.length());
-        Matcher o = circlePattern.matcher(unformattedText);
-
-        while (o.find()) {
-            o.appendReplacement(sb,
-                    "<font style=\"bold\" color=\""
-                    + CIRCLE_MENTION_COLOR
-                    + "\">" + o.group(1)
-                    + "</font>");
-
-        }
-        o.appendTail(sb);
-        return(Spannable) Html.fromHtml(sb.toString());
-    }
 }
