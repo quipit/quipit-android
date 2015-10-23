@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
@@ -20,11 +21,12 @@ import it.quip.android.fragment.CreateQuipFragment;
 import it.quip.android.fragment.NotificationsFragment;
 import it.quip.android.fragment.QuipFeedFragment;
 import it.quip.android.fragment.ViewCircleFragment;
+import it.quip.android.listener.CircleTagClicked;
 import it.quip.android.model.Circle;
 import it.quip.android.model.User;
 import it.quip.android.util.MockUtils;
 
-public class QuipitHomeActivity extends AppCompatActivity {
+public class QuipitHomeActivity extends AppCompatActivity implements CircleTagClicked {
 
     private static final int CREATE_CIRCLE_REQUEST = 158;
 
@@ -197,5 +199,10 @@ public class QuipitHomeActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void clickedTag(CharSequence tag) {
+        Toast.makeText(this, tag.toString(), Toast.LENGTH_LONG).show();
     }
 }

@@ -1,13 +1,18 @@
 package it.quip.android.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.TextView.BufferType;
 
 import it.quip.android.R;
+import it.quip.android.listener.CircleTagClicked;
 import it.quip.android.listener.NotificationHandler;
 import it.quip.android.model.Notification;
+import it.quip.android.util.FormatUtil;
+import it.quip.android.view.CircleTagTextView;
 
 public class NotificationBaseViewHolder extends RecyclerView.ViewHolder {
 
@@ -16,6 +21,11 @@ public class NotificationBaseViewHolder extends RecyclerView.ViewHolder {
     public ImageView notificationImage;
     private final NotificationAdapter mAdapter;
     private final NotificationHandler mHandler;
+    private final CircleTagTextView mCircleParser;
+
+    public CircleTagTextView getmCircleParser() {
+        return mCircleParser;
+    }
 
     public NotificationBaseViewHolder(View v, NotificationHandler handler, NotificationAdapter adapter) {
         super(v);
@@ -25,6 +35,7 @@ public class NotificationBaseViewHolder extends RecyclerView.ViewHolder {
         notificationImage = (ImageView) itemView.findViewById(R.id.iv_notification_image);
         mHandler = handler;
         mAdapter = adapter;
+        mCircleParser = new CircleTagTextView();
 
         notificationImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,6 +46,7 @@ public class NotificationBaseViewHolder extends RecyclerView.ViewHolder {
                 mHandler.onClickNotification(position, notification);
             }
         });
+
     }
 
     public TextView getHeadLineText() {

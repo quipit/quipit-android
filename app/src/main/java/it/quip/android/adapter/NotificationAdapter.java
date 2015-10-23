@@ -2,14 +2,21 @@ package it.quip.android.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
 import com.squareup.picasso.Picasso;
 import java.util.List;
 import it.quip.android.R;
+import it.quip.android.listener.CircleTagClicked;
 import it.quip.android.listener.NotificationHandler;
 import it.quip.android.model.Notification;
+import it.quip.android.util.FormatUtil;
 
 public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -90,7 +97,14 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
          * TODO: style the different views
          */
         Notification notification = mNotifications.get(position);
-        vh.getHeadLineText().setText(Html.fromHtml(notification.getText()));
+        vh.getHeadLineText().setMovementMethod(LinkMovementMethod.getInstance());
+        String headlineText =  notification.getText().toString();
+        vh.getHeadLineText().setText(vh.getmCircleParser().circleParse(
+                        headlineText,
+                        (CircleTagClicked) mContext,
+                        false,
+                        FormatUtil.CIRCLE_MENTION_COLOR),
+                TextView.BufferType.SPANNABLE);
         vh.getTimestampText().setText(notification.getTimestampString());
         vh.getNotificationImage().setImageResource(0);
         Picasso.with(mContext)
@@ -98,6 +112,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 .fit()
                 .into(vh.getNotificationImage());
 
+    }
+
+    public Context getContext() {
+        return mContext;
     }
 
 

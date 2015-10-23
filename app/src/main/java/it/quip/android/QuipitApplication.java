@@ -5,7 +5,9 @@ import android.app.Application;
 import com.facebook.FacebookSdk;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
+import com.parse.ParseObject;
 
+import it.quip.android.model.Notification;
 import it.quip.android.model.User;
 import it.quip.android.util.MockUtils;
 
@@ -18,6 +20,7 @@ public class QuipitApplication extends Application {
         Parse.initialize(this,
                 stringRes(R.string.parse_application_id),
                 stringRes(R.string.parse_client_key));
+        ParseObject.registerSubclass(Notification.class);
         ParseInstallation.getCurrentInstallation().saveInBackground();
 
         FacebookSdk.sdkInitialize(getApplicationContext());

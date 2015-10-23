@@ -5,11 +5,12 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.parse.ParseObject;
+import com.parse.ParseClassName;
 
-/**
- * Created by danbuscaglia on 10/18/15.
- */
-public class Notification implements Parcelable {
+
+@ParseClassName("Notification")
+public class Notification extends ParseObject implements Parcelable {
 
     private long uid;
     private String text;
@@ -46,6 +47,10 @@ public class Notification implements Parcelable {
         return "2h";
     }
 
+    public Notification() {
+
+    }
+
     public Notification(long uid, String text, String notificationImageUrl, int timestamp, boolean viewed) {
 
         this.uid = uid;
@@ -69,7 +74,7 @@ public class Notification implements Parcelable {
         dest.writeByte(viewed ? (byte) 1 : (byte) 0);
     }
 
-    protected Notification(Parcel in) {
+    public Notification(Parcel in) {
         this.uid = in.readLong();
         this.text = in.readString();
         this.notificationImageUrl = in.readString();
@@ -95,7 +100,7 @@ public class Notification implements Parcelable {
         List<Notification> stubs = new ArrayList<>();
 
         stubs.add(new Notification(new Long(1),
-                "<b>Brothers Darkness</b> has added you to circle <b><i>@unity</i></b>",
+                "Brothers Darknesshas added you to circle @unity",
                 "http://image.iheart.com/images/1080/MI0001411019.jpg",
                 1445205833,
                 false
@@ -103,7 +108,7 @@ public class Notification implements Parcelable {
         ));
 
         stubs.add(new Notification(new Long(2),
-                "<b>Edgard Juarez</b> just quipped in circle <b><i>@darkness</i></b>",
+                "Edgar Juarez just quipped in circle @darkness",
                 "http://laaficion.milenio.com/beisbol/Toros_MILIMA20140326_0343_11.jpg",
                 1445205839,
                 true

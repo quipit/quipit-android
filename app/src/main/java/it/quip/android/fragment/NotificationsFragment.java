@@ -98,4 +98,5 @@ public class NotificationsFragment extends BaseFragment implements NotificationH
         Toast.makeText(this.getContext(), selectedNotification.getText(), Toast.LENGTH_LONG).show();
 
     }
+
 }
