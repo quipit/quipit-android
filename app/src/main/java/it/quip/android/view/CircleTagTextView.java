@@ -48,7 +48,6 @@ public class CircleTagTextView {
 
                 @Override
                 public void updateDrawState(TextPaint ds) {
-                    // color for the hash tag
                     ds.setColor(Color.parseColor(mCircleColor));
                     ds.setUnderlineText(mHypeLinkEnabled);
                 }
