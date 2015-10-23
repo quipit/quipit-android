@@ -21,7 +21,7 @@ public class CircleTagTextView {
     private CircleTagClicked mTagClick;
     private boolean mHypeLinkEnabled;
 
-    public SpannableStringBuilder circleParse(String nTagString,
+    public SpannableStringBuilder circleParse(String tagString,
                                                    CircleTagClicked TagClick,
                                                    boolean useLink, String circleColor) {
 
@@ -30,15 +30,15 @@ public class CircleTagTextView {
         mTagClick = TagClick;
         Pattern circlePattern = FormatUtil.circlePattern;
 
-        SpannableStringBuilder string = new SpannableStringBuilder(nTagString);
+        SpannableStringBuilder string = new SpannableStringBuilder(tagString);
         CharSequence spanText;
         int start;
         int end;
-        Matcher m = circlePattern.matcher(nTagString);
+        Matcher m = circlePattern.matcher(tagString);
         while (m.find()) {
             start = m.start();
             end = m.end();
-            spanText = nTagString.subSequence(start, end);
+            spanText = tagString.subSequence(start, end);
             final CharSequence mLastTextSpan = spanText;
             string.setSpan(new ClickableSpan() {
                 @Override
