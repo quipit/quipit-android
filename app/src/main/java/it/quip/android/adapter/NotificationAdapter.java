@@ -99,11 +99,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         vh.getHeadLineText().setMovementMethod(LinkMovementMethod.getInstance());
         String headlineText =  notification.getText().toString();
         vh.getHeadLineText().setText(vh.getCircleParser().tagParse(
-                        FormatUtil.CIRCLE_PATTERN,
-                        headlineText,
-                        (TagClickListener) mContext,
-                        false,
-                        FormatUtil.CIRCLE_MENTION_COLOR),
+                                    FormatUtil.CIRCLE_PATTERN,
+                                    headlineText,
+                                    (TagClickListener) mContext,
+                                    false,
+                                    FormatUtil.CIRCLE_MENTION_COLOR),
                 TextView.BufferType.SPANNABLE);
         vh.getTimestampText().setText(notification.getTimestampString());
         vh.getNotificationImage().setImageResource(0);

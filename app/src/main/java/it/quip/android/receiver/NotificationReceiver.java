@@ -24,6 +24,9 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
     public static final String INTENT_SEND = "com.parse.push.intent.SEND";
     public static final String INTENT_RECEIVE = "com.parse.push.intent.RECEIVE";
 
+    public static final String PARSE_CHANNEL_INTENT_KEY = "com.parse.Channel";
+    public static final String PARSE_DATA_INTENT_KEY = "com.parse.Data";
+
     protected Class<? extends Activity> getActivity(Context context, Intent intent) {
         return QuipitHomeActivity.class;
     }
@@ -42,7 +45,7 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
         String action = intent.getAction();
         Log.d(TAG, "got action " + action);
         if (action.equals(ACTION_PUSH_RECEIVE)) {
-            String channel = intent.getExtras().getString("com.parse.Channel");
+            String channel = intent.getExtras().getString(PARSE_CHANNEL_INTENT_KEY);
             try {
                 JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
                 Log.d(TAG, "got action " + action + " on channel " + channel + " with:");
