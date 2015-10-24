@@ -17,6 +17,8 @@ public class QuipitApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+
+        Parse.enableLocalDatastore(this);
         Parse.initialize(this,
                 stringRes(R.string.parse_application_id),
                 stringRes(R.string.parse_client_key));
