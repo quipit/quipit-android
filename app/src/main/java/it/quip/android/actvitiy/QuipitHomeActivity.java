@@ -21,12 +21,12 @@ import it.quip.android.fragment.CreateQuipFragment;
 import it.quip.android.fragment.NotificationsFragment;
 import it.quip.android.fragment.QuipFeedFragment;
 import it.quip.android.fragment.ViewCircleFragment;
-import it.quip.android.listener.CircleTagClicked;
+import it.quip.android.listener.TagClickListener;
 import it.quip.android.model.Circle;
 import it.quip.android.model.User;
 import it.quip.android.util.MockUtils;
 
-public class QuipitHomeActivity extends AppCompatActivity implements CircleTagClicked {
+public class QuipitHomeActivity extends AppCompatActivity implements TagClickListener {
 
     private static final int CREATE_CIRCLE_REQUEST = 158;
 

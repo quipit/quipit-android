@@ -12,24 +12,23 @@ import android.view.View;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import it.quip.android.listener.CircleTagClicked;
-import it.quip.android.util.FormatUtil;
+import it.quip.android.listener.TagClickListener;
 
-public class CircleTagTextView {
+public class TagTextSpanner {
 
     private String mCircleColor;
-    private CircleTagClicked mTagClick;
     private boolean mHypeLinkEnabled;
+    private TagClickListener mTagClickListener;
 
-    public SpannableStringBuilder circleParse(String tagString,
-                                                   CircleTagClicked TagClick,
-                                                   boolean useLink, String circleColor) {
+    public SpannableStringBuilder tagParse(Pattern circlePattern,
+                                           String tagString,
+                                           TagClickListener listener,
+                                           boolean useLink,
+                                           String circleColor) {
 
         mCircleColor = circleColor;
         mHypeLinkEnabled = useLink;
-        mTagClick = TagClick;
-        Pattern circlePattern = FormatUtil.circlePattern;
-
+        mTagClickListener = listener;
         SpannableStringBuilder string = new SpannableStringBuilder(tagString);
         CharSequence spanText;
         int start;
@@ -44,7 +43,7 @@ public class CircleTagTextView {
                 @Override
                 public void onClick(View widget) {
                     Log.d("Circle Clicked", String.format("Clicked", mLastTextSpan));
-                    mTagClick.clickedTag(mLastTextSpan);
+                    mTagClickListener.clickedTag(mLastTextSpan);
                 }
 
                 @Override

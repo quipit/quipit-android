@@ -19,10 +19,10 @@ import it.quip.android.model.Notification;
 public class NotificationReceiver extends ParsePushBroadcastReceiver {
 
     private static final String TAG = "NotificationReceiver";
-    public static final String intentAction = "SEND_PUSH";
+    public static final String INTENT_ACTION = "SEND_PUSH";
 
-    public static final String intentSend = "com.parse.push.intent.SEND";
-    public static final String intentReceive = "com.parse.push.intent.RECEIVE";
+    public static final String INTENT_SEND = "com.parse.push.intent.SEND";
+    public static final String INTENT_RECEIVE = "com.parse.push.intent.RECEIVE";
 
     protected Class<? extends Activity> getActivity(Context context, Intent intent) {
         return QuipitHomeActivity.class;
@@ -30,11 +30,9 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
 
     @Override
     protected void onPushReceive(Context context, Intent intent) {
-        // Navigate based on Notification type
         if (intent == null) {
             Log.d(TAG, "Receiver intent null");
         } else {
-            // Parse push message and handle accordingly
             processPush(context, intent);
         }
         super.onPushReceive(context, intent);
@@ -48,11 +46,9 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
             try {
                 JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
                 Log.d(TAG, "got action " + action + " on channel " + channel + " with:");
-                // Iterate the parse keys if needed
                 Iterator<String> itr = json.keys();
                 while (itr.hasNext()) {
-                    String key = (String) itr.next();
-                    // Extract custom push data
+                    String key = itr.next();
                     if ((key.equals("alert")) || (key.equals("quip_event"))) {
                         Notification notification = Notification.fromJson(json);
                         triggerBroadcastToActivity(context, notification);
@@ -60,13 +56,11 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
                     Log.d(TAG, "..." + key + " => " + json.getString(key));
                 }
             } catch (JSONException ex) {
-                Log.d(TAG, "JSON failed!");
+                ex.printStackTrace();
             }
         }
     }
 
-    // Handle push notification by sending a local broadcast
-    // to which the activity subscribes to
     private void triggerBroadcastToActivity(Context context, Notification notification) {
         Intent pupInt = new Intent(context, QuipitHomeActivity.class);
         pupInt.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );

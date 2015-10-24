@@ -1,9 +1,6 @@
 package it.quip.android.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +8,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
+import java.text.Normalizer;
 import java.util.List;
 import it.quip.android.R;
-import it.quip.android.listener.CircleTagClicked;
+import it.quip.android.listener.TagClickListener;
 import it.quip.android.listener.NotificationHandler;
 import it.quip.android.model.Notification;
 import it.quip.android.util.FormatUtil;
@@ -99,9 +98,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         Notification notification = mNotifications.get(position);
         vh.getHeadLineText().setMovementMethod(LinkMovementMethod.getInstance());
         String headlineText =  notification.getText().toString();
-        vh.getHeadLineText().setText(vh.getmCircleParser().circleParse(
+        vh.getHeadLineText().setText(vh.getCircleParser().tagParse(
+                        FormatUtil.CIRCLE_PATTERN,
                         headlineText,
-                        (CircleTagClicked) mContext,
+                        (TagClickListener) mContext,
                         false,
                         FormatUtil.CIRCLE_MENTION_COLOR),
                 TextView.BufferType.SPANNABLE);

@@ -12,7 +12,7 @@ import it.quip.android.R;
 
 public class FormatUtil {
 
-    public static final Pattern circlePattern = Pattern.compile("(@[A-Za-z0-9_-]+)");
+    public static final Pattern CIRCLE_PATTERN = Pattern.compile("(@[A-Za-z0-9_-]+)");
 
     public static final String CIRCLE_MENTION_COLOR = "#FD8917";
 }

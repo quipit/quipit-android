@@ -1,5 +1,5 @@
 package it.quip.android.listener;
 
-public interface CircleTagClicked {
+public interface TagClickListener {
     public void clickedTag(CharSequence tag);
 }
