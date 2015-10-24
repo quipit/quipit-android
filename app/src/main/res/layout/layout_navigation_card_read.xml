@@ -30,6 +30,7 @@
                 android:layout_height="wrap_content"
                 android:text="Brother Darkness added you to the @darkness circle"
                 android:id="@+id/tv_notification_headline"
+                android:focusable="false"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/iv_notification_image"
                 android:layout_toEndOf="@+id/iv_notification_image"
@@ -41,6 +42,7 @@
                 android:text="2h"
                 android:id="@+id/tv_notification_timestamp"
                 android:layout_centerVertical="true"
+
                 android:layout_alignParentRight="true"
                 android:layout_margin="@dimen/small_margin" />
 

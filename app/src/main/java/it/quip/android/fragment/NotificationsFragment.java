@@ -95,7 +95,10 @@ public class NotificationsFragment extends BaseFragment implements NotificationH
     @Override
     public void onClickNotification(int position, Notification selectedNotification) {
         // TODO: sprint 2 hookups
-        Toast.makeText(this.getContext(), selectedNotification.getText(), Toast.LENGTH_LONG).show();
+        // TODO: remove this is only for testing
+        selectedNotification.send();
+        //Toast.makeText(this.getContext(), selectedNotification.getText(), Toast.LENGTH_LONG).show();
 
     }
+
 }

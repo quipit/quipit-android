@@ -8,6 +8,7 @@ import android.widget.TextView;
 import it.quip.android.R;
 import it.quip.android.listener.NotificationHandler;
 import it.quip.android.model.Notification;
+import it.quip.android.view.TagTextSpanner;
 
 public class NotificationBaseViewHolder extends RecyclerView.ViewHolder {
 
@@ -16,6 +17,11 @@ public class NotificationBaseViewHolder extends RecyclerView.ViewHolder {
     public ImageView notificationImage;
     private final NotificationAdapter mAdapter;
     private final NotificationHandler mHandler;
+    private final TagTextSpanner mCircleParser;
+
+    public TagTextSpanner getCircleParser() {
+        return mCircleParser;
+    }
 
     public NotificationBaseViewHolder(View v, NotificationHandler handler, NotificationAdapter adapter) {
         super(v);
@@ -25,6 +31,7 @@ public class NotificationBaseViewHolder extends RecyclerView.ViewHolder {
         notificationImage = (ImageView) itemView.findViewById(R.id.iv_notification_image);
         mHandler = handler;
         mAdapter = adapter;
+        mCircleParser = new TagTextSpanner();
 
         notificationImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,6 +42,7 @@ public class NotificationBaseViewHolder extends RecyclerView.ViewHolder {
                 mHandler.onClickNotification(position, notification);
             }
         });
+
     }
 
     public TextView getHeadLineText() {
