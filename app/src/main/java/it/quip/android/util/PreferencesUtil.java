@@ -6,8 +6,6 @@ import android.content.SharedPreferences;
 
 public class PreferencesUtil {
 
-    public static final String _PREFERENCE_SORT_BY = "sort_by";
-
     private SharedPreferences _preferences;
     private SharedPreferences.Editor _preferencesEditor;
 

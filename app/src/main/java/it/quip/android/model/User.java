@@ -2,6 +2,13 @@ package it.quip.android.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
+
+import com.facebook.AccessToken;
+import com.parse.ParseClassName;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,19 +17,41 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User implements Parcelable {
 
-    private long uid;
-    private long facebookId;
+@ParseClassName("User")
+public class User extends ParseObject implements Parcelable {
+
+    private static final String FACEBOOK_ID = "facebook_id";
+    private static final String NAME = "name";
+    private static final String EMAIL = "email";
+    private static final String CIRCLES = "circles";
+
+    public void setFacebookId(String facebookId) {
+        this.facebookId = facebookId;
+        this.put(FACEBOOK_ID, facebookId);
+    }
+
+    public void setName(String name) {
+        this.name = name;
+        this.put(NAME, name);
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+        this.put(EMAIL, email);
+    }
+
+    public void setCircles(List<Circle> circles) {
+        this.circles = circles;
+        this.put(CIRCLES, circlesToIds());
+    }
+
+    private String facebookId;
     private String name;
     private String email;
     private List<Circle> circles = new ArrayList<>();
 
-    public long getUid() {
-        return uid;
-    }
-
-    public long getFacebookId() {
+    public String getFacebookId() {
         return facebookId;
     }
 
@@ -52,16 +81,19 @@ public class User implements Parcelable {
         circles.add(circle);
     }
 
+    public static ParseQuery<User> getQuery() {
+        return ParseQuery.getQuery(User.class);
+    }
+
     public static User fromJSON(JSONObject userJson) {
         User user = new User();
         
         try {
-            user.uid = userJson.getLong("id");
-            user.facebookId = userJson.optLong("facebook_id", -1);
-            user.name = userJson.getString("name");
-            user.email = userJson.getString("email");
+            user.facebookId = userJson.getString(FACEBOOK_ID);
+            user.name = userJson.getString(NAME);
+            user.email = userJson.getString(EMAIL);
 
-            JSONArray circlesJson = userJson.optJSONArray("circles");
+            JSONArray circlesJson = userJson.optJSONArray(CIRCLES);
             if (circlesJson != null) {
                 user.circles = Circle.fromJSONArray(circlesJson);
             }
@@ -93,7 +125,38 @@ public class User implements Parcelable {
         }
 
         return users;
+    }
 
+    public static User getUserForSession() {
+        String facebookId = AccessToken.getCurrentAccessToken().getUserId();
+        User currentUser = null;
+        try {
+            List<User> currentUsers = getQuery()
+                    .whereEqualTo(FACEBOOK_ID, facebookId)
+                    .find();
+            if (currentUsers.size() > 0) {
+                currentUser = currentUsers.get(0);
+            }
+        } catch (ParseException parseException) {
+            Log.d("User", "Error loading User object from Parse.");
+        }
+
+        if (null == currentUser) {
+            currentUser = new User();
+            currentUser.setFacebookId(facebookId);
+            currentUser.saveInBackground();
+        }
+
+        return currentUser;
+    }
+
+    private List<Long> circlesToIds() {
+        List<Long> circleIds = new ArrayList<Long>();
+        for (Circle circle : getCircles()) {
+            circleIds.add(circle.getUid());
+        }
+
+        return circleIds;
     }
 
     @Override
@@ -103,18 +166,17 @@ public class User implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(this.uid);
-        dest.writeLong(this.facebookId);
+        dest.writeString(this.facebookId);
         dest.writeString(this.name);
         dest.writeString(this.email);
     }
 
     public User() {
+
     }
 
     private User(Parcel in) {
-        this.uid = in.readLong();
-        this.facebookId = in.readLong();
+        this.facebookId = in.readString();
         this.name = in.readString();
         this.email = in.readString();
     }

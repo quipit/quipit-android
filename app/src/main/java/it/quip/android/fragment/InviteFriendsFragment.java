@@ -120,7 +120,7 @@ public class InviteFriendsFragment extends Fragment {
     }
 
     private boolean myself(User friend) {
-        return friend.getUid() == QuipitApplication.getCurrentUser().getUid();
+        return friend.getObjectId() == QuipitApplication.getCurrentUser().getObjectId();
     }
 
     private boolean alreadyInvited(User friend) {

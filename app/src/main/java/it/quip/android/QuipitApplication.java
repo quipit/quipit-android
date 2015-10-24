@@ -9,23 +9,30 @@ import com.parse.ParseObject;
 
 import it.quip.android.model.Notification;
 import it.quip.android.model.User;
-import it.quip.android.util.MockUtils;
 
 public class QuipitApplication extends Application {
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
+    private static User sUser;
 
-
+    private void setupParse() {
         Parse.enableLocalDatastore(this);
         Parse.initialize(this,
                 stringRes(R.string.parse_application_id),
                 stringRes(R.string.parse_client_key));
         ParseObject.registerSubclass(Notification.class);
+        ParseObject.registerSubclass(User.class);
         ParseInstallation.getCurrentInstallation().saveInBackground();
+    }
 
+    private void setupFacebook() {
         FacebookSdk.sdkInitialize(getApplicationContext());
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        setupParse();
+        setupFacebook();
     }
 
     public String stringRes(int resId) {
@@ -33,7 +40,11 @@ public class QuipitApplication extends Application {
     }
 
     public static User getCurrentUser() {
-        return MockUtils.getUsers().get(0);
+        return sUser;
+    }
+
+    public static void setCurrentUser(User user) {
+        sUser = user;
     }
 
 }
