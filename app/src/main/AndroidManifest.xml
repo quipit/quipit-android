@@ -50,14 +50,15 @@
         </activity>
 
         <service android:name="com.parse.PushService" />
-
+        <!-- Custom receiver for quipit notifications -->
         <receiver
-            android:name="com.parse.ParsePushBroadcastReceiver"
+            android:name="it.quip.android.receiver.NotificationReceiver"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />
                 <action android:name="com.parse.push.intent.DELETE" />
                 <action android:name="com.parse.push.intent.OPEN" />
+                <action android:name="com.parse.push.intent.SEND" />
             </intent-filter>
         </receiver>
         <receiver
@@ -66,7 +67,7 @@
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-<!--                   IMPORTANT: Change "com.parse.starter" to match your app's package name. -->
+                <action android:name="com.google.android.c2dm.intent.SEND" />
                 <category android:name="it.quip.android" />
             </intent-filter>
         </receiver>
