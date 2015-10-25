@@ -35,8 +35,6 @@ public class CircleHeaderFragment extends Fragment {
     private static final int BACKGROUND_IMAGE = 1239;
     private static final int AVATAR_IMAGE = 2871;
 
-    private int imageBeingEdited;
-
     private EditText etName;
     private TextView tvName;
     private TextView tvQuipsters;
@@ -45,12 +43,12 @@ public class CircleHeaderFragment extends Fragment {
     private ImageView ivBackground;
     private ImageView ivCamera;
 
-    private Circle circle;
+    private Circle mCircle;
 
-    private boolean inEditingMode = false;
-    private boolean isEditingName = false;
+    private int mImageBeingEdited;
+    private boolean mInEditingMode = false;
 
-    private ImagePickerService imagePicker;
+    private ImagePickerService mImagePicker;
 
     public static CircleHeaderFragment newInstance(Circle circle) {
         CircleHeaderFragment fragment = new CircleHeaderFragment();
@@ -61,29 +59,29 @@ public class CircleHeaderFragment extends Fragment {
     }
 
     public Circle getCircle() {
-        return circle;
+        return mCircle;
     }
 
     public void setEditing(boolean editing) {
-        inEditingMode = editing;
+        mInEditingMode = editing;
         updateEditingState();
     }
 
     public void addMember(User member) {
-        circle.addMember(member);
+        mCircle.addMember(member);
         updateQuipsterCount();
     }
 
     public void removeMember(User member) {
-        circle.removeMember(member);
+        mCircle.removeMember(member);
         updateQuipsterCount();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        imagePicker = new ImagePickerService(getString(R.string.app_name));
-        circle = getArguments().getParcelable(CIRCLE);
+        mImagePicker = new ImagePickerService(getString(R.string.app_name));
+        mCircle = getArguments().getParcelable(CIRCLE);
     }
 
     @Nullable
@@ -102,7 +100,7 @@ public class CircleHeaderFragment extends Fragment {
 
     private void setupViews(View v) {
         tvName = (TextView) v.findViewById(R.id.tv_name);
-        tvName.setText(circle.getName());
+        tvName.setText(mCircle.getName());
 
         etName = (EditText) v.findViewById(R.id.et_name);
         etName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -132,29 +130,29 @@ public class CircleHeaderFragment extends Fragment {
     }
 
     private void updateQuipsterCount() {
-        int numQuipsters = circle.getMembers().size();
+        int numQuipsters = mCircle.getMembers().size();
         String quipsters = String.format(getString(R.string.label_quipsters), numQuipsters);
         tvQuipsters.setText(quipsters);
     }
 
     private void launchImageSelect(int whichImageView) {
-        imageBeingEdited = whichImageView;
-        startActivityForResult(imagePicker.pickImage(), PICK_IMAGE_REQUEST);
+        mImageBeingEdited = whichImageView;
+        startActivityForResult(mImagePicker.pickImage(), PICK_IMAGE_REQUEST);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (Activity.RESULT_OK == resultCode) {
             if (PICK_IMAGE_REQUEST == requestCode) {
-                loadImage(imagePicker.onImagePicked(data));
+                loadImage(mImagePicker.onImagePicked(data));
             } else if (TAKE_CAMERA_IMAGE_REQUEST == requestCode) {
-                loadImage(imagePicker.onImageTaken());
+                loadImage(mImagePicker.onImageTaken());
             }
         }
     }
 
     private void loadImage(Uri imageUri) {
-        switch (imageBeingEdited) {
+        switch (mImageBeingEdited) {
             case AVATAR_IMAGE:
                 loadAvatarImage(Picasso.with(getContext()).load(imageUri));
                 break;
@@ -185,7 +183,7 @@ public class CircleHeaderFragment extends Fragment {
         boolean hasExistingName = circleHasName();
 
         if (hasValidNewName) {
-            circle.setName(newName);
+            mCircle.setName(newName);
             stopEditingName();
         } else if (hasExistingName) {
             stopEditingName();
@@ -197,7 +195,7 @@ public class CircleHeaderFragment extends Fragment {
             return;
         }
 
-        if (inEditingMode) {
+        if (mInEditingMode) {
             showEditingGuides();
         } else {
             hideEditingGuides();
@@ -248,7 +246,6 @@ public class CircleHeaderFragment extends Fragment {
     }
 
     private void startEditingName() {
-        isEditingName = true;
         tvName.setVisibility(View.INVISIBLE);
         etName.setVisibility(View.VISIBLE);
         etName.setText("");
@@ -256,14 +253,13 @@ public class CircleHeaderFragment extends Fragment {
     }
 
     private void stopEditingName() {
-        isEditingName = false;
         etName.setVisibility(View.INVISIBLE);
         tvName.setVisibility(View.VISIBLE);
-        tvName.setText(circle.getName());
+        tvName.setText(mCircle.getName());
     }
 
     private boolean circleHasName() {
-        return !isBlank(circle.getName());
+        return !isBlank(mCircle.getName());
     }
 
 }
