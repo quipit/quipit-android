@@ -1,6 +1,7 @@
 package it.quip.android.fragment;
 
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,9 +22,11 @@ import it.quip.android.R;
 import it.quip.android.adapter.NotificationAdapter;
 import it.quip.android.listener.NotificationHandler;
 import it.quip.android.model.Circle;
+import it.quip.android.model.MarkAndRefreshJobData;
 import it.quip.android.model.Notification;
 import it.quip.android.model.Quip;
 import it.quip.android.model.User;
+import it.quip.android.task.MarkCurrentAsReadAndRefreshNotifications;
 
 public class NotificationsFragment extends BaseFragment implements NotificationHandler {
 
@@ -31,7 +34,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationH
     private SwipeRefreshLayout mSwipeContainer;
     private NotificationAdapter mNotificationAdapter;
     private RecyclerView mRvContacts;
-    private ArrayList<Notification> mNotifications;
+    private List<Notification> mNotifications;
 
     @Override
     public CharSequence getTitle() {
@@ -49,15 +52,21 @@ public class NotificationsFragment extends BaseFragment implements NotificationH
     }
 
     @Override
-    public void onResult(List<ParseObject> scoreList) {
-        mNotifications.clear();
-        mNotifications = scoreList;
-        mNotificationAdapter.notifyDataSetChanged();
+    public void onResult(List<Notification> notifications) {
+        setNotifications(notifications);
     }
+
+    public void setNotifications(List<Notification> notifications) {
+        mNotifications.clear();
+        mNotifications.addAll(notifications);
+        mNotificationAdapter.notifyDataSetChanged();
+        mSwipeContainer.setRefreshing(false);
+    }
+
 
     @Override
     public void onException(ParseException e) {
-        Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.getContext(), e.toString(), Toast.LENGTH_SHORT).show();
         // None thangs
     }
 
@@ -90,8 +99,9 @@ public class NotificationsFragment extends BaseFragment implements NotificationH
     }
 
     public void refreshNotifications() {
-        // TODO: implement
-        mSwipeContainer.setRefreshing(false);
+        MarkCurrentAsReadAndRefreshNotifications job = new MarkCurrentAsReadAndRefreshNotifications();
+        MarkAndRefreshJobData jobData = new MarkAndRefreshJobData(mNotifications, this);
+        job.execute(jobData);
     }
 
     @Override

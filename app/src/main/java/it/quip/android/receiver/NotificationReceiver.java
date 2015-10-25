@@ -52,7 +52,7 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
                 Iterator<String> itr = json.keys();
                 while (itr.hasNext()) {
                     String key = itr.next();
-                    if ((key.equals("alert")) || (key.equals("quip_event"))) {
+                    if ((key.equals("alert")) || (key.equals(Notification.PUSH_TEXT_BODY_KEY))) {
                         Notification notification = Notification.fromJson(json);
                         triggerBroadcastToActivity(context, notification);
                     }
@@ -68,6 +68,7 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
         Intent pupInt = new Intent(context, QuipitHomeActivity.class);
         pupInt.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
         pupInt.putExtra("new_notification", notification);
+        notification.saveInBackground();
         LocalBroadcastManager.getInstance(context).sendBroadcast(pupInt);
     }
 

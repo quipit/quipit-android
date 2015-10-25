@@ -14,6 +14,7 @@ import com.facebook.login.widget.LoginButton;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
+import it.quip.android.model.Notification;
 import it.quip.android.model.User;
 import it.quip.android.network.FacebookClient;
 
