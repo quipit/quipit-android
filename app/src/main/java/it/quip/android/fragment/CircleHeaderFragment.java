@@ -74,6 +74,11 @@ public class CircleHeaderFragment extends Fragment {
         updateQuipsterCount();
     }
 
+    public void removeMember(User member) {
+        circle.removeMember(member);
+        updateQuipsterCount();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,9 +101,18 @@ public class CircleHeaderFragment extends Fragment {
     }
 
     private void setupViews(View v) {
-        etName = (EditText) v.findViewById(R.id.et_name);
         tvName = (TextView) v.findViewById(R.id.tv_name);
         tvName.setText(circle.getName());
+
+        etName = (EditText) v.findViewById(R.id.et_name);
+        etName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    setCircleName();
+                }
+            }
+        });
 
         tvQuipsters = (TextView) v.findViewById(R.id.tv_quipsters);
         updateQuipsterCount();
@@ -112,9 +126,7 @@ public class CircleHeaderFragment extends Fragment {
         vBackground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isEditingName) {
-                    setCircleName();
-                }
+                etName.clearFocus();
             }
         });
     }
@@ -194,6 +206,8 @@ public class CircleHeaderFragment extends Fragment {
         if (circleHasName()) {
             stopEditingName();
         } else {
+            // If editing mode is turned off but the circle doesn't have a name, users should
+            // be able to enter one (and then not edit it anymore)
             startEditingName();
         }
     }

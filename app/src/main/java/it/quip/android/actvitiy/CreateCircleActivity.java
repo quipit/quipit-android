@@ -14,7 +14,8 @@ import it.quip.android.fragment.InviteFriendsFragment;
 import it.quip.android.model.Circle;
 import it.quip.android.model.User;
 
-public class CreateCircleActivity extends AppCompatActivity implements InviteFriendsFragment.OnFriendInvitedListener {
+public class CreateCircleActivity extends AppCompatActivity
+        implements InviteFriendsFragment.OnFriendsListChangedListener {
 
     public static final String CREATED_CIRCLE = "it.quip.android.CREATED_CIRCLE";
 
@@ -38,7 +39,7 @@ public class CreateCircleActivity extends AppCompatActivity implements InviteFri
         circleHeaderFragment.setEditing(true);
 
         InviteFriendsFragment inviteFriendsFragment = InviteFriendsFragment.newInstance();
-        inviteFriendsFragment.setOnFriendInvitedListener(this);
+        inviteFriendsFragment.setOnFriendsListChangedListener(this);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fl_circle_info, circleHeaderFragment);
@@ -76,5 +77,10 @@ public class CreateCircleActivity extends AppCompatActivity implements InviteFri
     @Override
     public void onFriendInvited(User friend) {
         circleHeaderFragment.addMember(friend);
+    }
+
+    @Override
+    public void onFriendUninvited(User friend) {
+        circleHeaderFragment.removeMember(friend);
     }
 }

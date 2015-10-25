@@ -36,6 +36,10 @@ public class Circle implements Parcelable {
         members.add(member);
     }
 
+    public void removeMember(User member) {
+        members.remove(member);
+    }
+
     public static Circle fromJSON(JSONObject circleJson) {
         Circle circle = new Circle();
 
