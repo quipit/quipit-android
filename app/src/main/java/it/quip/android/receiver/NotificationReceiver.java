@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.parse.ParseException;
 import com.parse.ParsePushBroadcastReceiver;
+import com.parse.SendCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,6 +17,8 @@ import java.util.Iterator;
 
 import it.quip.android.actvitiy.QuipitHomeActivity;
 import it.quip.android.model.Notification;
+import it.quip.android.model.User;
+import it.quip.android.util.TimeUtils;
 
 public class NotificationReceiver extends ParsePushBroadcastReceiver {
 
@@ -43,21 +47,24 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
 
     private void processPush(Context context, Intent intent) {
         String action = intent.getAction();
-        Log.d(TAG, "got action " + action);
         if (action.equals(ACTION_PUSH_RECEIVE)) {
             String channel = intent.getExtras().getString(PARSE_CHANNEL_INTENT_KEY);
             try {
                 JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
-                Log.d(TAG, "got action " + action + " on channel " + channel + " with:");
-                Iterator<String> itr = json.keys();
-                while (itr.hasNext()) {
-                    String key = itr.next();
-                    if ((key.equals("alert")) || (key.equals("quip_event"))) {
-                        Notification notification = Notification.fromJson(json);
-                        triggerBroadcastToActivity(context, notification);
-                    }
-                    Log.d(TAG, "..." + key + " => " + json.getString(key));
+                if (json.has(Notification.PUSH_TEXT_BODY_KEY)) {
+                    Notification notification = Notification.fromJson(json);
+                    notification.setReceiverUid(User.getUserForSession().getObjectId());
+                    triggerBroadcastToActivity(context, notification);
+                } else {
+                    // This is a global push, just use alert
+                    Notification notification = new Notification();
+                    notification.setTimestamp(TimeUtils.currentTimestampInS());
+                    notification.setReceiverUid(User.getUserForSession().getObjectId());
+                    notification.setText(json.getString("alert"));
+                    // TODO: use our image app for this?
+                    triggerBroadcastToActivity(context, notification);
                 }
+
             } catch (JSONException ex) {
                 ex.printStackTrace();
             }
@@ -68,6 +75,7 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
         Intent pupInt = new Intent(context, QuipitHomeActivity.class);
         pupInt.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
         pupInt.putExtra("new_notification", notification);
+        notification.saveInBackground();
         LocalBroadcastManager.getInstance(context).sendBroadcast(pupInt);
     }
 

@@ -1,5 +1,6 @@
 package it.quip.android.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 import it.quip.android.R;
 import it.quip.android.listener.NotificationHandler;
 import it.quip.android.model.Notification;
+import it.quip.android.model.User;
 import it.quip.android.view.TagTextSpanner;
 
 public class NotificationBaseViewHolder extends RecyclerView.ViewHolder {
@@ -23,7 +25,7 @@ public class NotificationBaseViewHolder extends RecyclerView.ViewHolder {
         return mCircleParser;
     }
 
-    public NotificationBaseViewHolder(View v, NotificationHandler handler, NotificationAdapter adapter) {
+    public NotificationBaseViewHolder(View v, NotificationHandler handler, final NotificationAdapter adapter) {
         super(v);
         // "its the ... u know... view holder pattern...anyone else wanna take a stab at this?"
         headLineText = (TextView) itemView.findViewById(R.id.tv_notification_headline);
@@ -40,6 +42,20 @@ public class NotificationBaseViewHolder extends RecyclerView.ViewHolder {
                 int position = getLayoutPosition();
                 Notification notification = mAdapter.getItems().get(position);
                 mHandler.onClickNotification(position, notification);
+            }
+        });
+
+        timestampText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Context context = mAdapter.getContext();
+                Notification notification = new Notification.with(context)
+                        .body("Jean Claude Van Como deposited some darkness in @sfsewers thangs")
+                        .sender(User.getUserForSession())
+                        .type(Notification.STANDARD_NOTIFICATION)
+                        .deliver();
+
             }
         });
 

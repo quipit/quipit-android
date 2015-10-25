@@ -1,22 +1,33 @@
 package it.quip.android.fragment;
 
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.parse.ParseException;
+import com.parse.ParseObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import it.quip.android.R;
 import it.quip.android.adapter.NotificationAdapter;
 import it.quip.android.listener.NotificationHandler;
 import it.quip.android.model.Circle;
+import it.quip.android.model.MarkAndRefreshJobData;
 import it.quip.android.model.Notification;
 import it.quip.android.model.Quip;
 import it.quip.android.model.User;
+import it.quip.android.task.MarkCurrentAsReadAndRefreshNotifications;
 
 public class NotificationsFragment extends BaseFragment implements NotificationHandler {
 
@@ -24,6 +35,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationH
     private SwipeRefreshLayout mSwipeContainer;
     private NotificationAdapter mNotificationAdapter;
     private RecyclerView mRvContacts;
+    private List<Notification> mNotifications;
 
     @Override
     public CharSequence getTitle() {
@@ -40,9 +52,30 @@ public class NotificationsFragment extends BaseFragment implements NotificationH
         return mView;
     }
 
+    @Override
+    public void onResult(List<Notification> notifications) {
+        setNotifications(notifications);
+    }
+
+    public void setNotifications(List<Notification> notifications) {
+        mNotifications.clear();
+        mNotifications.addAll(notifications);
+        mNotificationAdapter.notifyDataSetChanged();
+        mSwipeContainer.setRefreshing(false);
+    }
+
+
+    @Override
+    public void onException(ParseException e) {
+        Log.d("Parse Exception", e.toString());
+        // None thangs
+    }
+
     private void attachNotificationAdapter(View view) {
         mRvContacts = (RecyclerView) view.findViewById(R.id.rv_notifications);
-        mNotificationAdapter = new NotificationAdapter(Notification.getNotifcations(0), this, this.getContext());
+        mNotifications = new ArrayList<>();
+        mNotificationAdapter = new NotificationAdapter(mNotifications, this, this.getContext());
+        Notification.queryNotifcations(this);
         mRvContacts.setAdapter(mNotificationAdapter);
         mRvContacts.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         mRvContacts.setHasFixedSize(true);
@@ -65,8 +98,9 @@ public class NotificationsFragment extends BaseFragment implements NotificationH
     }
 
     public void refreshNotifications() {
-        // TODO: implement
-        mSwipeContainer.setRefreshing(false);
+        MarkCurrentAsReadAndRefreshNotifications job = new MarkCurrentAsReadAndRefreshNotifications();
+        MarkAndRefreshJobData jobData = new MarkAndRefreshJobData(mNotifications, this);
+        job.execute(jobData);
     }
 
     @Override
@@ -100,5 +134,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationH
         //Toast.makeText(this.getContext(), selectedNotification.getText(), Toast.LENGTH_LONG).show();
 
     }
+
+
 
 }

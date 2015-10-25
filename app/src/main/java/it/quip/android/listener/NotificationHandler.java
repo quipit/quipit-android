@@ -1,5 +1,10 @@
 package it.quip.android.listener;
 
+import com.parse.ParseException;
+import com.parse.ParseObject;
+
+import java.util.List;
+
 import it.quip.android.model.Circle;
 import it.quip.android.model.Notification;
 import it.quip.android.model.Quip;
@@ -14,4 +19,6 @@ public interface NotificationHandler {
     void onClickNotificationCircle(Circle selectedCircle);
     void onClickNotificationQuip(Quip selectedQuip);
     void onClickNotification(int position, Notification selectedNotification);
+    void onResult(List<Notification> notifications);
+    void onException(ParseException e);
 }
