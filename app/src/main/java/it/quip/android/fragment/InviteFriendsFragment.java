@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
@@ -23,6 +22,10 @@ import it.quip.android.view.OverlayListView;
 
 public class InviteFriendsFragment extends Fragment {
 
+    public interface OnFriendInvitedListener {
+        void onFriendInvited(User friend);
+    }
+
     private EditText etFriendName;
 
     private UsersArrayAdapter aFilteredFriends;
@@ -30,12 +33,14 @@ public class InviteFriendsFragment extends Fragment {
     private ArrayList<User> invitedFriends;
     private UsersArrayAdapter aInvitedFriends;
 
+    private OnFriendInvitedListener onFriendInvitedListener;
+
     public static InviteFriendsFragment newInstance() {
         return new InviteFriendsFragment();
     }
 
-    public List<User> getInvitedFriends() {
-        return invitedFriends;
+    public void setOnFriendInvitedListener(OnFriendInvitedListener onFriendInvitedListener) {
+        this.onFriendInvitedListener = onFriendInvitedListener;
     }
 
     @Nullable
@@ -85,6 +90,10 @@ public class InviteFriendsFragment extends Fragment {
 
         etFriendName.setText("");
         aFilteredFriends.clear();
+
+        if (onFriendInvitedListener != null) {
+            onFriendInvitedListener.onFriendInvited(friend);
+        }
     }
 
     private void setupFriendNameField() {

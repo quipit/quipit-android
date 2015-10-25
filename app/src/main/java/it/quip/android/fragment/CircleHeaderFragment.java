@@ -20,6 +20,7 @@ import com.squareup.picasso.RequestCreator;
 import it.quip.android.R;
 import it.quip.android.graphics.CircleTransformation;
 import it.quip.android.model.Circle;
+import it.quip.android.model.User;
 import it.quip.android.service.ImagePickerService;
 
 import static it.quip.android.util.StringUtils.isBlank;
@@ -38,6 +39,7 @@ public class CircleHeaderFragment extends Fragment {
 
     private EditText etName;
     private TextView tvName;
+    private TextView tvQuipsters;
 
     private ImageView ivAvatar;
     private ImageView ivBackground;
@@ -67,6 +69,11 @@ public class CircleHeaderFragment extends Fragment {
         updateEditingState();
     }
 
+    public void addMember(User member) {
+        circle.addMember(member);
+        updateQuipsterCount();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,13 +96,12 @@ public class CircleHeaderFragment extends Fragment {
     }
 
     private void setupViews(View v) {
-        TextView tvQuipsters = (TextView) v.findViewById(R.id.tv_quipsters);
-        String quipsters = String.format(getString(R.string.label_quipsters), circle.getMembers().size());
-        tvQuipsters.setText(quipsters);
-
         etName = (EditText) v.findViewById(R.id.et_name);
         tvName = (TextView) v.findViewById(R.id.tv_name);
         tvName.setText(circle.getName());
+
+        tvQuipsters = (TextView) v.findViewById(R.id.tv_quipsters);
+        updateQuipsterCount();
 
         ivCamera = (ImageView) v.findViewById(R.id.iv_camera_background);
         ivBackground = (ImageView) v.findViewById(R.id.iv_background);
@@ -111,6 +117,12 @@ public class CircleHeaderFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void updateQuipsterCount() {
+        int numQuipsters = circle.getMembers().size();
+        String quipsters = String.format(getString(R.string.label_quipsters), numQuipsters);
+        tvQuipsters.setText(quipsters);
     }
 
     private void launchImageSelect(int whichImageView) {
