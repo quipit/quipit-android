@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.text.Normalizer;
 import java.util.List;
 import it.quip.android.R;
 import it.quip.android.listener.TagClickListener;
@@ -42,7 +41,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemViewType(int position) {
-        if (mNotifications.get(position).isViewed()) {
+        if (mNotifications.get(position).viewed()) {
             return READ;
         } else {
             return UNREAD;

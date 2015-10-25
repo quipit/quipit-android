@@ -1,5 +1,6 @@
 package it.quip.android.model;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -7,79 +8,180 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseClassName;
 import com.parse.ParsePush;
+import com.parse.ParseQuery;
 import com.parse.SendCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import it.quip.android.listener.ParseModelQueryHandler;
+import it.quip.android.util.TimeUtil;
 
 
 @ParseClassName("Notification")
 public class Notification extends ParseObject implements Parcelable {
 
     public static final int STANDARD_NOTIFICATION = 0;
-    public static final String PUSH_TEXT_BODY_KEY = "alert";
-    public static final String PUSH_SENDER_ID = "sender";
-    public static final String PUSH_CIRCLE_KEY = "circle";
+    public static final String PUSH_TEXT_BODY_KEY = "text_body";
+    public static final String PUSH_SENDER_ID = "sender_uid";
+    public static final String PUSH_IMAGE_URL_KEY = "image_url";
+    public static final String PUSH_RECEIVER_ID = "receiver_uid";
     public static final String PUSH_TYPE_KEY = "notification_type";
+    public static final String PUSH_TIMESTAMP_KEY = "timestamp";
+    public static final String PUSH_VIEWED_KEY = "viewed";
 
-    private long uid;
-    private String text;
-    private String notificationImageUrl;
-    private int timestamp;
-    private int type;  // TODO: define enum
-    private boolean viewed;
+    private String mSenderUid;
+    private String mReceiverUid;
+    private String mText;
+    private String mNotificationImageUrl;
+    private long mTimestamp;
+    private int mType;  // TODO: define enum
+    private boolean mViewed;
 
-    public boolean isViewed() {
-        return viewed;
-    }
-
-    public void setViewed(boolean viewed) {
-        this.viewed = viewed;
-    }
-
-    public long getUid() {
-        return uid;
+    public boolean viewed() {
+        mViewed = this.getBoolean(PUSH_VIEWED_KEY);
+        return mViewed;
     }
 
     public String getText() {
-        return text;
+        mText = this.getString(PUSH_TEXT_BODY_KEY);
+        return mText;
     }
 
     public String getNotificationImageUrl() {
-        return notificationImageUrl;
+        mNotificationImageUrl = this.getString(PUSH_IMAGE_URL_KEY);
+        return mNotificationImageUrl;
     }
 
-    public int getTimestamp() {
-        return timestamp;
+    public int getType() {
+        mType = this.getInt(PUSH_TYPE_KEY);
+        return mType;
+    }
+
+    public String getReceiverUid() {
+        mReceiverUid = this.getString(PUSH_RECEIVER_ID);
+        return mReceiverUid;
+    }
+
+    public String getSenderUid() {
+        mSenderUid = this.getString(PUSH_SENDER_ID);
+        return mSenderUid;
     }
 
     public String getTimestampString() {
-        // TODO: implement this based on unix timestamp
+        // TODO: implement this based on unix mTimestamp
         return "2h";
+    }
+
+    // SETTERS
+
+    public void setViewed(boolean viewed) {
+        this.mViewed = viewed;
+        this.put(PUSH_VIEWED_KEY, viewed);
+    }
+
+    public void setSenderUid(String uid) {
+        this.mSenderUid = uid;
+        this.put(PUSH_SENDER_ID, uid);
+    }
+
+    public void setReceiverUid(String uid) {
+        this.mReceiverUid = uid;
+        this.put(PUSH_RECEIVER_ID, uid);
+    }
+
+    public void setText(String textString) {
+        this.mText = textString;
+        this.put(PUSH_TEXT_BODY_KEY, textString);
+    }
+
+    public void setNotificationImageUrl(String imageUrl) {
+        this.mNotificationImageUrl = imageUrl;
+        this.put(PUSH_IMAGE_URL_KEY, imageUrl);
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.mTimestamp = timestamp;
+        this.put(PUSH_TIMESTAMP_KEY, timestamp);
+    }
+
+    public void setType(int type) {
+        this.mType = type;
+        this.put(PUSH_TYPE_KEY, type);
     }
 
     public Notification() {
 
     }
 
-    public Notification(long uid, String text, String notificationImageUrl, int timestamp, boolean viewed) {
+    public static class with {
+        private final Context context;
+        private int notificationType;
+        private String notificationText;
+        private String notificationSenderId;
+        private String notificationReceiverId;
+        private String notificationImageUrl;
 
-        this.uid = uid;
-        this.text = text;
-        this.notificationImageUrl = notificationImageUrl;
-        this.timestamp = timestamp;
-        this.viewed = viewed;
-        this.type = STANDARD_NOTIFICATION;
+        public with(Context c) {
+            this.context = c;
+        }
+
+        public with type(int type) {
+            notificationType = type;
+            return this;
+        }
+
+        public with body(String bodyText) {
+            notificationText = bodyText;
+            return this;
+        }
+
+        public with sender(User user) {
+            notificationSenderId = user.getObjectId();
+            return this;
+        }
+
+        public with receiver(User user) {
+            notificationReceiverId = user.getObjectId();
+            return this;
+        }
+
+        public with imageUrl(String url) {
+            notificationImageUrl = url;
+            return this;
+        }
+
+        public Notification build() {
+            Notification n = new Notification(this);
+            n.mViewed = false;
+            return n;
+        }
+    }
+
+    private Notification(with builder) {
+        mType = builder.notificationType;
+        this.put(Notification.PUSH_TYPE_KEY, mType);
+        mSenderUid = builder.notificationSenderId;
+        this.put(Notification.PUSH_SENDER_ID, mSenderUid);
+        mReceiverUid = builder.notificationReceiverId;
+        this.put(Notification.PUSH_RECEIVER_ID, mReceiverUid);
+        mText = builder.notificationText;
+        this.put(Notification.PUSH_TEXT_BODY_KEY, mText);
+        mTimestamp = TimeUtil.currentTimestampInS();
+        this.put(Notification.PUSH_TIMESTAMP_KEY, mTimestamp);
+        mNotificationImageUrl = builder.notificationImageUrl;
+        this.put(Notification.PUSH_IMAGE_URL_KEY, mNotificationImageUrl);
     }
 
     public static Notification fromJson(JSONObject json) {
         Notification notification = new Notification();
         try {
-            notification.text = json.getString("alert");
+            notification.mText = json.getString("alert");
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
@@ -90,7 +192,7 @@ public class Notification extends ParseObject implements Parcelable {
     public JSONObject toJson() {
         JSONObject data = new JSONObject();
         try {
-            data.put(PUSH_TYPE_KEY, this.type);
+            data.put(PUSH_TYPE_KEY, this.mType);
             data.put(PUSH_TEXT_BODY_KEY, this.getText());
             return data;
         } catch (JSONException e) {
@@ -118,30 +220,21 @@ public class Notification extends ParseObject implements Parcelable {
         });
     }
 
-    public static List<Notification> getNotifcations(int page) {
-        /**
-         * Getting the notifications by page needs to be done in some helper or client
-         * TODO: implement this in sprint 2
-         */
+    public static void queryNotifcations(final ParseModelQueryHandler handler) {
 
-        List<Notification> stubs = new ArrayList<>();
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Notification");
+        //query.whereEqualTo("receiver", );
 
-        stubs.add(new Notification(new Long(1),
-                "Brothers Darknesshas added you to circle @unity",
-                "http://image.iheart.com/images/1080/MI0001411019.jpg",
-                1445205833,
-                false
-
-        ));
-
-        stubs.add(new Notification(new Long(2),
-                "Edgar Juarez just quipped in circle @darkness",
-                "http://laaficion.milenio.com/beisbol/Toros_MILIMA20140326_0343_11.jpg",
-                1445205839,
-                true
-        ));
-
-        return stubs;
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null) {
+                    handler.onResult(objects);
+                } else {
+                    handler.onException(e);
+                }
+            }
+        });
 
     }
 
@@ -152,28 +245,29 @@ public class Notification extends ParseObject implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(this.uid);
-        dest.writeString(this.text);
-        dest.writeString(this.notificationImageUrl);
-        dest.writeInt(this.timestamp);
-        dest.writeInt(this.type);
-        dest.writeByte(viewed ? (byte) 1 : (byte) 0);
+        dest.writeString(this.mSenderUid);
+        dest.writeString(this.mReceiverUid);
+        dest.writeString(this.mText);
+        dest.writeString(this.mNotificationImageUrl);
+        dest.writeLong(this.mTimestamp);
+        dest.writeInt(this.mType);
+        dest.writeByte(mViewed ? (byte) 1 : (byte) 0);
     }
 
     protected Notification(Parcel in) {
-        this.uid = in.readLong();
-        this.text = in.readString();
-        this.notificationImageUrl = in.readString();
-        this.timestamp = in.readInt();
-        this.type = in.readInt();
-        this.viewed = in.readByte() != 0;
+        this.setSenderUid(in.readString());
+        this.setReceiverUid(in.readString());
+        this.setText(in.readString());
+        this.setNotificationImageUrl(in.readString());
+        this.setTimestamp(in.readLong());
+        this.setType(in.readInt());
+        this.setViewed(in.readByte() != 0);
     }
 
     public static final Creator<Notification> CREATOR = new Creator<Notification>() {
         public Notification createFromParcel(Parcel source) {
             return new Notification(source);
         }
-
         public Notification[] newArray(int size) {
             return new Notification[size];
         }

@@ -5,7 +5,7 @@ import it.quip.android.model.Notification;
 import it.quip.android.model.Quip;
 import it.quip.android.model.User;
 
-public interface NotificationHandler {
+public interface NotificationHandler extends ParseModelQueryHandler {
     /**
      * Define the interface of any activity or fragment that interacts with a notification adapter
      */

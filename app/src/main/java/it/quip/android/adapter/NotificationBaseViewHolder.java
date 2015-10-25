@@ -8,6 +8,7 @@ import android.widget.TextView;
 import it.quip.android.R;
 import it.quip.android.listener.NotificationHandler;
 import it.quip.android.model.Notification;
+import it.quip.android.model.User;
 import it.quip.android.view.TagTextSpanner;
 
 public class NotificationBaseViewHolder extends RecyclerView.ViewHolder {
@@ -40,6 +41,20 @@ public class NotificationBaseViewHolder extends RecyclerView.ViewHolder {
                 int position = getLayoutPosition();
                 Notification notification = mAdapter.getItems().get(position);
                 mHandler.onClickNotification(position, notification);
+            }
+        });
+
+        timestampText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Notification notification = new Notification.with((Context)     mHandler)
+                        .body("Jean Claude Van Como deposited some darkness in @sfsewers thangs")
+                        .sender(User.getUserForSession())
+                        .type(Notification.STANDARD_NOTIFICATION)
+                        .build()
+                        .send();
+
             }
         });
 
