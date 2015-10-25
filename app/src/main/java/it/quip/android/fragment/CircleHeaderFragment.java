@@ -32,9 +32,6 @@ public class CircleHeaderFragment extends Fragment {
     private static final int PICK_IMAGE_REQUEST = 1408;
     private static final int TAKE_CAMERA_IMAGE_REQUEST = 1556;
 
-    private static final int BACKGROUND_IMAGE = 1239;
-    private static final int AVATAR_IMAGE = 2871;
-
     private EditText etName;
     private TextView tvName;
     private TextView tvQuipsters;
@@ -135,8 +132,8 @@ public class CircleHeaderFragment extends Fragment {
         tvQuipsters.setText(quipsters);
     }
 
-    private void launchImageSelect(int whichImageView) {
-        mImageBeingEdited = whichImageView;
+    private void launchImageSelect(ImageView whichImageView) {
+        mImageBeingEdited = whichImageView.getId();
         startActivityForResult(mImagePicker.pickImage(), PICK_IMAGE_REQUEST);
     }
 
@@ -153,10 +150,10 @@ public class CircleHeaderFragment extends Fragment {
 
     private void loadImage(Uri imageUri) {
         switch (mImageBeingEdited) {
-            case AVATAR_IMAGE:
+            case R.id.iv_avatar:
                 loadAvatarImage(Picasso.with(getContext()).load(imageUri));
                 break;
-            case BACKGROUND_IMAGE:
+            case R.id.iv_background:
                 loadBackgroundImage(Picasso.with(getContext()).load(imageUri));
                 break;
         }
@@ -215,14 +212,14 @@ public class CircleHeaderFragment extends Fragment {
         ivCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                launchImageSelect(BACKGROUND_IMAGE);
+                launchImageSelect(ivBackground);
             }
         });
 
         ivAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                launchImageSelect(AVATAR_IMAGE);
+                launchImageSelect(ivAvatar);
             }
         });
 
