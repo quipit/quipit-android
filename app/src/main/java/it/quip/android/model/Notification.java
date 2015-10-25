@@ -216,9 +216,18 @@ public class Notification extends ParseObject implements Parcelable {
         Notification notification = new Notification();
         try {
             notification.setText(json.getString(Notification.PUSH_TEXT_BODY_KEY));
+            notification.setChannel(json.getString(Notification.PUSH_CHANNEL_KEY));
+            notification.setNotificationImageUrl(json.getString(Notification.PUSH_IMAGE_URL_KEY));
+            notification.setViewed(json.getBoolean(Notification.PUSH_VIEWED_KEY));
+            notification.setReceiverUid(json.getString(Notification.PUSH_RECEIVER_ID));
+            notification.setSenderUid(json.getString(Notification.PUSH_SENDER_ID));
+            notification.setTimestamp(json.getLong(Notification.PUSH_TIMESTAMP_KEY));
+            notification.setType(json.getInt(Notification.PUSH_TYPE_KEY));
+
         } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
+            // This is a global alert, just return default
+            Notification alert = new Notification();
+            return alert;
         }
         return notification;
     }
@@ -228,6 +237,12 @@ public class Notification extends ParseObject implements Parcelable {
         try {
             data.put(PUSH_TYPE_KEY, this.mType);
             data.put(PUSH_TEXT_BODY_KEY, this.getText());
+            data.put(PUSH_CHANNEL_KEY, this.getChannel());
+            data.put(PUSH_RECEIVER_ID, this.getReceiverUid());
+            data.put(PUSH_SENDER_ID, this.getSenderUid());
+            data.put(PUSH_TIMESTAMP_KEY, this.getTimestampString());
+            data.put(PUSH_VIEWED_KEY, this.viewed());
+            data.put(PUSH_IMAGE_URL_KEY, this.getNotificationImageUrl());
             return data;
         } catch (JSONException e) {
             // TODO: implement some sort of better handling
@@ -257,7 +272,7 @@ public class Notification extends ParseObject implements Parcelable {
 
     public static void queryNotifcations(final NotificationHandler handler) {
         ParseQuery<Notification> notifications = ParseQuery.getQuery(Notification.class);
-
+        notifications.orderByDescending(Notification.PUSH_TIMESTAMP_KEY);
         notifications.findInBackground(new FindCallback<Notification>() {
             public void done(List<Notification> notifs, ParseException exception) {
                 if (exception == null) {
