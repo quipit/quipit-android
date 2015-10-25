@@ -1,4 +1,4 @@
-package it.quip.android.view;
+package it.quip.android.graphics;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -7,12 +7,12 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader;
 
-public class RoundedImageTransform implements com.squareup.picasso.Transformation {
+public class RoundedRectTransform implements com.squareup.picasso.Transformation {
 
     private final int radius;
     private final int margin;
 
-    public RoundedImageTransform(final int radius, final int margin) {
+    public RoundedRectTransform(final int radius, final int margin) {
         this.radius = radius;
         this.margin = margin;
     }
@@ -39,7 +39,7 @@ public class RoundedImageTransform implements com.squareup.picasso.Transformatio
 
     @Override
     public String key() {
-        return "RoundedImageTransform";
+        return "rounded(radius=" + radius + ", margin=" + margin + ")";
     }
 
 }

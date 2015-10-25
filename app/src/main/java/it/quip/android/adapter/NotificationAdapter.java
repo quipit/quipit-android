@@ -14,7 +14,7 @@ import it.quip.android.R;
 import it.quip.android.listener.TagClickListener;
 import it.quip.android.listener.NotificationHandler;
 import it.quip.android.model.Notification;
-import it.quip.android.util.FormatUtil;
+import it.quip.android.util.FormatUtils;
 
 public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -98,11 +98,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         vh.getHeadLineText().setMovementMethod(LinkMovementMethod.getInstance());
         String headlineText =  notification.getText().toString();
         vh.getHeadLineText().setText(vh.getCircleParser().tagParse(
-                                    FormatUtil.CIRCLE_PATTERN,
+                                    FormatUtils.CIRCLE_PATTERN,
                                     headlineText,
                                     (TagClickListener) mContext,
                                     false,
-                                    FormatUtil.CIRCLE_MENTION_COLOR),
+                                    FormatUtils.CIRCLE_MENTION_COLOR),
                 TextView.BufferType.SPANNABLE);
         vh.getTimestampText().setText(notification.getTimestampString());
         vh.getNotificationImage().setImageResource(0);

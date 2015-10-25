@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
@@ -23,6 +22,11 @@ import it.quip.android.view.OverlayListView;
 
 public class InviteFriendsFragment extends Fragment {
 
+    public interface OnFriendsListChangedListener {
+        void onFriendInvited(User friend);
+        void onFriendUninvited(User friend);
+    }
+
     private EditText etFriendName;
 
     private UsersArrayAdapter aFilteredFriends;
@@ -30,12 +34,14 @@ public class InviteFriendsFragment extends Fragment {
     private ArrayList<User> invitedFriends;
     private UsersArrayAdapter aInvitedFriends;
 
+    private OnFriendsListChangedListener onFriendsListChangedListener;
+
     public static InviteFriendsFragment newInstance() {
         return new InviteFriendsFragment();
     }
 
-    public List<User> getInvitedFriends() {
-        return invitedFriends;
+    public void setOnFriendsListChangedListener(OnFriendsListChangedListener onFriendsListChangedListener) {
+        this.onFriendsListChangedListener = onFriendsListChangedListener;
     }
 
     @Nullable
@@ -74,7 +80,7 @@ public class InviteFriendsFragment extends Fragment {
         aInvitedFriends.setOnLongClickListener(new UsersArrayAdapter.OnLongClickListener() {
             @Override
             public boolean onLongClick(int position, User user) {
-                aInvitedFriends.remove(user);
+                uninviteFriend(user);
                 return true;
             }
         });
@@ -85,6 +91,17 @@ public class InviteFriendsFragment extends Fragment {
 
         etFriendName.setText("");
         aFilteredFriends.clear();
+
+        if (onFriendsListChangedListener != null) {
+            onFriendsListChangedListener.onFriendInvited(friend);
+        }
+    }
+
+    private void uninviteFriend(User friend) {
+        aInvitedFriends.remove(friend);
+        if (onFriendsListChangedListener != null) {
+            onFriendsListChangedListener.onFriendUninvited(friend);
+        }
     }
 
     private void setupFriendNameField() {
@@ -120,7 +137,8 @@ public class InviteFriendsFragment extends Fragment {
     }
 
     private boolean myself(User friend) {
-        return friend.getObjectId() == QuipitApplication.getCurrentUser().getObjectId();
+        // TODO: We will need to do this with the object ids
+        return friend.getName().equals(QuipitApplication.getCurrentUser().getName());
     }
 
     private boolean alreadyInvited(User friend) {
