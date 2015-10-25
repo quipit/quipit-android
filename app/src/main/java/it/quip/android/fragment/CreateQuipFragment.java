@@ -19,7 +19,7 @@ import com.squareup.picasso.Picasso;
 
 import it.quip.android.R;
 import it.quip.android.model.User;
-import it.quip.android.view.RoundedImageTransform;
+import it.quip.android.graphics.RoundedRectTransform;
 
 public class CreateQuipFragment extends DialogFragment {
 
@@ -62,7 +62,7 @@ public class CreateQuipFragment extends DialogFragment {
         try {
             Picasso.with(getActivity())
                     .load("drawable/edgarjuarez.jpeg")
-                    .transform(new RoundedImageTransform(10, 0))
+                    .transform(new RoundedRectTransform(10, 0))
                     .into(mIvProfile);
 
         } catch (IllegalArgumentException illegalArgumentException) {

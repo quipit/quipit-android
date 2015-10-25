@@ -11,7 +11,7 @@ import java.util.List;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
-import it.quip.android.fragment.CreateCircleFragment;
+import it.quip.android.fragment.CircleHeaderFragment;
 import it.quip.android.fragment.InviteFriendsFragment;
 import it.quip.android.model.Circle;
 import it.quip.android.model.User;
@@ -21,7 +21,7 @@ public class CreateCircleActivity extends AppCompatActivity {
 
     public static final String CREATED_CIRCLE = "it.quip.android.CREATED_CIRCLE";
 
-    private CreateCircleFragment createCircleFragment;
+    private CircleHeaderFragment circleHeaderFragment;
     private InviteFriendsFragment inviteFriendsFragment;
 
     @Override
@@ -35,11 +35,11 @@ public class CreateCircleActivity extends AppCompatActivity {
     }
 
     private void setupFragments() {
-        createCircleFragment = CreateCircleFragment.newInstance();
+        circleHeaderFragment = CircleHeaderFragment.newInstance(new Circle());
         inviteFriendsFragment = InviteFriendsFragment.newInstance();
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fl_circle_info, createCircleFragment);
+        ft.replace(R.id.fl_circle_info, circleHeaderFragment);
         ft.replace(R.id.fl_circle_friends, inviteFriendsFragment);
         ft.commit();
     }
@@ -62,9 +62,9 @@ public class CreateCircleActivity extends AppCompatActivity {
     }
 
     private void createCircle() {
-        String circleName = createCircleFragment.getCircleName();
+        Circle circle = circleHeaderFragment.getCircle();
         List<User> invitedFriends = inviteFriendsFragment.getInvitedFriends();
-        Circle createdCircle = MockUtils.circleWithNameAndMembers(circleName, invitedFriends);
+        Circle createdCircle = MockUtils.circleWithNameAndMembers(circle.getName(), invitedFriends);
         createdCircle.addMember(QuipitApplication.getCurrentUser());
 
         Intent data = new Intent();

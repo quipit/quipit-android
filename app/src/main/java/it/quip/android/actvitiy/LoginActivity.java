@@ -56,7 +56,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (FacebookClient.getInstance() == null) {
             setupLoginButton();
 

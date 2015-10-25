@@ -1,12 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@android:color/darker_gray"
+    android:id="@+id/header"
     android:layout_width="match_parent"
     android:layout_height="180dp">
 
+    <ImageView android:id="@+id/iv_background"
+        android:src="@drawable/background"
+        android:contentDescription="@string/description_background"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageView android:id="@+id/iv_camera_background"
+        android:src="@drawable/ic_camera"
+        android:contentDescription="@string/description_access_camera"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:padding="10dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
     <ImageView android:id="@+id/iv_avatar"
-        android:src="@mipmap/ic_launcher"
-        android:layout_centerInParent="true"
+        android:src="@drawable/quipit"
+        android:contentDescription="@string/description_avatar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="8dp"
         android:layout_width="60dp"
         android:layout_height="60dp" />
 
@@ -15,10 +36,28 @@
         android:textSize="16sp"
         android:textColor="@android:color/white"
         android:gravity="center"
+        android:visibility="visible"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/iv_avatar"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="28dp" />
+
+    <EditText android:id="@+id/et_name"
+        android:hint="Circle Name"
+        android:singleLine="true"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/secondary_text_dark"
+        android:textCursorDrawable="@null"
+        android:inputType="textNoSuggestions"
+        android:background="@null"
+        android:gravity="center"
+        android:visibility="invisible"
+        android:padding="0dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/iv_avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp" />
 
     <TextView android:id="@+id/tv_quipsters"
         android:text="4 quipsters"
