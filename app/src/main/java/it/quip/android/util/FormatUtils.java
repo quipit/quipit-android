@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 import it.quip.android.R;
 
-public class FormatUtil {
+public class FormatUtils {
 
     public static final Pattern CIRCLE_PATTERN = Pattern.compile("(@[A-Za-z0-9_-]+)");
 

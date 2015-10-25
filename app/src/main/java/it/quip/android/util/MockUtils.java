@@ -96,7 +96,7 @@ public class MockUtils {
     }
 
     private static long randomTimestamp() {
-        return TimeUtil.currentTimestampInS() - generator.nextInt(YEAR_IN_S);
+        return TimeUtils.currentTimestampInS() - generator.nextInt(YEAR_IN_S);
     }
 
 }

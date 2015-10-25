@@ -7,22 +7,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.List;
-
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
-import it.quip.android.fragment.CreateCircleFragment;
+import it.quip.android.fragment.CircleHeaderFragment;
 import it.quip.android.fragment.InviteFriendsFragment;
 import it.quip.android.model.Circle;
 import it.quip.android.model.User;
-import it.quip.android.util.MockUtils;
 
-public class CreateCircleActivity extends AppCompatActivity {
+public class CreateCircleActivity extends AppCompatActivity
+        implements InviteFriendsFragment.OnFriendsListChangedListener {
 
     public static final String CREATED_CIRCLE = "it.quip.android.CREATED_CIRCLE";
 
-    private CreateCircleFragment createCircleFragment;
-    private InviteFriendsFragment inviteFriendsFragment;
+    private CircleHeaderFragment circleHeaderFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +32,17 @@ public class CreateCircleActivity extends AppCompatActivity {
     }
 
     private void setupFragments() {
-        createCircleFragment = CreateCircleFragment.newInstance();
-        inviteFriendsFragment = InviteFriendsFragment.newInstance();
+        Circle circle = new Circle();
+        circle.addMember(QuipitApplication.getCurrentUser());
+
+        circleHeaderFragment = CircleHeaderFragment.newInstance(circle);
+        circleHeaderFragment.setEditing(true);
+
+        InviteFriendsFragment inviteFriendsFragment = InviteFriendsFragment.newInstance();
+        inviteFriendsFragment.setOnFriendsListChangedListener(this);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fl_circle_info, createCircleFragment);
+        ft.replace(R.id.fl_circle_info, circleHeaderFragment);
         ft.replace(R.id.fl_circle_friends, inviteFriendsFragment);
         ft.commit();
     }
@@ -62,15 +65,22 @@ public class CreateCircleActivity extends AppCompatActivity {
     }
 
     private void createCircle() {
-        String circleName = createCircleFragment.getCircleName();
-        List<User> invitedFriends = inviteFriendsFragment.getInvitedFriends();
-        Circle createdCircle = MockUtils.circleWithNameAndMembers(circleName, invitedFriends);
-        createdCircle.addMember(QuipitApplication.getCurrentUser());
+        Circle createdCircle = circleHeaderFragment.getCircle();
 
         Intent data = new Intent();
         data.putExtra(CREATED_CIRCLE, createdCircle);
 
         setResult(RESULT_OK, data);
         finish();
+    }
+
+    @Override
+    public void onFriendInvited(User friend) {
+        circleHeaderFragment.addMember(friend);
+    }
+
+    @Override
+    public void onFriendUninvited(User friend) {
+        circleHeaderFragment.removeMember(friend);
     }
 }

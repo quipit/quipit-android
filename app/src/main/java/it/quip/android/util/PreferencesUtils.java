@@ -4,12 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 
-public class PreferencesUtil {
+public class PreferencesUtils {
 
     private SharedPreferences _preferences;
     private SharedPreferences.Editor _preferencesEditor;
 
-    public PreferencesUtil(Context sourceActivity, String preferenceFile) {
+    public PreferencesUtils(Context sourceActivity, String preferenceFile) {
         _preferences = sourceActivity.getSharedPreferences(preferenceFile, Context.MODE_PRIVATE);
         _preferencesEditor = _preferences.edit();
     }

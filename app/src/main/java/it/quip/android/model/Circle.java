@@ -13,7 +13,7 @@ import java.util.List;
 public class Circle implements Parcelable {
 
     private long uid;
-    private String name;
+    private String name = "";
     private List<User> members = new ArrayList<>();
 
     public long getUid() {
@@ -24,12 +24,20 @@ public class Circle implements Parcelable {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public List<User> getMembers() {
         return members;
     }
 
     public void addMember(User member) {
         members.add(member);
+    }
+
+    public void removeMember(User member) {
+        members.remove(member);
     }
 
     public static Circle fromJSON(JSONObject circleJson) {
@@ -100,4 +108,5 @@ public class Circle implements Parcelable {
             return new Circle[size];
         }
     };
+
 }

@@ -14,7 +14,7 @@ import java.util.List;
 
 import it.quip.android.R;
 import it.quip.android.fragment.QuipFeedFragment;
-import it.quip.android.view.RoundedImageTransform;
+import it.quip.android.graphics.RoundedRectTransform;
 import it.quip.android.model.Quip;
 
 public class QuipsAdapter extends RecyclerView.Adapter<QuipsViewHolder> {
@@ -52,7 +52,7 @@ public class QuipsAdapter extends RecyclerView.Adapter<QuipsViewHolder> {
         try {
             Picasso.with(viewHolder.mContext)
                     .load("drawable/edgarjuarez.jpeg")
-                    .transform(new RoundedImageTransform(10, 0))
+                    .transform(new RoundedRectTransform(10, 0))
                     .into(viewHolder.mIvProfile);
 
         } catch (IllegalArgumentException illegalArgumentException) {
