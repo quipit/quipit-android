@@ -5,7 +5,6 @@ import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
-import com.facebook.login.LoginResult;
 
 
 public class FacebookClient {
@@ -28,13 +27,13 @@ public class FacebookClient {
 
     private AccessToken accessToken;
 
-    public static FacebookClient getInstance(LoginResult loginResult) throws FacebookClientException {
-        if (client == null) {
-            if (loginResult == null) {
-                throw new FacebookClientException("No loginResult found.");
-            }
+    public static FacebookClient getInstance() {
+        if (AccessToken.getCurrentAccessToken().isExpired()) {
+            return null;
+        }
 
-            client = new FacebookClient(loginResult.getAccessToken());
+        if (client == null) {
+            client = new FacebookClient(AccessToken.getCurrentAccessToken());
         }
 
         return client;

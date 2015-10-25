@@ -50,7 +50,7 @@ public class MockUtils {
     public static User userWithName(String name) {
         long userId = randomId();
         String userAsJson = String.format(
-                "{\"email\": \"\", \"name\": \"%s\", \"id\": %d}", name, userId);
+                "{\"email\": \"\", \"name\": \"%s\", \"facebook_id\": %s}", name, Long.toString(userId));
 
         return User.fromJSON(jsonFromString(userAsJson));
     }

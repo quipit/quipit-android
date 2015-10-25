@@ -4,15 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import it.quip.android.QuipitApplication;
 import it.quip.android.R;
+import it.quip.android.model.User;
 import it.quip.android.network.FacebookClient;
 
 public class LoginActivity extends AppCompatActivity {
@@ -29,42 +31,44 @@ public class LoginActivity extends AppCompatActivity {
         mBtnLogin.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                try {
-                    FacebookClient.getInstance(loginResult);
-                } catch (FacebookClient.FacebookClientException facebookClientException) {
-                    Log.e("LoginActivity", "Unable to generate FacebookClient with result: " + loginResult);
-                }
-
+                AccessToken.setCurrentAccessToken(loginResult.getAccessToken());
                 startMainActivity();
             }
 
             @Override
             public void onCancel() {
-                Toast.makeText(LoginActivity.this, "Auth Cancelled", Toast.LENGTH_SHORT).show();
+                Log.d("LogIn", "Auth Cancelled");
             }
 
             @Override
             public void onError(FacebookException exception) {
-                Toast.makeText(LoginActivity.this, "Auth Error", Toast.LENGTH_SHORT).show();
+                Log.d("LogIn", "Auth Error");
             }
         });
+    }
+
+    private void startMainActivity() {
+        QuipitApplication.setCurrentUser(User.getUserForSession());
+        Intent intent = new Intent(this, QuipitHomeActivity.class);
+        startActivity(intent);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupLoginButton();
+
+        if (FacebookClient.getInstance() == null) {
+            setupLoginButton();
+
+        } else {
+            startMainActivity();
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private void startMainActivity() {
-        Intent intent = new Intent(this, QuipitHomeActivity.class);
-        startActivity(intent);
     }
 
 }
