@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,16 +67,14 @@ public class NotificationsFragment extends BaseFragment implements NotificationH
 
     @Override
     public void onException(ParseException e) {
-        Toast.makeText(this.getContext(), e.toString(), Toast.LENGTH_SHORT).show();
+        Log.d("Parse Exception", e.toString());
         // None thangs
     }
 
     private void attachNotificationAdapter(View view) {
         mRvContacts = (RecyclerView) view.findViewById(R.id.rv_notifications);
         mNotifications = new ArrayList<>();
-        mNotificationAdapter = new NotificationAdapter(mNotifications
-                , this, this.getContext());
-
+        mNotificationAdapter = new NotificationAdapter(mNotifications, this, this.getContext());
         Notification.queryNotifcations(this);
         mRvContacts.setAdapter(mNotificationAdapter);
         mRvContacts.setLayoutManager(new LinearLayoutManager(this.getActivity()));

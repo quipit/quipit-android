@@ -1,12 +1,10 @@
 package it.quip.android.model;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.parse.FindCallback;
@@ -21,7 +19,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import it.quip.android.listener.NotificationHandler;
-import it.quip.android.listener.ParseModelQueryHandler;
 import it.quip.android.util.TimeUtils;
 
 
@@ -35,7 +32,7 @@ public class Notification extends ParseObject implements Parcelable {
     public static final String PUSH_RECEIVER_ID = "receiver_uid";
     public static final String PUSH_TYPE_KEY = "notification_type";
     public static final String PUSH_TIMESTAMP_KEY = "timestamp";
-    public static final String PUSH_VIEWED_KEY = "viewed";
+    public static final String PUSH_VIEWED_KEY = "getViewed";
     public static final String PUSH_CHANNEL_KEY = "channel";
 
     private String mSenderUid;
@@ -53,12 +50,7 @@ public class Notification extends ParseObject implements Parcelable {
         return mChannel;
     }
 
-    public void setChannel(String channel) {
-        this.safePutKey(PUSH_CHANNEL_KEY, channel);
-        this.mChannel = channel;
-    }
-
-    public boolean viewed() {
+    public boolean getViewed() {
         mViewed = this.getBoolean(PUSH_VIEWED_KEY);
         return mViewed;
 
@@ -99,6 +91,11 @@ public class Notification extends ParseObject implements Parcelable {
     public void setViewed(boolean viewed) {
         this.mViewed = viewed;
         this.safePutKey(PUSH_VIEWED_KEY, viewed);
+    }
+
+    public void setChannel(String channel) {
+        this.safePutKey(PUSH_CHANNEL_KEY, channel);
+        this.mChannel = channel;
     }
 
     public void setSenderUid(String uid) {
@@ -241,7 +238,7 @@ public class Notification extends ParseObject implements Parcelable {
             data.put(PUSH_RECEIVER_ID, this.getReceiverUid());
             data.put(PUSH_SENDER_ID, this.getSenderUid());
             data.put(PUSH_TIMESTAMP_KEY, this.getTimestampString());
-            data.put(PUSH_VIEWED_KEY, this.viewed());
+            data.put(PUSH_VIEWED_KEY, this.getViewed());
             data.put(PUSH_IMAGE_URL_KEY, this.getNotificationImageUrl());
             return data;
         } catch (JSONException e) {

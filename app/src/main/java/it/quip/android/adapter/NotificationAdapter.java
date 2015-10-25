@@ -41,7 +41,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemViewType(int position) {
-        if (mNotifications.get(position).viewed()) {
+        if (mNotifications.get(position).getViewed()) {
             return READ;
         } else {
             return UNREAD;
