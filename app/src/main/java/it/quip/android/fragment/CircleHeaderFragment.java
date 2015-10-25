@@ -41,8 +41,11 @@ public class CircleHeaderFragment extends Fragment {
 
     private ImageView ivAvatar;
     private ImageView ivBackground;
+    private ImageView ivCamera;
 
     private Circle circle;
+
+    private boolean inEditingMode = false;
     private boolean isEditingName = false;
 
     private ImagePickerService imagePicker;
@@ -57,6 +60,11 @@ public class CircleHeaderFragment extends Fragment {
 
     public Circle getCircle() {
         return circle;
+    }
+
+    public void setEditing(boolean editing) {
+        inEditingMode = editing;
+        updateEditingState();
     }
 
     @Override
@@ -74,45 +82,25 @@ public class CircleHeaderFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateEditingState();
+    }
+
     private void setupViews(View v) {
         TextView tvQuipsters = (TextView) v.findViewById(R.id.tv_quipsters);
         String quipsters = String.format(getString(R.string.label_quipsters), circle.getMembers().size());
         tvQuipsters.setText(quipsters);
 
+        etName = (EditText) v.findViewById(R.id.et_name);
+        tvName = (TextView) v.findViewById(R.id.tv_name);
+        tvName.setText(circle.getName());
+
+        ivCamera = (ImageView) v.findViewById(R.id.iv_camera_background);
         ivBackground = (ImageView) v.findViewById(R.id.iv_background);
         ivAvatar = (ImageView) v.findViewById(R.id.iv_avatar);
         loadAvatarImage(Picasso.with(getContext()).load(R.drawable.quipit));
-
-        ivAvatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchImageSelect(AVATAR_IMAGE);
-            }
-        });
-
-        ImageView ivCamera = (ImageView) v.findViewById(R.id.iv_camera_background);
-        ivCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchImageSelect(BACKGROUND_IMAGE);
-            }
-        });
-
-        etName = (EditText) v.findViewById(R.id.et_name);
-        tvName = (TextView) v.findViewById(R.id.tv_name);
-        tvName.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                startEditingName();
-                return true;
-            }
-        });
-
-        if (circleHasName()) {
-            stopEditingName();
-        } else {
-            startEditingName();
-        }
 
         View vBackground = v.findViewById(R.id.header);
         vBackground.setOnClickListener(new View.OnClickListener() {
@@ -134,21 +122,11 @@ public class CircleHeaderFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (Activity.RESULT_OK == resultCode) {
             if (PICK_IMAGE_REQUEST == requestCode) {
-                onImagePicked(data);
+                loadImage(imagePicker.onImagePicked(data));
             } else if (TAKE_CAMERA_IMAGE_REQUEST == requestCode) {
-                onImageTaken();
+                loadImage(imagePicker.onImageTaken());
             }
         }
-    }
-
-    private void onImagePicked(Intent data) {
-        Uri pickedImage = imagePicker.onImagePicked(data);
-        loadImage(pickedImage);
-    }
-
-    private void onImageTaken() {
-        Uri takenImage = imagePicker.onImageTaken();
-        loadImage(takenImage);
     }
 
     private void loadImage(Uri imageUri) {
@@ -188,6 +166,59 @@ public class CircleHeaderFragment extends Fragment {
         } else if (hasExistingName) {
             stopEditingName();
         }
+    }
+
+    private void updateEditingState() {
+        if (null == getView()) {
+            return;
+        }
+
+        if (inEditingMode) {
+            showEditingGuides();
+        } else {
+            hideEditingGuides();
+        }
+
+        if (circleHasName()) {
+            stopEditingName();
+        } else {
+            startEditingName();
+        }
+    }
+
+    private void showEditingGuides() {
+        ivCamera.setVisibility(View.VISIBLE);
+        ivCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchImageSelect(BACKGROUND_IMAGE);
+            }
+        });
+
+        ivAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchImageSelect(AVATAR_IMAGE);
+            }
+        });
+
+        tvName.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                startEditingName();
+                return true;
+            }
+        });
+    }
+
+    private void hideEditingGuides() {
+        // We don't hide the edit text here because if the user is in the middle of typing something
+        // when the editing state is changed, we should still allow them to finish (but then not
+        // allow subsequent edits).
+        ivCamera.setVisibility(View.INVISIBLE);
+        ivCamera.setOnClickListener(null);
+        ivAvatar.setOnClickListener(null);
+        tvName.setOnLongClickListener(null);
     }
 
     private void startEditingName() {

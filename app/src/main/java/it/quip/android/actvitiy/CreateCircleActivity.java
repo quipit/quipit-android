@@ -35,8 +35,9 @@ public class CreateCircleActivity extends AppCompatActivity {
     }
 
     private void setupFragments() {
-        circleHeaderFragment = CircleHeaderFragment.newInstance(new Circle());
         inviteFriendsFragment = InviteFriendsFragment.newInstance();
+        circleHeaderFragment = CircleHeaderFragment.newInstance(new Circle());
+        circleHeaderFragment.setEditing(true);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fl_circle_info, circleHeaderFragment);
