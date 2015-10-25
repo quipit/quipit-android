@@ -47,7 +47,6 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
 
     private void processPush(Context context, Intent intent) {
         String action = intent.getAction();
-        Log.d(TAG, "got action " + action);
         if (action.equals(ACTION_PUSH_RECEIVE)) {
             String channel = intent.getExtras().getString(PARSE_CHANNEL_INTENT_KEY);
             try {
@@ -66,16 +65,6 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
                     triggerBroadcastToActivity(context, notification);
                 }
 
-                Log.d(TAG, "got action " + action + " on channel " + channel + " with:");
-                Iterator<String> itr = json.keys();
-                while (itr.hasNext()) {
-                    String key = itr.next();
-                    if (key.equals(Notification.PUSH_TEXT_BODY_KEY)) {
-                        Notification notification = Notification.fromJson(json);
-                        triggerBroadcastToActivity(context, notification);
-                    }
-                    Log.d(TAG, "..." + key + " => " + json.getString(key));
-                }
             } catch (JSONException ex) {
                 ex.printStackTrace();
             }
