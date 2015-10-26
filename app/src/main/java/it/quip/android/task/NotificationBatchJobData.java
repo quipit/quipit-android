@@ -1,7 +1,10 @@
-package it.quip.android.model;
+package it.quip.android.task;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import it.quip.android.model.Notification;
+import it.quip.android.model.User;
 
 public class NotificationBatchJobData {
 

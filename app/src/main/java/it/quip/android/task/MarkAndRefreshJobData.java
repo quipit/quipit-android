@@ -1,8 +1,9 @@
-package it.quip.android.model;
+package it.quip.android.task;
 
 import java.util.List;
 
 import it.quip.android.listener.NotificationHandler;
+import it.quip.android.model.Notification;
 
 public class MarkAndRefreshJobData {
     private NotificationHandler mHandler;

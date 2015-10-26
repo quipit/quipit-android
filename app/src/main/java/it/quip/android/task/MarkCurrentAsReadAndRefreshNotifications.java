@@ -7,7 +7,6 @@ import com.parse.ParseException;
 import java.util.List;
 
 import it.quip.android.listener.NotificationHandler;
-import it.quip.android.model.MarkAndRefreshJobData;
 import it.quip.android.model.Notification;
 
 public class MarkCurrentAsReadAndRefreshNotifications extends AsyncTask<MarkAndRefreshJobData, Void, Void> {
