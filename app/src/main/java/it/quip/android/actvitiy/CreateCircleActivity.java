@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.parse.ParseException;
+import com.parse.SaveCallback;
+
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
 import it.quip.android.fragment.CircleHeaderFragment;
@@ -66,9 +69,25 @@ public class CreateCircleActivity extends AppCompatActivity
 
     private void createCircle() {
         Circle createdCircle = circleHeaderFragment.getCircle();
+        createdCircle.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                finishWithResult();
+            }
+        });
 
+        // TODO: do something with theme images
+//        Bitmap avatar = circleHeaderFragment.getAvatar();
+//        new ParseFile("avatar.jpg", ImageUtils.getBytes(avatar));
+//
+//        Bitmap background = circleHeaderFragment.getBackground();
+//        new ParseFile("background.jpg", ImageUtils.getBytes(background));
+
+    }
+
+    private void finishWithResult() {
         Intent data = new Intent();
-        data.putExtra(CREATED_CIRCLE, createdCircle);
+        data.putExtra(CREATED_CIRCLE, circleHeaderFragment.getCircle());
 
         setResult(RESULT_OK, data);
         finish();

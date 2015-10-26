@@ -2,7 +2,9 @@ package it.quip.android.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,6 +23,9 @@ import it.quip.android.R;
 import it.quip.android.graphics.CircleTransformation;
 import it.quip.android.model.Circle;
 import it.quip.android.model.User;
+import it.quip.android.repository.circle.CircleRepository;
+import it.quip.android.repository.circle.CircleResponseHandler;
+import it.quip.android.repository.circle.ParseCircleRepository;
 import it.quip.android.service.ImagePickerService;
 
 import static it.quip.android.util.StringUtils.isBlank;
@@ -41,6 +46,7 @@ public class CircleHeaderFragment extends Fragment {
     private ImageView ivCamera;
 
     private Circle mCircle;
+    private CircleRepository circlesRepo;
 
     private int mImageBeingEdited;
     private boolean mInEditingMode = false;
@@ -57,6 +63,18 @@ public class CircleHeaderFragment extends Fragment {
 
     public Circle getCircle() {
         return mCircle;
+    }
+
+    public Bitmap getAvatar() {
+        return getBitmap(ivAvatar);
+    }
+
+    public Bitmap getBackground() {
+        return getBitmap(ivBackground);
+    }
+
+    private Bitmap getBitmap(ImageView imageView) {
+        return ((BitmapDrawable) imageView.getDrawable()).getBitmap();
     }
 
     public void setEditing(boolean editing) {
@@ -79,6 +97,20 @@ public class CircleHeaderFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mImagePicker = new ImagePickerService(getString(R.string.app_name));
         mCircle = getArguments().getParcelable(CIRCLE);
+        circlesRepo = new ParseCircleRepository();
+
+        fetchCircle();
+    }
+
+    private void fetchCircle() {
+        circlesRepo.getCircle(mCircle, new CircleResponseHandler() {
+            @Override
+            public void onSuccess(Circle circle) {
+                // TODO: make an onFailure - this will fail if the circle is not found
+                mCircle = circle;
+                updateViewState();
+            }
+        });
     }
 
     @Nullable
@@ -93,6 +125,10 @@ public class CircleHeaderFragment extends Fragment {
     public void onResume() {
         super.onResume();
         updateEditingState();
+    }
+
+    private void updateViewState() {
+        updateQuipsterCount();
     }
 
     private void setupViews(View v) {

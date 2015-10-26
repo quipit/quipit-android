@@ -21,10 +21,12 @@ public class QuipitApplication extends Application {
         Parse.initialize(this,
                 stringRes(R.string.parse_application_id),
                 stringRes(R.string.parse_client_key));
-        ParseObject.registerSubclass(Notification.class);
+
         ParseObject.registerSubclass(User.class);
         ParseObject.registerSubclass(Quip.class);
         ParseObject.registerSubclass(Circle.class);
+        ParseObject.registerSubclass(Notification.class);
+
         ParseInstallation.getCurrentInstallation().saveInBackground();
     }
 
