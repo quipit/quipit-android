@@ -15,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.List;
+
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
 import it.quip.android.fragment.NotificationsFragment;
@@ -84,8 +86,10 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
         Menu circlesSubMenu = mNavDrawer.getMenu().findItem(R.id.navCircles).getSubMenu();
         circlesSubMenu.clear();
 
-        for (Circle circle : user.getCircles()) {
-            circlesSubMenu.add(0, Integer.parseInt(circle.getObjectId()), Menu.NONE, circle.getName());
+        List<Circle> userCircles = user.getCircles();
+        for (int i = 0; i < userCircles.size(); i++) {
+            Circle circle = userCircles.get(i);
+            circlesSubMenu.add(0, i, Menu.NONE, circle.getName());
         }
     }
 
@@ -102,7 +106,7 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
                 Circle circle = user.getCircle(itemId);
                 if (null == circle) {
                     throw new RuntimeException("Attempted to select circle id " + itemId
-                            + " but it doesnt exist in the menu");
+                            + " but it doesn't exist in the menu");
                 }
 
                 fragment = ViewCircleFragment.newInstance(circle);

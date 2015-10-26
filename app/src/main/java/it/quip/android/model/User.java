@@ -51,11 +51,9 @@ public class User extends BaseParseObject implements Parcelable {
         return circles;
     }
 
-    public Circle getCircle(int circleId) {
-        for (Circle circle : circles) {
-            if (Integer.parseInt(circle.getObjectId()) == circleId) {
-                return circle;
-            }
+    public Circle getCircle(int circleIndex) {
+        if (circleIndex < circles.size()) {
+            return circles.get(circleIndex);
         }
 
         return null;
