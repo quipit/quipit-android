@@ -31,6 +31,8 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
     public static final String PARSE_CHANNEL_INTENT_KEY = "com.parse.Channel";
     public static final String PARSE_DATA_INTENT_KEY = "com.parse.Data";
 
+    public static final String PARSE_ALERT_KEY = "alert";
+
     protected Class<? extends Activity> getActivity(Context context, Intent intent) {
         return QuipitHomeActivity.class;
     }
@@ -47,20 +49,24 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
 
     private void processPush(Context context, Intent intent) {
         String action = intent.getAction();
+        // Note: we do not save notifications here anymore unless they are global notifications.
+        // Their representation should already be persisted in the parse database, as the actual
+        // GCM call is ensured to happen after the models are persisted. This is done in a serial
+        // blocking fashion off the UI thread of the client generating the notification.
         if (action.equals(ACTION_PUSH_RECEIVE)) {
             String channel = intent.getExtras().getString(PARSE_CHANNEL_INTENT_KEY);
             try {
-                JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
+                JSONObject json = new JSONObject(intent.getExtras().getString(PARSE_DATA_INTENT_KEY));
                 if (json.has(Notification.PUSH_TEXT_BODY_KEY)) {
                     Notification notification = Notification.fromJson(json);
-                    notification.setReceiverUid(User.getUserForSession().getObjectId());
                     triggerBroadcastToActivity(context, notification);
                 } else {
                     // This is a global push, just use alert
                     Notification notification = new Notification();
                     notification.setTimestamp(TimeUtils.currentTimestampInS());
                     notification.setReceiverUid(User.getUserForSession().getObjectId());
-                    notification.setText(json.getString("alert"));
+                    notification.setText(json.getString(PARSE_ALERT_KEY));
+                    notification.saveInBackground();
                     // TODO: use our image app for this?
                     triggerBroadcastToActivity(context, notification);
                 }
@@ -73,9 +79,8 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
 
     private void triggerBroadcastToActivity(Context context, Notification notification) {
         Intent pupInt = new Intent(context, QuipitHomeActivity.class);
-        pupInt.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+        pupInt.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         pupInt.putExtra("new_notification", notification);
-        notification.saveInBackground();
         LocalBroadcastManager.getInstance(context).sendBroadcast(pupInt);
     }
 

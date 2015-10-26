@@ -1,10 +1,12 @@
 package it.quip.android.model;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.parse.FindCallback;
@@ -19,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import it.quip.android.listener.NotificationHandler;
+import it.quip.android.task.NotificationBatchJob;
 import it.quip.android.util.TimeUtils;
 
 
@@ -40,6 +43,8 @@ public class Notification extends ParseObject implements Parcelable {
     private String mText;
     private String mNotificationImageUrl;
     private String mChannel;
+    private Circle mCircle;
+    private List<User> mRecepients;
 
     private long mTimestamp;
     private int mType;  // TODO: define enum
@@ -86,6 +91,14 @@ public class Notification extends ParseObject implements Parcelable {
         return "2h";
     }
 
+    public Circle getCircle() {
+        return this.mCircle;
+    }
+
+    public List<User> getRecepients() {
+        return this.mRecepients;
+    }
+
     // SETTERS
 
     public void setViewed(boolean viewed) {
@@ -128,6 +141,15 @@ public class Notification extends ParseObject implements Parcelable {
         this.safePutKey(PUSH_TYPE_KEY, type);
     }
 
+    public void setCircle(Circle circle) {
+        this.mCircle = circle;
+        this.setRecepients(circle.getMembers());
+    }
+
+    public void setRecepients(List<User> users) {
+        this.mRecepients = users;
+    }
+
     public Notification() {
 
     }
@@ -139,6 +161,8 @@ public class Notification extends ParseObject implements Parcelable {
         private String notificationSenderId;
         private String notificationReceiverId;
         private String notificationImageUrl;
+        private Circle circle;
+        private List<User> bulkRecepients;
 
         public with(Context c) {
             this.context = c;
@@ -147,6 +171,8 @@ public class Notification extends ParseObject implements Parcelable {
             this.notificationReceiverId = null;
             this.notificationImageUrl = null;
             this.notificationType = Notification.STANDARD_NOTIFICATION;
+            this.circle = null;
+            this.bulkRecepients = null;
         }
 
         public with type(int type) {
@@ -171,6 +197,18 @@ public class Notification extends ParseObject implements Parcelable {
 
         public with imageUrl(String url) {
             notificationImageUrl = url;
+            return this;
+        }
+
+        public with circle(Circle c) {
+            circle = c;
+            bulkRecepients = c.getMembers();
+            return this;
+        }
+
+        public with bulkRecepients(List<User> users) {
+            // only use if not sending bulk to circles and you want to send to many.
+            bulkRecepients = users;
             return this;
         }
 
@@ -201,6 +239,9 @@ public class Notification extends ParseObject implements Parcelable {
         this.safePutKey(Notification.PUSH_TIMESTAMP_KEY, mTimestamp);
         mNotificationImageUrl = builder.notificationImageUrl;
         this.safePutKey(Notification.PUSH_IMAGE_URL_KEY, mNotificationImageUrl);
+        mCircle = builder.circle;
+        mRecepients = builder.bulkRecepients;
+
     }
 
     private void safePutKey(String key, Object value) {
@@ -248,6 +289,17 @@ public class Notification extends ParseObject implements Parcelable {
     }
 
     public void send() {
+        if (this.mRecepients == null) {
+            deliver();
+        } else {
+            // bulk
+            NotificationBatchJobData jobData = new NotificationBatchJobData(this.mRecepients, this.mSenderUid, this);
+            AsyncTask task = new NotificationBatchJob().execute(jobData);
+        }
+
+    }
+
+    private void deliver() {
         JSONObject data = this.toJson();
         ParsePush push = new ParsePush();
         // TODO: need to implement query handling with circles
@@ -264,11 +316,11 @@ public class Notification extends ParseObject implements Parcelable {
             }
 
         });
-
     }
 
     public static void queryNotifcations(final NotificationHandler handler) {
         ParseQuery<Notification> notifications = ParseQuery.getQuery(Notification.class);
+        notifications.whereEqualTo(PUSH_RECEIVER_ID, User.getUserForSession().getObjectId());
         notifications.orderByDescending(Notification.PUSH_TIMESTAMP_KEY);
         notifications.findInBackground(new FindCallback<Notification>() {
             public void done(List<Notification> notifs, ParseException exception) {
