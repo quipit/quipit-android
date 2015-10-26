@@ -1,4 +1,4 @@
-package it.quip.android.receiver;
+package it.quip.android.network;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,18 +6,14 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.parse.ParseException;
 import com.parse.ParsePushBroadcastReceiver;
-import com.parse.SendCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Iterator;
-
+import it.quip.android.QuipitApplication;
 import it.quip.android.actvitiy.QuipitHomeActivity;
 import it.quip.android.model.Notification;
-import it.quip.android.model.User;
 import it.quip.android.util.TimeUtils;
 
 public class NotificationReceiver extends ParsePushBroadcastReceiver {
@@ -64,7 +60,7 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
                     // This is a global push, just use alert
                     Notification notification = new Notification();
                     notification.setTimestamp(TimeUtils.currentTimestampInS());
-                    notification.setReceiverUid(User.getUserForSession().getObjectId());
+                    notification.setReceiverUid(QuipitApplication.getCurrentUser().getObjectId());
                     notification.setText(json.getString(PARSE_ALERT_KEY));
                     notification.saveInBackground();
                     // TODO: use our image app for this?

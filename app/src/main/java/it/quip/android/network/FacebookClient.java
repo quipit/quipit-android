@@ -1,10 +1,18 @@
 package it.quip.android.network;
 
 
+import android.util.Log;
+
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import it.quip.android.QuipitApplication;
+import it.quip.android.model.User;
 
 
 public class FacebookClient {
@@ -27,13 +35,39 @@ public class FacebookClient {
 
     private AccessToken accessToken;
 
+    public static void createNewUser() throws FacebookClientException {
+        FacebookClient client = FacebookClient.getInstance();
+        if (null == client) {
+            throw new FacebookClientException("Attempting to create new user with no FacebookClient.");
+        }
+
+        client.getCurrentUsersFacebookInfo(new OnFacebookResponse() {
+            @Override
+            public void onFacebookResponse(GraphResponse response) {
+                JSONObject responseJSON = response.getJSONObject();
+                User user = new User();
+                try {
+                    user.setName(responseJSON.getString("name"));
+                    user.setEmail(responseJSON.getString("email"));
+                    user.setFacebookId(responseJSON.getString("id"));
+                    user.setImageUrl(responseJSON.getString("picture"));
+                    user.saveInBackground();
+                    QuipitApplication.setCurrentUser(user);
+                } catch (JSONException jsonException) {
+                    Log.e("FacebookClient", "Unable to parse JSON in Facebook response.");
+                }
+            }
+        });
+    }
+
     public static FacebookClient getInstance() {
-        if (AccessToken.getCurrentAccessToken().isExpired()) {
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        if ((null == accessToken) || accessToken.isExpired()) {
             return null;
         }
 
         if (client == null) {
-            client = new FacebookClient(AccessToken.getCurrentAccessToken());
+            client = new FacebookClient(accessToken);
         }
 
         return client;
@@ -55,6 +89,15 @@ public class FacebookClient {
                     }
                 }
         ).executeAsync();
+    }
+
+    public void getCurrentUsersFacebookInfo(final OnFacebookResponse responseHandler) {
+        GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+            @Override
+            public void onCompleted(JSONObject jsonObject, GraphResponse graphResponse) {
+                responseHandler.onFacebookResponse(graphResponse);
+            }
+        }).executeAsync();
     }
 
 }

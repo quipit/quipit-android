@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
-import it.quip.android.fragment.CreateQuipFragment;
 import it.quip.android.fragment.NotificationsFragment;
 import it.quip.android.fragment.QuipFeedFragment;
 import it.quip.android.fragment.ViewCircleFragment;
@@ -29,6 +28,7 @@ import it.quip.android.util.MockUtils;
 public class QuipitHomeActivity extends AppCompatActivity implements TagClickListener {
 
     private static final int CREATE_CIRCLE_REQUEST = 158;
+    private static final int CREATE_QUIP_REQUEST = 321;
 
     private User user;
 
@@ -85,7 +85,7 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
         circlesSubMenu.clear();
 
         for (Circle circle : user.getCircles()) {
-            circlesSubMenu.add(0, (int) circle.getUid(), Menu.NONE, circle.getName());
+            circlesSubMenu.add(0, Integer.parseInt(circle.getObjectId()), Menu.NONE, circle.getName());
         }
     }
 
@@ -170,6 +170,8 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
                 Circle createdCircle = data.getParcelableExtra(CreateCircleActivity.CREATED_CIRCLE);
                 onCircleCreated(createdCircle);
             }
+        } else if (CREATE_QUIP_REQUEST == requestCode) {
+            // TODO: reload feed...
         }
     }
 
@@ -179,8 +181,8 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
     }
 
     private void createQuip() {
-        CreateQuipFragment f = CreateQuipFragment.newInstance(MockUtils.userWithName("Jon Como"));
-        f.show(getFragmentManager(), "create_quip");
+        Intent intent = new Intent(this, CreateQuipActivity.class);
+        startActivityForResult(intent, CREATE_QUIP_REQUEST);
     }
 
     private void onCircleCreated(Circle createdCircle) {

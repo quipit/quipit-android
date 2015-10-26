@@ -6,12 +6,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
-import java.util.List;
-
 import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.SendCallback;
@@ -19,6 +16,9 @@ import com.parse.SendCallback;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
+import it.quip.android.QuipitApplication;
 import it.quip.android.listener.NotificationHandler;
 import it.quip.android.task.NotificationBatchJob;
 import it.quip.android.task.NotificationBatchJobData;
@@ -26,7 +26,7 @@ import it.quip.android.util.TimeUtils;
 
 
 @ParseClassName("Notification")
-public class Notification extends ParseObject implements Parcelable {
+public class Notification extends BaseParseObject implements Parcelable {
 
     public static final int STANDARD_NOTIFICATION = 0;
     public static final String PUSH_TEXT_BODY_KEY = "text_body";
@@ -35,7 +35,7 @@ public class Notification extends ParseObject implements Parcelable {
     public static final String PUSH_RECEIVER_ID = "receiver_uid";
     public static final String PUSH_TYPE_KEY = "notification_type";
     public static final String PUSH_TIMESTAMP_KEY = "timestamp";
-    public static final String PUSH_VIEWED_KEY = "getViewed";
+    public static final String PUSH_VIEWED_KEY = "viewed";
     public static final String PUSH_CHANNEL_KEY = "channel";
 
     private String mSenderUid;
@@ -99,46 +99,44 @@ public class Notification extends ParseObject implements Parcelable {
         return this.mRecepients;
     }
 
-    // SETTERS
-
     public void setViewed(boolean viewed) {
         this.mViewed = viewed;
-        this.safePutKey(PUSH_VIEWED_KEY, viewed);
+        this.safePut(PUSH_VIEWED_KEY, viewed);
     }
 
     public void setChannel(String channel) {
-        this.safePutKey(PUSH_CHANNEL_KEY, channel);
+        this.safePut(PUSH_CHANNEL_KEY, channel);
         this.mChannel = channel;
     }
 
     public void setSenderUid(String uid) {
         this.mSenderUid = uid;
-        this.safePutKey(PUSH_SENDER_ID, uid);
+        this.safePut(PUSH_SENDER_ID, uid);
     }
 
     public void setReceiverUid(String uid) {
         this.mReceiverUid = uid;
-        this.safePutKey(PUSH_RECEIVER_ID, uid);
+        this.safePut(PUSH_RECEIVER_ID, uid);
     }
 
     public void setText(String textString) {
         this.mText = textString;
-        this.safePutKey(PUSH_TEXT_BODY_KEY, textString);
+        this.safePut(PUSH_TEXT_BODY_KEY, textString);
     }
 
     public void setNotificationImageUrl(String imageUrl) {
         this.mNotificationImageUrl = imageUrl;
-        this.safePutKey(PUSH_IMAGE_URL_KEY, imageUrl);
+        this.safePut(PUSH_IMAGE_URL_KEY, imageUrl);
     }
 
     public void setTimestamp(long timestamp) {
         this.mTimestamp = timestamp;
-        this.safePutKey(PUSH_TIMESTAMP_KEY, timestamp);
+        this.safePut(PUSH_TIMESTAMP_KEY, timestamp);
     }
 
     public void setType(int type) {
         this.mType = type;
-        this.safePutKey(PUSH_TYPE_KEY, type);
+        this.safePut(PUSH_TYPE_KEY, type);
     }
 
     public void setCircle(Circle circle) {
@@ -166,7 +164,6 @@ public class Notification extends ParseObject implements Parcelable {
 
         public with(Context c) {
             this.context = c;
-            // defaults
             this.notificationSenderId = null;
             this.notificationReceiverId = null;
             this.notificationImageUrl = null;
@@ -228,26 +225,19 @@ public class Notification extends ParseObject implements Parcelable {
 
     private Notification(with builder) {
         mType = builder.notificationType;
-        this.safePutKey(Notification.PUSH_TYPE_KEY, mType);
+        this.safePut(Notification.PUSH_TYPE_KEY, mType);
         mSenderUid = builder.notificationSenderId;
-        this.safePutKey(Notification.PUSH_SENDER_ID, mSenderUid);
+        this.safePut(Notification.PUSH_SENDER_ID, mSenderUid);
         mReceiverUid = builder.notificationReceiverId;
-        this.safePutKey(Notification.PUSH_RECEIVER_ID, mReceiverUid);
+        this.safePut(Notification.PUSH_RECEIVER_ID, mReceiverUid);
         mText = builder.notificationText;
-        this.safePutKey(Notification.PUSH_TEXT_BODY_KEY, mText);
+        this.safePut(Notification.PUSH_TEXT_BODY_KEY, mText);
         mTimestamp = TimeUtils.currentTimestampInS();
-        this.safePutKey(Notification.PUSH_TIMESTAMP_KEY, mTimestamp);
+        this.safePut(Notification.PUSH_TIMESTAMP_KEY, mTimestamp);
         mNotificationImageUrl = builder.notificationImageUrl;
-        this.safePutKey(Notification.PUSH_IMAGE_URL_KEY, mNotificationImageUrl);
+        this.safePut(Notification.PUSH_IMAGE_URL_KEY, mNotificationImageUrl);
         mCircle = builder.circle;
         mRecepients = builder.bulkRecepients;
-
-    }
-
-    private void safePutKey(String key, Object value) {
-        if (value != null) {
-            this.put(key, value);
-        }
     }
 
     public static Notification fromJson(JSONObject json) {
@@ -320,7 +310,7 @@ public class Notification extends ParseObject implements Parcelable {
 
     public static void queryNotifcations(final NotificationHandler handler) {
         ParseQuery<Notification> notifications = ParseQuery.getQuery(Notification.class);
-        notifications.whereEqualTo(PUSH_RECEIVER_ID, User.getUserForSession().getObjectId());
+        notifications.whereEqualTo(PUSH_RECEIVER_ID, QuipitApplication.getCurrentUser().getObjectId());
         notifications.orderByDescending(Notification.PUSH_TIMESTAMP_KEY);
         notifications.findInBackground(new FindCallback<Notification>() {
             public void done(List<Notification> notifs, ParseException exception) {

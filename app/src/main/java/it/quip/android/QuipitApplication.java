@@ -7,7 +7,9 @@ import com.parse.Parse;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 
+import it.quip.android.model.Circle;
 import it.quip.android.model.Notification;
+import it.quip.android.model.Quip;
 import it.quip.android.model.User;
 
 public class QuipitApplication extends Application {
@@ -21,6 +23,8 @@ public class QuipitApplication extends Application {
                 stringRes(R.string.parse_client_key));
         ParseObject.registerSubclass(Notification.class);
         ParseObject.registerSubclass(User.class);
+        ParseObject.registerSubclass(Quip.class);
+        ParseObject.registerSubclass(Circle.class);
         ParseInstallation.getCurrentInstallation().saveInBackground();
     }
 

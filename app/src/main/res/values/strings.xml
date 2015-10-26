@@ -5,6 +5,8 @@
     <string name="title_create_circle">New Circle</string>
     <string name="title_notifications">Notifications</string>
 
+    <string name="title_create_quip">New Quip</string>
+
     <string name="action_settings">Settings</string>
     <string name="action_new_quip">New Quip</string>
     <string name="action_new_circle">New Circle</string>
@@ -30,4 +32,7 @@
     <string name="description_avatar">Circle Avatar</string>
     <string name="description_background">Circle Background</string>
     <string name="description_access_camera">Access Camera</string>
+
+    <string name="share_quip">share</string>
+    <string name="post_quip">post</string>
 </resources>

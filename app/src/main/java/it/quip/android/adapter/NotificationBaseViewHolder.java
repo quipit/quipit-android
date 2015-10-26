@@ -6,10 +6,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import it.quip.android.QuipitApplication;
 import it.quip.android.R;
 import it.quip.android.listener.NotificationHandler;
 import it.quip.android.model.Notification;
-import it.quip.android.model.User;
 import it.quip.android.view.TagTextSpanner;
 
 public class NotificationBaseViewHolder extends RecyclerView.ViewHolder {
@@ -52,7 +52,7 @@ public class NotificationBaseViewHolder extends RecyclerView.ViewHolder {
                 Context context = mAdapter.getContext();
                 Notification notification = new Notification.with(context)
                         .body("Jean Claude Van Como deposited some darkness in @sfsewers thangs")
-                        .sender(User.getUserForSession())
+                        .sender(QuipitApplication.getCurrentUser())
                         .type(Notification.STANDARD_NOTIFICATION)
                         .deliver();
 

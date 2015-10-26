@@ -3,17 +3,25 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_marginLeft="15dp"
+    android:layout_margin="15dp"
+    >
 
     <include
         layout="@layout/profile_stub"
         android:id="@+id/quip_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
         />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_alignTop="@id/quip_profile"
+        android:layout_alignBottom="@id/quip_profile"
         android:layout_alignParentRight="true"
         android:id="@+id/tv_quip_timestamp"
         />
@@ -23,6 +31,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/tv_quip_body"
         android:layout_below="@id/quip_profile"
+        android:textSize="20sp"
         />
 
     <TextView

@@ -7,48 +7,28 @@ import android.util.Log;
 import com.facebook.AccessToken;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import it.quip.android.QuipitApplication;
+import it.quip.android.network.FacebookClient;
+
 
 @ParseClassName("User")
-public class User extends ParseObject implements Parcelable {
+public class User extends BaseParseObject implements Parcelable {
 
     private static final String FACEBOOK_ID = "facebook_id";
     private static final String NAME = "name";
     private static final String EMAIL = "email";
+    private static final String IMAGE_URL = "image_url";
     private static final String CIRCLES = "circles";
-
-    public void setFacebookId(String facebookId) {
-        this.facebookId = facebookId;
-        this.put(FACEBOOK_ID, facebookId);
-    }
-
-    public void setName(String name) {
-        this.name = name;
-        this.put(NAME, name);
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-        this.put(EMAIL, email);
-    }
-
-    public void setCircles(List<Circle> circles) {
-        this.circles = circles;
-        this.put(CIRCLES, circlesToIds());
-    }
 
     private String facebookId;
     private String name;
     private String email;
+    private String imageUrl;
     private List<Circle> circles = new ArrayList<>();
 
     public String getFacebookId() {
@@ -63,13 +43,17 @@ public class User extends ParseObject implements Parcelable {
         return email;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
     public List<Circle> getCircles() {
         return circles;
     }
 
-    public Circle getCircle(long circleId) {
+    public Circle getCircle(int circleId) {
         for (Circle circle : circles) {
-            if (circle.getUid() == circleId) {
+            if (Integer.parseInt(circle.getObjectId()) == circleId) {
                 return circle;
             }
         }
@@ -77,57 +61,41 @@ public class User extends ParseObject implements Parcelable {
         return null;
     }
 
+    public void setFacebookId(String facebookId) {
+        this.facebookId = facebookId;
+        this.safePut(FACEBOOK_ID, facebookId);
+    }
+
+    public void setName(String name) {
+        this.name = name;
+        this.safePut(NAME, name);
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+        this.safePut(EMAIL, email);
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+        this.safePut(IMAGE_URL, imageUrl);
+    }
+
+    public void setCircles(List<Circle> circles) {
+        this.circles = circles;
+        this.safePut(CIRCLES, circlesToIds());
+    }
+
     public void addCircle(Circle circle) {
         circles.add(circle);
+        this.setCircles(circles);
     }
 
     public static ParseQuery<User> getQuery() {
         return ParseQuery.getQuery(User.class);
     }
 
-    public static User fromJSON(JSONObject userJson) {
-        User user = new User();
-        
-        try {
-            user.facebookId = userJson.getString(FACEBOOK_ID);
-            user.name = userJson.getString(NAME);
-            user.email = userJson.getString(EMAIL);
-
-            JSONArray circlesJson = userJson.optJSONArray(CIRCLES);
-            if (circlesJson != null) {
-                user.circles = Circle.fromJSONArray(circlesJson);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        return user;
-    }
-
-    public static List<User> fromJSONArray(JSONArray circlesJson) {
-        List<User> users = new ArrayList<>();
-
-        for (int i = 0; i < circlesJson.length(); i++) {
-
-            User user;
-            try {
-                JSONObject quipJson = circlesJson.getJSONObject(i);
-                user = User.fromJSON(quipJson);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                continue;
-            }
-
-            if (user != null) {
-                users.add(user);
-            }
-        }
-
-        return users;
-    }
-
-    public static User getUserForSession() {
+    public static void setUserForSession() {
         String facebookId = AccessToken.getCurrentAccessToken().getUserId();
         User currentUser = null;
         try {
@@ -142,18 +110,20 @@ public class User extends ParseObject implements Parcelable {
         }
 
         if (null == currentUser) {
-            currentUser = new User();
-            currentUser.setFacebookId(facebookId);
-            currentUser.saveInBackground();
+            try {
+                FacebookClient.createNewUser();
+            } catch (FacebookClient.FacebookClientException facebookClientException) {
+                Log.e("FacebookClient", "Could not create new user from Facebook.");
+            }
+        } else {
+            QuipitApplication.setCurrentUser(currentUser);
         }
-
-        return currentUser;
     }
 
-    private List<Long> circlesToIds() {
-        List<Long> circleIds = new ArrayList<Long>();
+    private List<String> circlesToIds() {
+        List<String> circleIds = new ArrayList<String>();
         for (Circle circle : getCircles()) {
-            circleIds.add(circle.getUid());
+            circleIds.add(circle.getObjectId());
         }
 
         return circleIds;
@@ -169,6 +139,8 @@ public class User extends ParseObject implements Parcelable {
         dest.writeString(this.facebookId);
         dest.writeString(this.name);
         dest.writeString(this.email);
+        dest.writeString(this.imageUrl);
+        dest.writeList(this.circles);
     }
 
     public User() {
@@ -176,16 +148,20 @@ public class User extends ParseObject implements Parcelable {
     }
 
     private User(Parcel in) {
-        this.facebookId = in.readString();
-        this.name = in.readString();
-        this.email = in.readString();
+        this.setFacebookId(in.readString());
+        this.setName(in.readString());
+        this.setEmail(in.readString());
+        this.setImageUrl(in.readString());
+
+        List<Circle> circles = new ArrayList<>();
+        in.readList(circles, Circle.class.getClassLoader());
+        this.setCircles(circles);
     }
 
     public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
         public User createFromParcel(Parcel source) {
             return new User(source);
         }
-
         public User[] newArray(int size) {
             return new User[size];
         }
