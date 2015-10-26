@@ -5,11 +5,8 @@ import android.util.Log;
 
 import com.parse.ParseException;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import it.quip.android.model.Circle;
-import it.quip.android.model.NotificationBatchJobData;
 import it.quip.android.model.Notification;
 import it.quip.android.model.User;
 

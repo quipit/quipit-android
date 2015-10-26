@@ -6,7 +6,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.parse.FindCallback;
@@ -22,6 +21,7 @@ import org.json.JSONObject;
 
 import it.quip.android.listener.NotificationHandler;
 import it.quip.android.task.NotificationBatchJob;
+import it.quip.android.task.NotificationBatchJobData;
 import it.quip.android.util.TimeUtils;
 
 

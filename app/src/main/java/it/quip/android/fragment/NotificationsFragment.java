@@ -1,7 +1,6 @@
 package it.quip.android.fragment;
 
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.parse.ParseException;
-import com.parse.ParseObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +21,7 @@ import it.quip.android.R;
 import it.quip.android.adapter.NotificationAdapter;
 import it.quip.android.listener.NotificationHandler;
 import it.quip.android.model.Circle;
-import it.quip.android.model.MarkAndRefreshJobData;
+import it.quip.android.task.MarkAndRefreshJobData;
 import it.quip.android.model.Notification;
 import it.quip.android.model.Quip;
 import it.quip.android.model.User;
