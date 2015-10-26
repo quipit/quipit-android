@@ -295,6 +295,7 @@ public class Notification extends ParseObject implements Parcelable {
             // bulk
             NotificationBatchJobData jobData = new NotificationBatchJobData(this.mRecepients, this.mSenderUid, this);
             AsyncTask task = new NotificationBatchJob().execute(jobData);
+            deliver();
         }
 
     }

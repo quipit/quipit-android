@@ -40,6 +40,5 @@ public class NotificationBatchJob extends AsyncTask<NotificationBatchJobData, Vo
             }
         }
 
-        notification.send();
     }
 }
