@@ -160,7 +160,6 @@ public class User extends BaseParseObject implements Parcelable {
         this.setEmail(in.readString());
         this.setImageUrl(in.readString());
 
-        List<Circle> circles = new ArrayList<>();
         in.readList(circles, Circle.class.getClassLoader());
         this.setCircles(circles);
     }

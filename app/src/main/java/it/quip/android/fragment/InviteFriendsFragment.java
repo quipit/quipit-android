@@ -145,18 +145,22 @@ public class InviteFriendsFragment extends Fragment {
         aFilteredFriends.clear();
 
         for (User friend : mFriends) {
-            if (!"".equals(name) &&
-                    !myself(friend) &&
-                    friend.getName().contains(name) &&
-                    !alreadyInvited(friend)) {
+            if (!"".equals(name)
+                    && !myself(friend)
+                    && hasFriendWithName(friend, name)
+                    && !alreadyInvited(friend)) {
                 aFilteredFriends.add(friend);
             }
         }
     }
 
+    private boolean hasFriendWithName(User friend, String name) {
+        return friend.getName().toLowerCase().contains(name.toLowerCase());
+    }
+
     private boolean myself(User friend) {
         // TODO: We will need to do this with the object ids
-        return friend.getObjectId().equals(mUser.getObjectId());
+        return mUser.getName().equals(friend.getName());
     }
 
     private boolean alreadyInvited(User friend) {
