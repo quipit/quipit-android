@@ -103,7 +103,6 @@ public class Circle extends BaseParseObject implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.name);
-        dest.writeTypedList(members);
     }
 
     public Circle() {
@@ -113,7 +112,6 @@ public class Circle extends BaseParseObject implements Parcelable {
     private Circle(Parcel in) {
         setName(in.readString());
         in.readTypedList(members, User.CREATOR);
-        setMembers(members);
     }
 
     public static final Parcelable.Creator<Circle> CREATOR = new Parcelable.Creator<Circle>() {

@@ -25,7 +25,8 @@ public class QuipSelectFragment extends SearchListFragment<Circle> {
 
     protected List<Circle> searchFor(String query) {
         List<Circle> circles = new ArrayList<>();
-        for (Circle circle : QuipitApplication.getCurrentUser().getCircles()) {
+        List<Circle> searchCircles = QuipitApplication.getCurrentUser().getCircles();
+        for (Circle circle : searchCircles) {
             if (!"".equals(query) &&
                     circle.getName().toLowerCase().contains(query) &&
                     !alreadySelected(circle)) {

@@ -8,6 +8,7 @@ import com.facebook.AccessToken;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,7 @@ public class User extends BaseParseObject implements Parcelable {
     }
 
     public List<Circle> getCircles() {
-        if (null == circles) {
+        if ((null == circles) || (circles.isEmpty())) {
             QuipitApplication.getCircleRepo().getAllForUser(this, new CirclesResponseHandler() {
                 @Override
                 public void onSuccess(List<Circle> fetchedCircles) {
@@ -90,10 +91,20 @@ public class User extends BaseParseObject implements Parcelable {
     }
 
     public void setCircles(List<Circle> circles) {
+        ParseRelation<Circle> relation = getRelation(CIRCLES);
+        for (Circle previousCircle : this.circles) {
+            relation.remove(previousCircle);
+        }
+
         this.circles = circles;
+
+        for (Circle newCircle : circles) {
+            relation.add(newCircle);
+        }
     }
 
     public void addCircle(Circle circle) {
+        getRelation(CIRCLES).add(circle);
         circles.add(circle);
         this.setCircles(circles);
     }
@@ -143,11 +154,10 @@ public class User extends BaseParseObject implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.facebookId);
-        dest.writeString(this.name);
-        dest.writeString(this.email);
-        dest.writeString(this.imageUrl);
-        dest.writeList(this.circles);
+        dest.writeString(getFacebookId());
+        dest.writeString(getName());
+        dest.writeString(getEmail());
+        dest.writeString(getImageUrl());
     }
 
     public User() {
@@ -159,9 +169,6 @@ public class User extends BaseParseObject implements Parcelable {
         this.setName(in.readString());
         this.setEmail(in.readString());
         this.setImageUrl(in.readString());
-
-        in.readList(circles, Circle.class.getClassLoader());
-        this.setCircles(circles);
     }
 
     public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
