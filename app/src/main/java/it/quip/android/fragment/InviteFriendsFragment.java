@@ -12,12 +12,15 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
 import it.quip.android.adapter.UsersArrayAdapter;
 import it.quip.android.model.User;
-import it.quip.android.util.MockUtils;
+import it.quip.android.repository.user.ParseUserRepository;
+import it.quip.android.repository.user.UserRepository;
+import it.quip.android.repository.user.UsersResponseHandler;
 import it.quip.android.view.OverlayListView;
 
 public class InviteFriendsFragment extends Fragment {
@@ -28,6 +31,10 @@ public class InviteFriendsFragment extends Fragment {
     }
 
     private EditText etFriendName;
+
+    private User mUser;
+    private List<User> mFriends;
+    private UserRepository mUsersRepo;
 
     private UsersArrayAdapter aFilteredFriends;
 
@@ -72,6 +79,11 @@ public class InviteFriendsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mUser = QuipitApplication.getCurrentUser();
+        mFriends = new ArrayList<>();
+        mUsersRepo = new ParseUserRepository();
+        populateFriends();
+
         ArrayList<User> filteredFriends = new ArrayList<>();
         aFilteredFriends = new UsersArrayAdapter(getContext(), filteredFriends);
 
@@ -82,6 +94,16 @@ public class InviteFriendsFragment extends Fragment {
             public boolean onLongClick(int position, User user) {
                 uninviteFriend(user);
                 return true;
+            }
+        });
+    }
+
+    private void populateFriends() {
+        mUsersRepo.getFriends(mUser, new UsersResponseHandler() {
+            @Override
+            public void onSuccess(List<User> users) {
+                mFriends.clear();
+                mFriends.addAll(users);
             }
         });
     }
@@ -126,10 +148,10 @@ public class InviteFriendsFragment extends Fragment {
     private void searchFriends(String name) {
         aFilteredFriends.clear();
 
-        for (User friend : MockUtils.getUsers()) {
+        for (User friend : mFriends) {
             if (!"".equals(name) &&
                     !myself(friend) &&
-                    friend.getName().toLowerCase().contains(name) &&
+                    friend.getObjectId().contains(name) &&
                     !alreadyInvited(friend)) {
                 aFilteredFriends.add(friend);
             }
@@ -138,7 +160,7 @@ public class InviteFriendsFragment extends Fragment {
 
     private boolean myself(User friend) {
         // TODO: We will need to do this with the object ids
-        return friend.getName().equals(QuipitApplication.getCurrentUser().getName());
+        return friend.getObjectId().equals(mUser.getObjectId());
     }
 
     private boolean alreadyInvited(User friend) {

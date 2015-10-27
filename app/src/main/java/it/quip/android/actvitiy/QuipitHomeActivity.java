@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.quip.android.QuipitApplication;
@@ -24,15 +25,18 @@ import it.quip.android.fragment.QuipFeedFragment;
 import it.quip.android.fragment.ViewCircleFragment;
 import it.quip.android.listener.TagClickListener;
 import it.quip.android.model.Circle;
-import it.quip.android.model.User;
-import it.quip.android.util.MockUtils;
+import it.quip.android.repository.circle.CircleRepository;
+import it.quip.android.repository.circle.CirclesResponseHandler;
+import it.quip.android.repository.circle.ParseCircleRepository;
 
 public class QuipitHomeActivity extends AppCompatActivity implements TagClickListener {
 
     private static final int CREATE_CIRCLE_REQUEST = 158;
     private static final int CREATE_QUIP_REQUEST = 321;
 
-    private User user;
+    private List<Circle> mCircles;
+
+    private CircleRepository mCirclesRepo;
 
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
@@ -44,10 +48,8 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quipit_home);
 
-        user = QuipitApplication.getCurrentUser();
-        for (Circle circle : MockUtils.getCircles()) {
-            user.addCircle(circle);
-        }
+        mCircles = new ArrayList<>();
+        mCirclesRepo = new ParseCircleRepository();
 
         setupViews();
     }
@@ -62,7 +64,7 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
 
         mNavDrawer = (NavigationView) findViewById(R.id.nv_view);
         setupDrawerContent();
-        updateSidebarMenu();
+        fetchCircles();
 
         displayDefaultQuipStream();
     }
@@ -86,11 +88,21 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
         Menu circlesSubMenu = mNavDrawer.getMenu().findItem(R.id.navCircles).getSubMenu();
         circlesSubMenu.clear();
 
-        List<Circle> userCircles = user.getCircles();
-        for (int i = 0; i < userCircles.size(); i++) {
-            Circle circle = userCircles.get(i);
-            circlesSubMenu.add(0, i, Menu.NONE, circle.getName());
+        for (int i = 0; i < mCircles.size(); i++) {
+            circlesSubMenu.add(0, i, Menu.NONE, mCircles.get(i).getName());
         }
+    }
+
+    private void fetchCircles() {
+        mCirclesRepo.getAllForUser(QuipitApplication.getCurrentUser(), new CirclesResponseHandler() {
+            @Override
+            public void onSuccess(List<Circle> fetchedCircles) {
+                mCircles.clear();
+                mCircles.addAll(fetchedCircles);
+
+                updateSidebarMenu();
+            }
+        });
     }
 
     private void selectDrawerItem(MenuItem menuItem) {
@@ -103,7 +115,7 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
                 break;
             default:
                 // If we end up here, the menu item selected was one of the user's circles
-                Circle circle = user.getCircle(itemId);
+                Circle circle = mCircles.get(itemId);
                 if (null == circle) {
                     throw new RuntimeException("Attempted to select circle id " + itemId
                             + " but it doesn't exist in the menu");
@@ -190,7 +202,7 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
     }
 
     private void onCircleCreated(Circle createdCircle) {
-        user.addCircle(createdCircle);
+        mCircles.add(createdCircle);
         updateSidebarMenu();
         prepareFragment(ViewCircleFragment.newInstance(createdCircle)).commitAllowingStateLoss();
     }

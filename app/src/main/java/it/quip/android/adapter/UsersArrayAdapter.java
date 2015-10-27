@@ -8,8 +8,8 @@ import it.quip.android.model.User;
 
 public class UsersArrayAdapter extends SearchArrayAdapter<User> {
 
-    public UsersArrayAdapter(Context context, List<User> objects) {
-        super(context, objects);
+    public UsersArrayAdapter(Context context, List<User> users) {
+        super(context, users);
     }
 
     protected String getSearchName(User user) {
