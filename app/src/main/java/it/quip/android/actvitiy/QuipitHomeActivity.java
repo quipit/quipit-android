@@ -112,6 +112,7 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
                 updateSidebarMenu();
             }
         });
+    }
 
     private void setupNotificationToastBar() {
         mNotificationBar = (RelativeLayout) findViewById(R.id.toolbar_notification_toast_bard);
