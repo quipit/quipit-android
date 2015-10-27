@@ -21,21 +21,19 @@ public class NotificationBatchJob extends AsyncTask<NotificationBatchJobData, Vo
 
     private void updateData(List<User> users, Notification notification, String senderUid) {
         for (User user : users) {
-            //if (user.getObjectId().equals(senderUid) != true) {
-            Notification n = new Notification.with(null)
-                                .body(notification.getText())
-                                .type(notification.getType())
-                                .receiver(user)
-                                .circle(notification.getCircle())
-                                .imageUrl(notification.getNotificationImageUrl())
-                                .build();
-            try {
-                n.save();
-            } catch (ParseException e) {
-                Log.d("BATCHJOB", e.toString());
+            if (user.getObjectId().equals(senderUid) != true) {
+                Notification n = new Notification.with(null)
+                        .body(notification.getText())
+                        .type(notification.getType())
+                        .receiver(user)
+                        .circle(notification.getCircle())
+                        .imageUrl(notification.getNotificationImageUrl())
+                        .build();
+                n.saveInBackground();
+
             }
-            //}
         }
+        notification.deliver();
 
 
     }
