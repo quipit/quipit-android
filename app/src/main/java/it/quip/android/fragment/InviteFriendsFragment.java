@@ -18,8 +18,6 @@ import it.quip.android.QuipitApplication;
 import it.quip.android.R;
 import it.quip.android.adapter.UsersArrayAdapter;
 import it.quip.android.model.User;
-import it.quip.android.repository.user.ParseUserRepository;
-import it.quip.android.repository.user.UserRepository;
 import it.quip.android.repository.user.UsersResponseHandler;
 import it.quip.android.view.OverlayListView;
 
@@ -34,7 +32,6 @@ public class InviteFriendsFragment extends Fragment {
 
     private User mUser;
     private List<User> mFriends;
-    private UserRepository mUsersRepo;
 
     private UsersArrayAdapter aFilteredFriends;
 
@@ -81,7 +78,6 @@ public class InviteFriendsFragment extends Fragment {
 
         mUser = QuipitApplication.getCurrentUser();
         mFriends = new ArrayList<>();
-        mUsersRepo = new ParseUserRepository();
         populateFriends();
 
         ArrayList<User> filteredFriends = new ArrayList<>();
@@ -99,7 +95,7 @@ public class InviteFriendsFragment extends Fragment {
     }
 
     private void populateFriends() {
-        mUsersRepo.getFriends(mUser, new UsersResponseHandler() {
+        QuipitApplication.getUserRepo().getFriends(mUser, new UsersResponseHandler() {
             @Override
             public void onSuccess(List<User> users) {
                 mFriends.clear();
@@ -151,7 +147,7 @@ public class InviteFriendsFragment extends Fragment {
         for (User friend : mFriends) {
             if (!"".equals(name) &&
                     !myself(friend) &&
-                    friend.getObjectId().contains(name) &&
+                    friend.getName().contains(name) &&
                     !alreadyInvited(friend)) {
                 aFilteredFriends.add(friend);
             }

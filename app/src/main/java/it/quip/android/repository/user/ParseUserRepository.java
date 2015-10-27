@@ -35,4 +35,5 @@ public class ParseUserRepository implements UserRepository {
     public void getUsersInCircle(Circle circle, UsersResponseHandler handler) {
 
     }
+
 }

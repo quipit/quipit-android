@@ -14,6 +14,7 @@ import java.util.List;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.network.FacebookClient;
+import it.quip.android.repository.circle.CirclesResponseHandler;
 
 
 @ParseClassName("User")
@@ -32,28 +33,37 @@ public class User extends BaseParseObject implements Parcelable {
     private List<Circle> circles = new ArrayList<>();
 
     public String getFacebookId() {
-        return facebookId;
+        return getString(FACEBOOK_ID);
     }
 
     public String getName() {
-        return name;
+        return getString(NAME);
     }
 
     public String getEmail() {
-        return email;
+        return getString(EMAIL);
     }
 
     public String getImageUrl() {
-        return imageUrl;
+        return getString(IMAGE_URL);
     }
 
     public List<Circle> getCircles() {
+        if (null == circles) {
+            QuipitApplication.getCircleRepo().getAllForUser(this, new CirclesResponseHandler() {
+                @Override
+                public void onSuccess(List<Circle> fetchedCircles) {
+                    User.this.setCircles(fetchedCircles);
+                }
+            });
+        }
+
         return circles;
     }
 
     public Circle getCircle(int circleIndex) {
-        if (circleIndex < circles.size()) {
-            return circles.get(circleIndex);
+        if (circleIndex < getCircles().size()) {
+            return getCircles().get(circleIndex);
         }
 
         return null;
@@ -81,7 +91,6 @@ public class User extends BaseParseObject implements Parcelable {
 
     public void setCircles(List<Circle> circles) {
         this.circles = circles;
-        this.safePut(CIRCLES, circlesToIds());
     }
 
     public void addCircle(Circle circle) {

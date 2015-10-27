@@ -31,9 +31,6 @@ import it.quip.android.fragment.ViewCircleFragment;
 import it.quip.android.listener.TagClickListener;
 import it.quip.android.model.Circle;
 import it.quip.android.model.Notification;
-import it.quip.android.repository.circle.CircleRepository;
-import it.quip.android.repository.circle.CirclesResponseHandler;
-import it.quip.android.repository.circle.ParseCircleRepository;
 
 
 public class QuipitHomeActivity extends AppCompatActivity implements TagClickListener {
@@ -42,8 +39,6 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
     private static final int CREATE_QUIP_REQUEST = 321;
 
     private List<Circle> mCircles;
-
-    private CircleRepository mCirclesRepo;
 
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
@@ -57,7 +52,6 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
         setContentView(R.layout.activity_quipit_home);
 
         mCircles = new ArrayList<>();
-        mCirclesRepo = new ParseCircleRepository();
 
         setupViews();
     }
@@ -103,15 +97,11 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
     }
 
     private void fetchCircles() {
-        mCirclesRepo.getAllForUser(QuipitApplication.getCurrentUser(), new CirclesResponseHandler() {
-            @Override
-            public void onSuccess(List<Circle> fetchedCircles) {
-                mCircles.clear();
-                mCircles.addAll(fetchedCircles);
+        List<Circle> fetchedCircles = QuipitApplication.getCurrentUser().getCircles();
+        mCircles.clear();
+        mCircles.addAll(fetchedCircles);
 
-                updateSidebarMenu();
-            }
-        });
+        updateSidebarMenu();
     }
 
     private void setupNotificationToastBar() {

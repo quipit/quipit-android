@@ -56,7 +56,7 @@ public class MockUtils {
         return fakeQuips;
     }
 
-    public static User userWithName(String name) {
+    private static User userWithName(String name) {
         User user = new User();
 
         user.setName(name);
@@ -70,7 +70,7 @@ public class MockUtils {
         return user;
     }
 
-    public static Circle circleWithName(String name) {
+    private static Circle circleWithName(String name) {
         List<User> members = new ArrayList<>();
         for (int i = 0; i < generator.nextInt(fakeUsers.size()); i++) {
             members.add(fakeUsers.get(generator.nextInt(fakeUsers.size())));
@@ -86,7 +86,7 @@ public class MockUtils {
         return circle;
     }
 
-    public static Quip quipWithText(String text) {
+    private static Quip quipWithText(String text) {
         return new Quip(text, randomUser(), randomUser(), randomCircle(), randomTimestamp(), null);
     }
 

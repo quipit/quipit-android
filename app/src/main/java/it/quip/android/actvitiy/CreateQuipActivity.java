@@ -1,9 +1,6 @@
 package it.quip.android.actvitiy;
 
 
-import android.animation.Animator;
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -14,10 +11,9 @@ import java.util.List;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
-import it.quip.android.fragment.QuipSelectFragment;
 import it.quip.android.fragment.QuipComposeFragment;
+import it.quip.android.fragment.QuipSelectFragment;
 import it.quip.android.model.Circle;
-import it.quip.android.model.Notification;
 import it.quip.android.model.Quip;
 import it.quip.android.model.User;
 import it.quip.android.util.TimeUtils;
