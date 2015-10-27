@@ -293,7 +293,10 @@ public class Notification extends BaseParseObject implements Parcelable {
         JSONObject data = this.toJson();
         ParsePush push = new ParsePush();
         // TODO: need to implement query handling with circles
-        push.setChannel(this.getChannel());
+        String channel = this.getChannel();
+        if (channel != null) {
+            push.setChannel(this.getChannel());
+        }
         push.setData(data);
         push.sendInBackground(new SendCallback() {
             @Override

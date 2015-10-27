@@ -58,10 +58,15 @@ public class MockUtils {
 
     public static User userWithName(String name) {
         User user = new User();
+
         user.setName(name);
         user.setEmail("");
         user.setImageUrl("https://cloud.githubusercontent.com/assets/1068249/10568603/4ddda6ac-75cf-11e5-8016-8d0c504c0051.png");
         user.setFacebookId(randomId());
+        if (name.equals("Hasham Ali")) {
+            String s = "Oo7iDf8gIH";
+            user.setObjectId(s);
+        }
         return user;
     }
 
