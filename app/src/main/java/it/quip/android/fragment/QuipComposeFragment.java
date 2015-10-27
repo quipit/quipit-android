@@ -1,8 +1,9 @@
 package it.quip.android.fragment;
 
-import android.app.DialogFragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -17,15 +18,17 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import it.quip.android.QuipitApplication;
 import it.quip.android.R;
+import it.quip.android.graphics.CircleTransformation;
 import it.quip.android.model.User;
-import it.quip.android.graphics.RoundedRectTransform;
 
-public class CreateQuipFragment extends DialogFragment {
+public class QuipComposeFragment extends DialogFragment {
 
-    private static final String USER_KEY = "USER";
+    public interface OnComposeQuipListener {
+        void onComposeQuip(String text, User source);
+    }
 
-    private User mUser;
     private LinearLayout mLlProfile;
     private ImageView mIvProfile;
     private TextView mTvUserName;
@@ -33,13 +36,8 @@ public class CreateQuipFragment extends DialogFragment {
     private TextView mTvQuipCount;
     private Button mBtQuip;
 
-    public static CreateQuipFragment newInstance(User user) {
-        Bundle args = new Bundle();
-        args.putParcelable(USER_KEY, user);
-
-        CreateQuipFragment f = new CreateQuipFragment();
-        f.setArguments(args);
-        return f;
+    public static QuipComposeFragment newInstance() {
+        return new QuipComposeFragment();
     }
 
     @Override
@@ -51,18 +49,20 @@ public class CreateQuipFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_create_quip, container, false);
+        return inflater.inflate(R.layout.fragment_create_quip_compose, container, false);
     }
 
     @Override
     public void onViewCreated(View v, @Nullable Bundle savedInstanceState) {
-        mUser = getArguments().getParcelable(USER_KEY);
+        User user = QuipitApplication.getCurrentUser();
         mLlProfile = (LinearLayout) v.findViewById(R.id.quip_create_profile);
         mIvProfile = (ImageView) mLlProfile.findViewById(R.id.iv_profile);
         try {
             Picasso.with(getActivity())
-                    .load("drawable/edgarjuarez.jpeg")
-                    .transform(new RoundedRectTransform(10, 0))
+                    .load(user.getImageUrl())
+                    .fit()
+                    .centerCrop()
+                    .transform(new CircleTransformation(4, Color.WHITE))
                     .into(mIvProfile);
 
         } catch (IllegalArgumentException illegalArgumentException) {
@@ -70,12 +70,9 @@ public class CreateQuipFragment extends DialogFragment {
         }
 
         mTvUserName = (TextView) mLlProfile.findViewById(R.id.tv_user_name);
-        mTvUserName.setText(mUser.getName());
+        mTvUserName.setText(user.getName());
 
         mEtQuipBody = (EditText) v.findViewById(R.id.et_quip_create_body);
-
-        mTvQuipCount = (TextView) v.findViewById(R.id.tv_quip_create_count);
-        mTvQuipCount.setText("0");
         mEtQuipBody.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -93,13 +90,20 @@ public class CreateQuipFragment extends DialogFragment {
             }
         });
 
+        mTvQuipCount = (TextView) v.findViewById(R.id.tv_quip_create_count);
+        mTvQuipCount.setText("0");
+
         mBtQuip = (Button) v.findViewById(R.id.bt_quip_create_share);
         mBtQuip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Create quip...
-                CreateQuipFragment.this.dismiss();
+                onCompose();
             }
         });
     }
+
+    private void onCompose() {
+        ((OnComposeQuipListener) getActivity()).onComposeQuip(mEtQuipBody.getText().toString(), null);
+    }
+
 }

@@ -3,29 +3,22 @@ package it.quip.android.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.parse.ParseClassName;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Circle implements Parcelable {
+@ParseClassName("Circle")
+public class Circle extends BaseParseObject implements Parcelable {
 
-    private long uid;
+    private static final String NAME = "name";
+    private static final String MEMBERS = "members";
+
     private String name = "";
     private List<User> members = new ArrayList<>();
 
-    public long getUid() {
-        return uid;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public List<User> getMembers() {
@@ -34,48 +27,22 @@ public class Circle implements Parcelable {
 
     public void addMember(User member) {
         members.add(member);
+        this.safePut(MEMBERS, members);
     }
 
     public void removeMember(User member) {
         members.remove(member);
+        this.safePut(MEMBERS, members);
     }
 
-    public static Circle fromJSON(JSONObject circleJson) {
-        Circle circle = new Circle();
-
-        try {
-            circle.uid = circleJson.getLong("id");
-            circle.name = circleJson.getString("name");
-            circle.members = User.fromJSONArray(circleJson.getJSONArray("members"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        return circle;
+    public void setName(String name) {
+        this.name = name;
+        this.safePut(NAME, name);
     }
 
-    public static List<Circle> fromJSONArray(JSONArray circlesJson) {
-        List<Circle> circles = new ArrayList<>();
-
-        for (int i = 0; i < circlesJson.length(); i++) {
-
-            Circle circle;
-            try {
-                JSONObject quipJson = circlesJson.getJSONObject(i);
-                circle = Circle.fromJSON(quipJson);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                continue;
-            }
-
-            if (circle != null) {
-                circles.add(circle);
-            }
-        }
-
-        return circles;
-
+    public void setMembers(List<User> members) {
+        this.members = members;
+        this.safePut(MEMBERS, members);
     }
 
     @Override
@@ -85,16 +52,15 @@ public class Circle implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(this.uid);
         dest.writeString(this.name);
         dest.writeTypedList(members);
     }
 
     public Circle() {
+
     }
 
     private Circle(Parcel in) {
-        this.uid = in.readLong();
         this.name = in.readString();
         in.readTypedList(members, User.CREATOR);
     }
@@ -103,7 +69,6 @@ public class Circle implements Parcelable {
         public Circle createFromParcel(Parcel source) {
             return new Circle(source);
         }
-
         public Circle[] newArray(int size) {
             return new Circle[size];
         }

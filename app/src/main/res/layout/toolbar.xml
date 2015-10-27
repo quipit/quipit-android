@@ -8,6 +8,6 @@
     android:background="?attr/colorPrimary"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+    app:theme="@style/AppTheme.QuipItBar">
 
 </android.support.v7.widget.Toolbar>

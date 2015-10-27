@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <include
         layout="@layout/profile_stub"
@@ -20,6 +21,8 @@
         android:hint="@string/quip_create_hint"
         android:inputType="textMultiLine"
         android:id="@+id/et_quip_create_body"
+        android:layout_marginLeft="@dimen/standard_margin"
+        android:layout_marginRight="@dimen/standard_margin"
         />
 
     <TextView
@@ -28,6 +31,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@id/et_quip_create_body"
         android:id="@+id/tv_quip_create_count"
+        android:layout_marginLeft="@dimen/standard_margin"
         />
 
     <TextView
@@ -36,6 +40,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@id/et_quip_create_body"
         android:id="@+id/tv_quip_create_source"
+        android:layout_marginRight="@dimen/standard_margin"
         android:text="@string/quip_create_source"
         />
 
@@ -44,7 +49,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:id="@+id/bt_quip_create_share"
-        android:text="quip"
+        android:text="@string/share_quip"
+        android:textColor="@color/quipit_alt"
         />
 
 </RelativeLayout>

@@ -2,6 +2,7 @@ package it.quip.android.adapter;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +15,7 @@ import java.util.List;
 
 import it.quip.android.R;
 import it.quip.android.fragment.QuipFeedFragment;
-import it.quip.android.graphics.RoundedRectTransform;
+import it.quip.android.graphics.CircleTransformation;
 import it.quip.android.model.Quip;
 
 public class QuipsAdapter extends RecyclerView.Adapter<QuipsViewHolder> {
@@ -51,12 +52,14 @@ public class QuipsAdapter extends RecyclerView.Adapter<QuipsViewHolder> {
     private void setupProfile(Quip quip, QuipsViewHolder viewHolder) {
         try {
             Picasso.with(viewHolder.mContext)
-                    .load("drawable/edgarjuarez.jpeg")
-                    .transform(new RoundedRectTransform(10, 0))
+                    .load(quip.getAuthor().getImageUrl())
+                    .fit()
+                    .centerCrop()
+                    .transform(new CircleTransformation(4, Color.WHITE))
                     .into(viewHolder.mIvProfile);
 
         } catch (IllegalArgumentException illegalArgumentException) {
-            Log.e("TweetsAdapter", "Unable to load: " + quip.getUid());
+            Log.e("TweetsAdapter", "Unable to load: " + quip.getObjectId());
         }
 
         viewHolder.mTvUserName.setText(quip.getAuthor().getName());

@@ -33,7 +33,7 @@
 
         <activity
             android:name=".actvitiy.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme.Login"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,24 +41,34 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".actvitiy.QuipitHomeActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/app_name">
         </activity>
+
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges=
                 "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:label="@string/app_name" />
+
         <activity
             android:name=".actvitiy.CreateCircleActivity"
             android:label="@string/title_create_circle">
         </activity>
 
+        <activity
+            android:name=".actvitiy.CreateQuipActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/title_create_quip" >
+        </activity>
+
         <service android:name="com.parse.PushService" />
         <!-- Custom receiver for quipit notifications -->
         <receiver
-            android:name="it.quip.android.receiver.NotificationReceiver"
+            android:name=".network.NotificationReceiver"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />

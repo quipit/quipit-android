@@ -77,7 +77,7 @@ public class InviteFriendsFragment extends Fragment {
 
         invitedFriends = new ArrayList<>();
         aInvitedFriends = new UsersArrayAdapter(getContext(), invitedFriends);
-        aInvitedFriends.setOnLongClickListener(new UsersArrayAdapter.OnLongClickListener() {
+        aInvitedFriends.setOnLongClickListener(new UsersArrayAdapter.OnLongClickListener<User>() {
             @Override
             public boolean onLongClick(int position, User user) {
                 uninviteFriend(user);

@@ -1,15 +1,15 @@
-package it.quip.android.util;
+package it.quip.android.service;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 
-public class PreferencesUtils {
+public class PreferencesService {
 
     private SharedPreferences _preferences;
     private SharedPreferences.Editor _preferencesEditor;
 
-    public PreferencesUtils(Context sourceActivity, String preferenceFile) {
+    public PreferencesService(Context sourceActivity, String preferenceFile) {
         _preferences = sourceActivity.getSharedPreferences(preferenceFile, Context.MODE_PRIVATE);
         _preferencesEditor = _preferences.edit();
     }

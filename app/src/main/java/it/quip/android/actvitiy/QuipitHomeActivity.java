@@ -15,9 +15,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.List;
+
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
-import it.quip.android.fragment.CreateQuipFragment;
 import it.quip.android.fragment.NotificationsFragment;
 import it.quip.android.fragment.QuipFeedFragment;
 import it.quip.android.fragment.ViewCircleFragment;
@@ -29,6 +30,7 @@ import it.quip.android.util.MockUtils;
 public class QuipitHomeActivity extends AppCompatActivity implements TagClickListener {
 
     private static final int CREATE_CIRCLE_REQUEST = 158;
+    private static final int CREATE_QUIP_REQUEST = 321;
 
     private User user;
 
@@ -84,8 +86,10 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
         Menu circlesSubMenu = mNavDrawer.getMenu().findItem(R.id.navCircles).getSubMenu();
         circlesSubMenu.clear();
 
-        for (Circle circle : user.getCircles()) {
-            circlesSubMenu.add(0, (int) circle.getUid(), Menu.NONE, circle.getName());
+        List<Circle> userCircles = user.getCircles();
+        for (int i = 0; i < userCircles.size(); i++) {
+            Circle circle = userCircles.get(i);
+            circlesSubMenu.add(0, i, Menu.NONE, circle.getName());
         }
     }
 
@@ -102,7 +106,7 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
                 Circle circle = user.getCircle(itemId);
                 if (null == circle) {
                     throw new RuntimeException("Attempted to select circle id " + itemId
-                            + " but it doesnt exist in the menu");
+                            + " but it doesn't exist in the menu");
                 }
 
                 fragment = ViewCircleFragment.newInstance(circle);
@@ -170,6 +174,8 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
                 Circle createdCircle = data.getParcelableExtra(CreateCircleActivity.CREATED_CIRCLE);
                 onCircleCreated(createdCircle);
             }
+        } else if (CREATE_QUIP_REQUEST == requestCode) {
+            // TODO: reload feed...
         }
     }
 
@@ -179,8 +185,8 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
     }
 
     private void createQuip() {
-        CreateQuipFragment f = CreateQuipFragment.newInstance(MockUtils.userWithName("Jon Como"));
-        f.show(getFragmentManager(), "create_quip");
+        Intent intent = new Intent(this, CreateQuipActivity.class);
+        startActivityForResult(intent, CREATE_QUIP_REQUEST);
     }
 
     private void onCircleCreated(Circle createdCircle) {

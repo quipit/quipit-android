@@ -1,8 +1,6 @@
 package it.quip.android.util;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -21,18 +19,29 @@ public class MockUtils {
             userWithName("Jonathan Como"),
             userWithName("Dan Buscaglia"),
             userWithName("Hasham Ali"),
-            userWithName("Tucker Joseph")
+            userWithName("Tucker Joseph"),
+            userWithName("Brother Darkness"),
+            userWithName("Bob Como"),
+            userWithName("Robin Como"),
+            userWithName("Bob Fannan"),
+            userWithName("Vimal Goel")
     );
 
     private static final List<Circle> fakeCircles = Arrays.asList(
-            circleWithNameAndMembers("#thangs", fakeUsers),
-            circleWithNameAndMembers("SF Crew", fakeUsers)
+            circleWithName("#thangs"),
+            circleWithName("SF Crew")
     );
 
     private static final List<Quip> fakeQuips = Arrays.asList(
-            quipWithText("This is some thangs!"),
+            quipWithText("That is some thangs!"),
             quipWithText("#darksided"),
-            quipWithText("You are brother darkness...")
+            quipWithText("You are brother darkness..."),
+            quipWithText("#puresided"),
+            quipWithText("what is them thangs with some thangs"),
+            quipWithText("whats pappin cap'n?"),
+            quipWithText("pa-yure"),
+            quipWithText("big dog thangs"),
+            quipWithText("folsimer")
     );
 
     public static List<User> getUsers() {
@@ -48,43 +57,36 @@ public class MockUtils {
     }
 
     public static User userWithName(String name) {
-        long userId = randomId();
-        String userAsJson = String.format(
-                "{\"email\": \"\", \"name\": \"%s\", \"facebook_id\": %s}", name, Long.toString(userId));
-
-        return User.fromJSON(jsonFromString(userAsJson));
+        User user = new User();
+        user.setName(name);
+        user.setEmail("");
+        user.setImageUrl("https://cloud.githubusercontent.com/assets/1068249/10568603/4ddda6ac-75cf-11e5-8016-8d0c504c0051.png");
+        user.setFacebookId(randomId());
+        return user;
     }
 
-    public static Circle circleWithNameAndMembers(String name, List<User> members) {
-        long circleId = randomId();
-        String circleAsJson = String.format(
-                "{\"name\": \"%s\", \"members\": [], \"id\": %d}", name, circleId);
+    public static Circle circleWithName(String name) {
+        List<User> members = new ArrayList<>();
+        for (int i = 0; i < generator.nextInt(fakeUsers.size()); i++) {
+            members.add(fakeUsers.get(generator.nextInt(fakeUsers.size())));
+        }
 
-        Circle circle = Circle.fromJSON(jsonFromString(circleAsJson));
-        if (circle != null) {
-            for (User member : members) {
-                circle.addMember(member);
-            }
+        Circle circle = new Circle();
+        circle.setName(name);
+        for (User member : members) {
+            circle.addMember(member);
+            member.addCircle(circle);
         }
 
         return circle;
     }
 
     public static Quip quipWithText(String text) {
-        return new Quip(randomId(), text, randomUser(), randomUser(), randomCircle(), randomTimestamp());
+        return new Quip(text, randomUser(), randomUser(), randomCircle(), randomTimestamp(), null);
     }
 
-    private static JSONObject jsonFromString(String json) {
-        try {
-            return new JSONObject(json);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            throw new RuntimeException("You dun fucked up");
-        }
-    }
-
-    private static long randomId() {
-        return generator.nextInt(Integer.MAX_VALUE);
+    public static String randomId() {
+        return Long.toString(generator.nextInt(Integer.MAX_VALUE));
     }
 
     private static User randomUser() {

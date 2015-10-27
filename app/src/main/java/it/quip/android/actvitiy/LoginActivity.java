@@ -12,7 +12,6 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
-import it.quip.android.QuipitApplication;
 import it.quip.android.R;
 import it.quip.android.model.Notification;
 import it.quip.android.model.User;
@@ -49,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void startMainActivity() {
-        QuipitApplication.setCurrentUser(User.getUserForSession());
+        User.setUserForSession();
         Intent intent = new Intent(this, QuipitHomeActivity.class);
         startActivity(intent);
     }
