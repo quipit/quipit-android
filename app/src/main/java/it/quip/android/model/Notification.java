@@ -86,6 +86,11 @@ public class Notification extends BaseParseObject implements Parcelable {
         return mSenderUid;
     }
 
+    public long getTimestamp() {
+        mTimestamp = this.getLong(PUSH_TIMESTAMP_KEY);
+        return mTimestamp;
+    }
+
     public String getTimestampString() {
         // TODO: implement this based on unix mTimestamp
         return "2h";
@@ -244,10 +249,7 @@ public class Notification extends BaseParseObject implements Parcelable {
         Notification notification = new Notification();
         try {
             notification.setText(json.getString(Notification.PUSH_TEXT_BODY_KEY));
-            notification.setChannel(json.getString(Notification.PUSH_CHANNEL_KEY));
-            notification.setNotificationImageUrl(json.getString(Notification.PUSH_IMAGE_URL_KEY));
             notification.setViewed(json.getBoolean(Notification.PUSH_VIEWED_KEY));
-            notification.setReceiverUid(json.getString(Notification.PUSH_RECEIVER_ID));
             notification.setSenderUid(json.getString(Notification.PUSH_SENDER_ID));
             notification.setTimestamp(json.getLong(Notification.PUSH_TIMESTAMP_KEY));
             notification.setType(json.getInt(Notification.PUSH_TYPE_KEY));
@@ -268,7 +270,7 @@ public class Notification extends BaseParseObject implements Parcelable {
             data.put(PUSH_CHANNEL_KEY, this.getChannel());
             data.put(PUSH_RECEIVER_ID, this.getReceiverUid());
             data.put(PUSH_SENDER_ID, this.getSenderUid());
-            data.put(PUSH_TIMESTAMP_KEY, this.getTimestampString());
+            data.put(PUSH_TIMESTAMP_KEY, this.getTimestamp());
             data.put(PUSH_VIEWED_KEY, this.getViewed());
             data.put(PUSH_IMAGE_URL_KEY, this.getNotificationImageUrl());
             return data;
@@ -284,12 +286,11 @@ public class Notification extends BaseParseObject implements Parcelable {
         } else {
             NotificationBatchJobData jobData = new NotificationBatchJobData(this.mRecepients, this.mSenderUid, this);
             AsyncTask task = new NotificationBatchJob().execute(jobData);
-            deliver();
         }
 
     }
 
-    private void deliver() {
+    public void deliver() {
         JSONObject data = this.toJson();
         ParsePush push = new ParsePush();
         // TODO: need to implement query handling with circles
