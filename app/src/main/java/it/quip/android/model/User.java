@@ -158,7 +158,6 @@ public class User extends BaseParseObject implements Parcelable {
         dest.writeString(getName());
         dest.writeString(getEmail());
         dest.writeString(getImageUrl());
-        dest.writeList(getCircles());
     }
 
     public User() {
@@ -170,9 +169,6 @@ public class User extends BaseParseObject implements Parcelable {
         this.setName(in.readString());
         this.setEmail(in.readString());
         this.setImageUrl(in.readString());
-
-        in.readList(circles, Circle.class.getClassLoader());
-        this.setCircles(circles);
     }
 
     public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
