@@ -70,7 +70,7 @@ public class Quip extends BaseParseObject implements Parcelable {
 
     public void setCircle(Circle circle) {
         this.circle = circle;
-        this.safePut(CIRCLE, circle == null ? null : circle.getObjectId());
+        this.safePut(CIRCLE, circle);
     }
 
     public void setTimestamp(Long timestamp) {

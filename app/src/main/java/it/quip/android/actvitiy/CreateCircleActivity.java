@@ -86,8 +86,14 @@ public class CreateCircleActivity extends AppCompatActivity
     }
 
     private void finishWithResult() {
+        Circle createdCircle = circleHeaderFragment.getCircle();
         Intent data = new Intent();
-        data.putExtra(CREATED_CIRCLE, circleHeaderFragment.getCircle());
+
+        // Add circle to all users...
+        for (User u : createdCircle.getMembers()) {
+            u.addCircle(createdCircle);
+            u.saveInBackground();
+        }
 
         setResult(RESULT_OK, data);
         finish();

@@ -186,8 +186,7 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (CREATE_CIRCLE_REQUEST == requestCode) {
             if (RESULT_OK == resultCode) {
-                Circle createdCircle = data.getParcelableExtra(CreateCircleActivity.CREATED_CIRCLE);
-                onCircleCreated(createdCircle);
+                onCircleCreated();
             }
         } else if (CREATE_QUIP_REQUEST == requestCode) {
             // TODO: reload feed...
@@ -204,10 +203,11 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
         startActivityForResult(intent, CREATE_QUIP_REQUEST);
     }
 
-    private void onCircleCreated(Circle createdCircle) {
-        mCircles.add(createdCircle);
+    private void onCircleCreated() {
+        mCircles.clear();
+        mCircles.addAll(QuipitApplication.getCurrentUser().getCircles());
         updateSidebarMenu();
-        prepareFragment(ViewCircleFragment.newInstance(createdCircle)).commitAllowingStateLoss();
+        prepareFragment(ViewCircleFragment.newInstance(mCircles.get(mCircles.size() - 1))).commitAllowingStateLoss();
     }
 
     @Override
