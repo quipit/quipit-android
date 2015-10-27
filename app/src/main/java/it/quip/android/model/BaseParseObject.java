@@ -17,7 +17,11 @@ public class BaseParseObject extends ParseObject {
 
     @Override
     public boolean equals(Object o) {
-        return ((ParseObject) o).getObjectId().equals(getObjectId());
+        try {
+            return ((ParseObject) o).getObjectId().equals(getObjectId());
+        } catch (ClassCastException classCastException) {
+            return false;
+        }
     }
 
 }
