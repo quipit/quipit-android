@@ -31,6 +31,8 @@ public class FacebookClient {
 
     }
 
+    private static final String FACEBOOK_IMAGE_URL = "https://graph.facebook.com/%s/picture";
+
     private static FacebookClient client;
 
     private AccessToken accessToken;
@@ -48,9 +50,9 @@ public class FacebookClient {
                 User user = new User();
                 try {
                     user.setName(responseJSON.getString("name"));
-                    user.setEmail(responseJSON.getString("email"));
+                    user.setEmail(responseJSON.optString("email"));
                     user.setFacebookId(responseJSON.getString("id"));
-                    user.setImageUrl(responseJSON.getString("picture"));
+                    user.setImageUrl(String.format(FACEBOOK_IMAGE_URL, user.getFacebookId()));
                     user.saveInBackground();
                     QuipitApplication.setCurrentUser(user);
                 } catch (JSONException jsonException) {
