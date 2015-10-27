@@ -14,9 +14,9 @@ import java.util.List;
 public class Quip extends BaseParseObject implements Parcelable {
 
     private static final String TEXT = "text";
-    private static final String AUTHOR_ID = "author_id";
-    private static final String SOURCE_ID = "source_id";
-    private static final String CIRCLE_ID = "circle_id";
+    private static final String AUTHOR = "author";
+    private static final String SOURCE = "source";
+    private static final String CIRCLE = "circle";
     private static final String TIMESTAMP = "timestamp";
     private static final String IMAGE_URL = "image_url";
 
@@ -58,17 +58,17 @@ public class Quip extends BaseParseObject implements Parcelable {
 
     public void setAuthor(User author) {
         this.author = author;
-        this.safePut(AUTHOR_ID, author == null ? null : author.getObjectId());
+        this.safePut(AUTHOR, author);
     }
 
     public void setSource(User source) {
         this.source = source;
-        this.safePut(SOURCE_ID, source == null ? null : source.getObjectId());
+        this.safePut(SOURCE, source);
     }
 
     public void setCircle(Circle circle) {
         this.circle = circle;
-        this.safePut(CIRCLE_ID, circle == null ? null : circle.getObjectId());
+        this.safePut(CIRCLE, circle == null ? null : circle.getObjectId());
     }
 
     public void setTimestamp(Long timestamp) {
@@ -150,12 +150,12 @@ public class Quip extends BaseParseObject implements Parcelable {
             if (null == circle) {
                 // TODO: figure out how to query quips by only your facebook friends...
                 quips = getQuery()
-                        .whereDoesNotExist(CIRCLE_ID)
+                        .whereDoesNotExist(CIRCLE)
                         .orderByDescending(TIMESTAMP)
                         .find();
             } else {
                 quips = getQuery()
-                        .whereEqualTo(CIRCLE_ID, circle.getObjectId())
+                        .whereEqualTo(CIRCLE, circle.getObjectId())
                         .orderByDescending(TIMESTAMP)
                         .find();
             }
