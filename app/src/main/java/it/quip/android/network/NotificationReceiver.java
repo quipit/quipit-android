@@ -62,7 +62,7 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
                     notification.setTimestamp(TimeUtils.currentTimestampInS());
                     notification.setReceiverUid(QuipitApplication.getCurrentUser().getObjectId());
                     notification.setText(json.getString(PARSE_ALERT_KEY));
-                    notification.saveInBackground();
+                    notification.saveInternal();
                     // TODO: use our image app for this?
                     triggerBroadcastToActivity(context, notification);
                 }

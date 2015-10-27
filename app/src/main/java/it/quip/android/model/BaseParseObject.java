@@ -22,4 +22,8 @@ public class BaseParseObject extends ParseObject {
 
         return objectId;
     }
+
+    public void saveInternal() {
+        this.saveInBackground();
+    }
 }

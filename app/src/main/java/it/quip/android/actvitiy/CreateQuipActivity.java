@@ -1,6 +1,9 @@
 package it.quip.android.actvitiy;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +17,7 @@ import it.quip.android.R;
 import it.quip.android.fragment.QuipSelectFragment;
 import it.quip.android.fragment.QuipComposeFragment;
 import it.quip.android.model.Circle;
+import it.quip.android.model.Notification;
 import it.quip.android.model.Quip;
 import it.quip.android.model.User;
 import it.quip.android.util.TimeUtils;
@@ -65,11 +69,11 @@ public class CreateQuipActivity
                     Quip quip = new Quip(mQuip);
                     quip.setCircle(circle);
                     quip.setTimestamp(timestamp);
-                    quip.saveInBackground();
+                    quip.saveInternal();
                 }
             } else {
                 mQuip.setTimestamp(timestamp);
-                mQuip.saveInBackground();
+                mQuip.saveInternal();
             }
 
             finish();
@@ -101,4 +105,5 @@ public class CreateQuipActivity
     public void onBackPressed() {
         finish();
     }
+
 }

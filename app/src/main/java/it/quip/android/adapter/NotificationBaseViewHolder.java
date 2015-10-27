@@ -1,10 +1,15 @@
 package it.quip.android.adapter;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
@@ -34,7 +39,6 @@ public class NotificationBaseViewHolder extends RecyclerView.ViewHolder {
         mHandler = handler;
         mAdapter = adapter;
         mCircleParser = new TagTextSpanner();
-
         notificationImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
