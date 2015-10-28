@@ -25,6 +25,7 @@
             android:layout_below="@+id/toolbar"
             layout="@layout/notification_toast_bar"
             ></include>
+
         <FrameLayout
             android:id="@+id/fl_content"
             android:layout_below="@id/sub_tool_bar"

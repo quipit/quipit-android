@@ -16,26 +16,52 @@ import it.quip.android.adapter.QuipsAdapter;
 import it.quip.android.listener.EndlessScrollListener;
 import it.quip.android.model.Quip;
 
-public class QuipFeedFragment extends BaseFragment {
+public abstract class QuipFeedFragment extends BaseFragment {
 
     @Override
     public CharSequence getTitle() {
         return "Quips";
     }
 
-    protected List<Quip> mQuips;
-    protected QuipsAdapter mQuipsAdapter;
+    private List<Quip> mQuips;
+    private QuipsAdapter mQuipsAdapter;
 
     private SwipeRefreshLayout mSrlFeed;
     private RecyclerView mRvFeed;
     private LinearLayoutManager mLlManager;
 
+    public abstract void loadInitialQuips();
+    public abstract void loadMoreQuips(int page);
+
+    public void addQuip(Quip quip) {
+        mQuips.add(quip);
+        mQuipsAdapter.notifyDataSetChanged();
+    }
+
+    public void addQuips(List<Quip> quips) {
+        mQuips.addAll(quips);
+        mQuipsAdapter.notifyDataSetChanged();
+    }
+
+    public void setQuips(List<Quip> quips) {
+        mQuips.clear();
+        addQuips(quips);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mQuips = new ArrayList<>();
+        mQuipsAdapter = new QuipsAdapter(mQuips, this);
+
+        loadInitialQuips();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
         setupViewDependencies(view);
-        populateFeed(false);
-
         return view;
     }
 
@@ -44,38 +70,30 @@ public class QuipFeedFragment extends BaseFragment {
         mSrlFeed.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                populateFeed(false);
+                loadInitialQuips();
             }
         });
 
-        mRvFeed = (RecyclerView) view.findViewById(R.id.rv_feed);
-        mQuips = new ArrayList<Quip>();
-        mQuipsAdapter = new QuipsAdapter(mQuips, this);
-        mRvFeed.setAdapter(mQuipsAdapter);
-
         mLlManager = new LinearLayoutManager(getContext());
+
+        mRvFeed = (RecyclerView) view.findViewById(R.id.rv_feed);
+        mRvFeed.setAdapter(mQuipsAdapter);
         mRvFeed.setLayoutManager(mLlManager);
         mRvFeed.addOnScrollListener(new EndlessScrollListener(mLlManager) {
-
             @Override
             public void onLoadMore(int currentPage) {
-                populateFeed(true);
+                loadMoreQuips(currentPage);
             }
-
         });
     }
 
-    private void populateFeed(final boolean additional) {
-        if (mQuips.size() < 20) {
-            if (!additional) {
-                mQuips.clear();
-            }
+    public void showProcessIndicators() {
+        // This will show the network indicator
+    }
 
-            //mQuips.addAll(MockUtils.getQuips());
-            mQuipsAdapter.notifyDataSetChanged();
-        }
-
+    public void hideProgressIndicators() {
         mSrlFeed.setRefreshing(false);
+        // TODO: Hide the network indicator here
     }
 
 }

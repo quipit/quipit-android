@@ -26,8 +26,8 @@ import java.util.List;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
+import it.quip.android.fragment.HomeFeedFragment;
 import it.quip.android.fragment.NotificationsFragment;
-import it.quip.android.fragment.QuipFeedFragment;
 import it.quip.android.fragment.ViewCircleFragment;
 import it.quip.android.listener.TagClickListener;
 import it.quip.android.model.Circle;
@@ -174,7 +174,7 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
 
     private void displayDefaultQuipStream() {
         // TODO: We shouldn't be creating a new fragment each time. We should manage these
-        prepareFragment(new QuipFeedFragment(), false).commit();
+        prepareFragment(new HomeFeedFragment(), false).commit();
     }
 
     @Override
