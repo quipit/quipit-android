@@ -206,7 +206,13 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
                 onCircleCreated();
             }
         } else if (CREATE_QUIP_REQUEST == requestCode) {
-
+            if (RESULT_OK == resultCode) {
+                String createdQuipCircleId = data.getStringExtra(CreateQuipActivity.CREATED_QUIP_CIRCLE_ID);
+                if (null != createdQuipCircleId) {
+                    Circle c = Circle.findById(mCircles, createdQuipCircleId);
+                    viewCircle(c);
+                }
+            }
         }
     }
 
@@ -225,7 +231,11 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
         mCircles.clear();
         mCircles.addAll(QuipitApplication.getCurrentUser().getCircles());
         updateSidebarMenu();
-        prepareFragment(ViewCircleFragment.newInstance(mCircles.get(mCircles.size() - 1))).commitAllowingStateLoss();
+        viewCircle(mCircles.get(mCircles.size() - 1));
+    }
+
+    private void viewCircle(Circle circle) {
+        prepareFragment(ViewCircleFragment.newInstance(circle)).commitAllowingStateLoss();
     }
 
     @Override

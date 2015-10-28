@@ -24,6 +24,7 @@ public class CreateQuipActivity
         extends AppCompatActivity
         implements QuipComposeFragment.OnSearchFriend, SearchListFragment.OnSearchListChangedListener<User> {
 
+    public static final String CREATED_QUIP_CIRCLE_ID = "CREATED_QUIP_CIRCLE_ID";
     private static final int SHARE_QUIP_REQUEST = 479;
 
     private QuipComposeFragment mCreateQuipComposeFragment;
@@ -68,7 +69,15 @@ public class CreateQuipActivity
             if (null != selectedCircles) {
                 createQuip(selectedCircles);
             }
+
+            Intent i = new Intent();
+            if (selectedCircles.size() > 0) {
+                i.putExtra(CREATED_QUIP_CIRCLE_ID, selectedCircles.get(0).getObjectId());
+            }
+
+            setResult(RESULT_OK, i);
             finish();
+
             overridePendingTransition(R.anim.slide_down, R.anim.zoom_in);
         } else {
             super.onActivityResult(requestCode, resultCode, data);
