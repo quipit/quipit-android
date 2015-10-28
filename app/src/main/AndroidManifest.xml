@@ -28,6 +28,37 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
+        <service android:name="com.parse.PushService" />
+        <!-- Custom receiver for quipit notifications -->
+        <receiver
+            android:name=".network.NotificationReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.parse.push.intent.RECEIVE" />
+                <action android:name="com.parse.push.intent.DELETE" />
+                <action android:name="com.parse.push.intent.OPEN" />
+                <action android:name="com.parse.push.intent.SEND" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.parse.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <action android:name="com.google.android.c2dm.intent.SEND" />
+
+                <category android:name="it.quip.android" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+            android:name="com.parse.push.notification_icon"
+            android:resource="@drawable/ic_quipit_notification_logo" />
+
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/app_name"
@@ -62,36 +93,6 @@
             android:name=".activity.ShareQuipActivity"
             android:label="@string/title_activity_share_quip"
             android:theme="@style/AppTheme.NoActionBar" >
-
-        <service android:name="com.parse.PushService" />
-        <!-- Custom receiver for quipit notifications -->
-        <receiver
-            android:name=".network.NotificationReceiver"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="com.parse.push.intent.RECEIVE" />
-                <action android:name="com.parse.push.intent.DELETE" />
-                <action android:name="com.parse.push.intent.OPEN" />
-                <action android:name="com.parse.push.intent.SEND" />
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.USER_PRESENT" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name="com.parse.GcmBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-                <action android:name="com.google.android.c2dm.intent.SEND" />
-
-                <category android:name="it.quip.android" />
-            </intent-filter>
-        </receiver>
-
-        <meta-data
-            android:name="com.parse.push.notification_icon"
-            android:resource="@drawable/ic_quipit_notification_logo" />
         </activity>
 
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
