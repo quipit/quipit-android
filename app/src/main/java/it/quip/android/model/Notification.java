@@ -208,8 +208,11 @@ public class Notification extends BaseParseObject implements Parcelable {
         }
 
         public with circle(Circle c) {
-            circle = c;
-            bulkRecepients = c.getMembers();
+            if (c != null) {
+                circle = c;
+
+                bulkRecepients = c.getMembers();
+            }
             return this;
         }
 
