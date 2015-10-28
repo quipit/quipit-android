@@ -84,7 +84,7 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.quipit)
-                        .setContentTitle("Quippin")
+                        .setContentTitle("Quipit")
                         .setContentText(notification.getText());
 
         // mId allows you to update the notification later on.
