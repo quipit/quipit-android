@@ -18,7 +18,6 @@ import it.quip.android.fragment.SearchListFragment;
 import it.quip.android.model.Circle;
 import it.quip.android.model.Quip;
 import it.quip.android.model.User;
-import it.quip.android.util.TimeUtils;
 
 public class CreateQuipActivity
         extends AppCompatActivity
@@ -102,17 +101,13 @@ public class CreateQuipActivity
             quip.setSource(mFriendSearchListFragment.getSelectedValues().get(0));
         }
 
-        long timestamp = TimeUtils.currentTimestampInS();
-
         if (circles.size() > 0) {
             for (Circle circle : circles) {
                 Quip newQuip = new Quip(quip);
                 newQuip.setCircle(circle);
-                newQuip.setTimestamp(timestamp);
                 newQuip.saveInternal();
             }
         } else {
-            quip.setTimestamp(timestamp);
             quip.saveInternal();
         }
     }

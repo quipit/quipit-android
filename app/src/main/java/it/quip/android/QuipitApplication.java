@@ -1,6 +1,8 @@
 package it.quip.android;
 
 import android.app.Application;
+import android.app.NotificationManager;
+import android.content.Context;
 
 import com.facebook.FacebookSdk;
 import com.parse.Parse;
@@ -21,6 +23,7 @@ public class QuipitApplication extends Application {
     private static User sUser;
     private static CircleRepository sCircleRepo;
     private static UserRepository sUserRepo;
+    public static NotificationManager sNotificationManager;
 
     private void setupParse() {
         Parse.enableLocalDatastore(this);
@@ -32,7 +35,7 @@ public class QuipitApplication extends Application {
         ParseObject.registerSubclass(Quip.class);
         ParseObject.registerSubclass(Circle.class);
         ParseObject.registerSubclass(Notification.class);
-
+        sNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         ParseInstallation.getCurrentInstallation().saveInBackground();
     }
 
@@ -71,6 +74,10 @@ public class QuipitApplication extends Application {
 
     public static void setCurrentUser(User user) {
         sUser = user;
+    }
+
+    public static NotificationManager notificationManager() {
+        return sNotificationManager;
     }
 
 }

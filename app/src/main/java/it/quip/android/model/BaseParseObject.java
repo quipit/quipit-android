@@ -4,8 +4,22 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 
+import java.util.Date;
+
 
 public class BaseParseObject extends ParseObject {
+
+    public static final String CREATED_AT = "createdAt";
+    public static final String UPDATED_AT = "updatedAt";
+
+    public long getTimestamp() {
+        Date created = getCreatedAt();
+        if (null == created) {
+            created = new Date();
+        }
+
+        return created.getTime();
+    }
 
     protected void safePut(String key, Object value) {
         if (value != null) {
