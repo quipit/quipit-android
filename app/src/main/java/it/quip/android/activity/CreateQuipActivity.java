@@ -1,12 +1,12 @@
 package it.quip.android.activity;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import it.quip.android.QuipitApplication;
 import it.quip.android.R;
 import it.quip.android.fragment.FriendSearchListFragment;
 import it.quip.android.fragment.QuipComposeFragment;
-import it.quip.android.fragment.CirclesSelectListFragment;
+import it.quip.android.fragment.SearchListFragment;
 import it.quip.android.model.Circle;
 import it.quip.android.model.Quip;
 import it.quip.android.model.User;
@@ -22,65 +22,54 @@ import it.quip.android.util.TimeUtils;
 
 public class CreateQuipActivity
         extends AppCompatActivity
-        implements QuipComposeFragment.OnComposeQuipListener {
+        implements QuipComposeFragment.OnSearchFriend, SearchListFragment.OnSearchListChangedListener<User> {
 
-    private static final String COMPOSE = "compose_fragment";
+    private static final int SHARE_QUIP_REQUEST = 479;
 
     private QuipComposeFragment mCreateQuipComposeFragment;
     private FriendSearchListFragment mFriendSearchListFragment;
 
-    private Quip mQuip;
-    private Button mBtQuip;
-    private FrameLayout mFlCompose;
-    private FrameLayout mFlSourcePicker;
+    private Button mBtShare;
 
     private void setupFragments() {
         mCreateQuipComposeFragment = QuipComposeFragment.newInstance();
         mFriendSearchListFragment = FriendSearchListFragment.newInstance();
+        mFriendSearchListFragment.setUseCustomInput(true);
+        mFriendSearchListFragment.setOnSearchListChangedListener(this);
     }
 
     private void setupView() {
-        mBtQuip = (Button) findViewById(R.id.bt_quip_create_post);
-        mBtQuip.setOnClickListener(new View.OnClickListener() {
+        mBtShare = (Button) findViewById(R.id.bt_quip_create_share);
+        mBtShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onPostQuip();
+                showShareFragment();
             }
         });
-
-        mFlCompose = (FrameLayout) findViewById(R.id.fl_create_quip_content);
-        mFlSourcePicker = (FrameLayout) findViewById(R.id.fl_create_quip_source);
     }
 
     private void showComposeFragment() {
-        mCreateQuipComposeFragment.show(getSupportFragmentManager(), COMPOSE);
-    }
-
-    private void showShareFragment() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fl_create_quip_circle_picker, mCirclesSelectListFragment);
+        ft.replace(R.id.fl_create_quip_content, mCreateQuipComposeFragment);
+        ft.replace(R.id.fl_create_quip_source, mFriendSearchListFragment);
         ft.commit();
     }
 
-    private void onPostQuip() {
-        if (mQuip != null) {
-            List<Circle> circles = mCirclesSelectListFragment.getSelectedValues();
-            long timestamp = TimeUtils.currentTimestampInS();
+    private void showShareFragment() {
+        Intent i = new Intent(CreateQuipActivity.this, ShareQuipActivity.class);
+        startActivityForResult(i, SHARE_QUIP_REQUEST);
+    }
 
-            // TODO: Figure out how to add a "Share with all friends" option rather than not selecting any circles...
-            if (circles.size() > 0) {
-                for (Circle circle : circles) {
-                    Quip quip = new Quip(mQuip);
-                    quip.setCircle(circle);
-                    quip.setTimestamp(timestamp);
-                    quip.saveInternal();
-                }
-            } else {
-                mQuip.setTimestamp(timestamp);
-                mQuip.saveInternal();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SHARE_QUIP_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                List<Circle> selectedCircles = data.getParcelableArrayListExtra(ShareQuipActivity.SELECTED_CIRCLES);
+                createQuip(selectedCircles);
             }
-
             finish();
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -93,21 +82,42 @@ public class CreateQuipActivity
         showComposeFragment();
     }
 
-    @Override
-    public void onComposeQuip(String text, User source) {
-        mCreateQuipComposeFragment.dismiss();
+    public void createQuip(List<Circle> circles) {
+        Quip quip = new Quip();
+        quip.setText(mCreateQuipComposeFragment.getBody());
+        quip.setAuthor(QuipitApplication.getCurrentUser());
 
-        mQuip = new Quip();
-        mQuip.setText(text);
-        mQuip.setAuthor(QuipitApplication.getCurrentUser());
-        mQuip.setSource(source);
+        if (mFriendSearchListFragment.getSelectedValues().size() > 0) {
+            quip.setSource(mFriendSearchListFragment.getSelectedValues().get(0));
+        }
 
-        showShareFragment();
+        long timestamp = TimeUtils.currentTimestampInS();
+
+        if (circles.size() > 0) {
+            for (Circle circle : circles) {
+                Quip newQuip = new Quip(quip);
+                newQuip.setCircle(circle);
+                newQuip.setTimestamp(timestamp);
+                newQuip.saveInternal();
+            }
+        } else {
+            quip.setTimestamp(timestamp);
+            quip.saveInternal();
+        }
     }
 
     @Override
-    public void onBackPressed() {
-        finish();
+    public void onSearchFriend(String text) {
+        mFriendSearchListFragment.search(text);
     }
 
+    @Override
+    public void onSelect(User object) {
+        mCreateQuipComposeFragment.setSourceName(object.getName());
+    }
+
+    @Override
+    public void onUnselect(User object) {
+        mCreateQuipComposeFragment.setSourceName("anon");
+    }
 }

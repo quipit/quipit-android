@@ -24,8 +24,8 @@ import it.quip.android.model.User;
 
 public class QuipComposeFragment extends Fragment {
 
-    public interface OnComposeQuipListener {
-        void onComposeQuip(String text, User source);
+    public interface OnSearchFriend {
+        void onSearchFriend(String text);
     }
 
     private LinearLayout mLlProfile;
@@ -86,7 +86,7 @@ public class QuipComposeFragment extends Fragment {
         mTvQuipCount = (TextView) v.findViewById(R.id.tv_quip_create_count);
         mTvQuipCount.setText("0");
 
-        mEtQuipSource = (EditText) v.findViewById(R.id.tv_quip_source_user_name);
+        mEtQuipSource = (EditText) v.findViewById(R.id.et_quip_create_source);
         mEtQuipSource.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -95,7 +95,7 @@ public class QuipComposeFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // TODO: Send character back to activity...
+                ((OnSearchFriend) getActivity()).onSearchFriend(s.toString());
             }
 
             @Override
@@ -103,6 +103,15 @@ public class QuipComposeFragment extends Fragment {
 
             }
         });
+    }
+
+    public String getBody() {
+        return mEtQuipBody.getText().toString();
+    }
+
+    public void setSourceName(String body) {
+        mEtQuipSource.clearFocus();
+        mEtQuipSource.setText(body);
     }
 
 }

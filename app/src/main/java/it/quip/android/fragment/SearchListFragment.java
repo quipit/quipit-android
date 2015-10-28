@@ -37,14 +37,25 @@ public abstract class SearchListFragment<T extends ParseObject> extends Fragment
     private List<T> mSelectedValues;
     private SearchArrayAdapter<T> mSelectedValuesAdapter;
 
-    private OnSearchListChangedListener onSearchListChangedListener;
+    private OnSearchListChangedListener mOnSearchListChangedListener;
+
+    private boolean mUseCustomInput = false;
 
     public List<T> getSelectedValues() {
         return mSelectedValues;
     }
 
-    public void setOnSearchListChangedListener(OnSearchListChangedListener onSearchListChangedListener) {
-        this.onSearchListChangedListener = onSearchListChangedListener;
+    public void setUseCustomInput(boolean useCustomInput) {
+        mUseCustomInput = useCustomInput;
+    }
+
+    public void setOnSearchListChangedListener(OnSearchListChangedListener mOnSearchListChangedListener) {
+        this.mOnSearchListChangedListener = mOnSearchListChangedListener;
+    }
+
+    public void search(String name) {
+        mFilteredValuesAdapter.clear();
+        mFilteredValuesAdapter.addAll(searchFor(name));
     }
 
     @Override
@@ -73,6 +84,11 @@ public abstract class SearchListFragment<T extends ParseObject> extends Fragment
         View v = inflater.inflate(R.layout.fragment_searchable_list, container, false);
 
         mEtSearch = (EditText) v.findViewById(R.id.et_search);
+        if (mUseCustomInput) {
+            mEtSearch.setVisibility(View.INVISIBLE);
+        } else {
+            setupSearchField();
+        }
 
         OverlayListView valuesOverlay = (OverlayListView) v.findViewById(R.id.overlay_values);
         valuesOverlay.setAdapter(mFilteredValuesAdapter);
@@ -85,8 +101,10 @@ public abstract class SearchListFragment<T extends ParseObject> extends Fragment
 
         ListView lvSelectedValues = (ListView) v.findViewById(R.id.lv_selected_values);
         lvSelectedValues.setAdapter(mSelectedValuesAdapter);
+        if (mUseCustomInput) {
+            lvSelectedValues.setVisibility(View.INVISIBLE);
+        }
 
-        setupSearchField();
         return v;
     }
 
@@ -101,15 +119,15 @@ public abstract class SearchListFragment<T extends ParseObject> extends Fragment
         mEtSearch.setText("");
         mFilteredValuesAdapter.clear();
 
-        if (onSearchListChangedListener != null) {
-            onSearchListChangedListener.onSelect(value);
+        if (mOnSearchListChangedListener != null) {
+            mOnSearchListChangedListener.onSelect(value);
         }
     }
 
     private void unselectValue(T value) {
         mSelectedValuesAdapter.remove(value);
-        if (onSearchListChangedListener != null) {
-            onSearchListChangedListener.onUnselect(value);
+        if (mOnSearchListChangedListener != null) {
+            mOnSearchListChangedListener.onUnselect(value);
         }
     }
 
@@ -130,11 +148,6 @@ public abstract class SearchListFragment<T extends ParseObject> extends Fragment
 
             }
         });
-    }
-
-    private void search(String name) {
-        mFilteredValuesAdapter.clear();
-        mFilteredValuesAdapter.addAll(searchFor(name));
     }
 
     protected List<T> getSearchValues() {

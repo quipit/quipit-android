@@ -58,6 +58,11 @@
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
 
+        <activity
+            android:name=".activity.ShareQuipActivity"
+            android:label="@string/title_activity_share_quip"
+            android:theme="@style/AppTheme.NoActionBar" >
+
         <service android:name="com.parse.PushService" />
         <!-- Custom receiver for quipit notifications -->
         <receiver
@@ -88,10 +93,6 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-
-        <activity
-            android:name=".activity.ShareQuipActivity"
-            android:label="@string/title_activity_share_quip" >
         </activity>
     </application>
 
