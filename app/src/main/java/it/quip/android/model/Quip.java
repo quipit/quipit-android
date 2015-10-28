@@ -155,14 +155,17 @@ public class Quip extends BaseParseObject implements Parcelable {
 
     @Override
     public void saveInternal() {
+        super.saveInternal();
+        if (getCircle() == null) {
+            return;
+        }
+
         User user = QuipitApplication.getCurrentUser();
-        Notification notification = new Notification.with(null)
+        new Notification.with(null)
                 .sender(user)
                 .circle(getCircle())
                 .type(Notification.STANDARD_NOTIFICATION)
                 .body(user.getName() + " just quipped to circle @" + getCircle().getName())
                 .deliver();
-
-        super.saveInternal();
     }
 }
