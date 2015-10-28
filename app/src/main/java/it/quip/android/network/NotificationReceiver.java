@@ -2,6 +2,7 @@ package it.quip.android.network;
 
 import android.app.Activity;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
+import it.quip.android.activity.LoginActivity;
 import it.quip.android.activity.QuipitHomeActivity;
 import it.quip.android.model.Notification;
 import it.quip.android.util.TimeUtils;
@@ -59,9 +61,6 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
                 JSONObject json = new JSONObject(intent.getExtras().getString(PARSE_DATA_INTENT_KEY));
                 if (json.has(Notification.PUSH_TEXT_BODY_KEY)) {
                     Notification notification = Notification.fromJson(json);
-                    if ((notification != null) && (!notification.getSenderUid().equals(QuipitApplication.getCurrentUser().getObjectId()))) {
-                        //triggerBroadcastToActivity(context, notification);
-                    }
                     triggerBroadcastToActivity(context, notification);
                 } else {
                     // This is a global push, just use alert
@@ -81,14 +80,22 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
     }
 
     private void triggerBroadcastToActivity(Context context, Notification notification) {
-        NotificationCompat.Builder mBuilder =
+        Intent intent = new Intent(context, LoginActivity.class);
+        int requestID = (int) System.currentTimeMillis(); //unique requestID to differentiate between various notification with same NotifId
+        int flags = PendingIntent.FLAG_CANCEL_CURRENT; // cancel old intent and create new one
+        PendingIntent pIntent = PendingIntent.getActivity(context, requestID, intent, flags);
+        android.app.Notification mBuilder =
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.quipit)
                         .setContentTitle("Quipit")
-                        .setContentText(notification.getText());
+                        .setContentText(notification.getText())
+                        .setContentIntent(pIntent)
+                        .setAutoCancel(true)
+                        .build();
+
 
         // mId allows you to update the notification later on.
-        QuipitApplication.notificationManager().notify(0, mBuilder.build());
+        QuipitApplication.notificationManager().notify(0, mBuilder);
         Intent pupInt = new Intent(Notification.NOTIFICATION_RECEIVED_ACTION);
         pupInt.setFlags(Notification.FLAG_NOTIFICATION_RECEIVED);
         pupInt.setAction(Notification.NOTIFICATION_RECEIVED_ACTION);
