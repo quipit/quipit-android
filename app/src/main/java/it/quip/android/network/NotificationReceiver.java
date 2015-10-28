@@ -87,7 +87,7 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
                         .setContentTitle("Quippin")
                         .setContentText(notification.getText());
 
-// mId allows you to update the notification later on.
+        // mId allows you to update the notification later on.
         QuipitApplication.notificationManager().notify(0, mBuilder.build());
         Intent pupInt = new Intent(Notification.NOTIFICATION_RECEIVED_ACTION);
         pupInt.setFlags(Notification.FLAG_NOTIFICATION_RECEIVED);
