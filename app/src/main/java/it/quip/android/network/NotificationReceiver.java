@@ -19,6 +19,8 @@ import it.quip.android.R;
 import it.quip.android.activity.LoginActivity;
 import it.quip.android.activity.QuipitHomeActivity;
 import it.quip.android.model.Notification;
+import it.quip.android.model.Quip;
+import it.quip.android.model.User;
 import it.quip.android.util.TimeUtils;
 
 public class NotificationReceiver extends ParsePushBroadcastReceiver {
@@ -60,8 +62,13 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
             try {
                 JSONObject json = new JSONObject(intent.getExtras().getString(PARSE_DATA_INTENT_KEY));
                 if (json.has(Notification.PUSH_TEXT_BODY_KEY)) {
+
                     Notification notification = Notification.fromJson(json);
-                    triggerBroadcastToActivity(context, notification);
+                    User loggedInUser = QuipitApplication.getCurrentUser();
+                    String sender = notification.getSenderUid();
+                    if (loggedInUser != null && !loggedInUser.equals(sender)) {
+                        triggerBroadcastToActivity(context, notification);
+                    }
                 } else {
                     // This is a global push, just use alert
                     Notification notification = new Notification();
