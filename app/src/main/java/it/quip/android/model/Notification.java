@@ -253,6 +253,7 @@ public class Notification extends BaseParseObject implements Parcelable {
             notification.setSenderUid(json.getString(Notification.PUSH_SENDER_ID));
             notification.setTimestamp(json.getLong(Notification.PUSH_TIMESTAMP_KEY));
             notification.setType(json.getInt(Notification.PUSH_TYPE_KEY));
+            notification.setNotificationImageUrl(Notification.PUSH_IMAGE_URL_KEY);
 
         } catch (JSONException e) {
             // This is a global alert, just return default

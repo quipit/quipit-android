@@ -15,6 +15,7 @@ import it.quip.android.R;
 import it.quip.android.fragment.CircleHeaderFragment;
 import it.quip.android.fragment.InviteFriendsFragment;
 import it.quip.android.model.Circle;
+import it.quip.android.model.Notification;
 import it.quip.android.model.User;
 
 public class CreateCircleActivity extends AppCompatActivity
@@ -95,6 +96,13 @@ public class CreateCircleActivity extends AppCompatActivity
             u.saveInBackground();
         }
 
+        Notification n = new Notification.with(null)
+                .body(QuipitApplication.getCurrentUser().getName() + " just added you to circle @" + createdCircle.getName())
+                .circle(createdCircle)
+                .sender(QuipitApplication.getCurrentUser())
+                .type(Notification.STANDARD_NOTIFICATION)
+                .imageUrl(createdCircle.getAvatarImageURL())
+                .build();
         setResult(RESULT_OK, data);
         finish();
     }

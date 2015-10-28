@@ -53,7 +53,7 @@ public class FacebookClient {
                     user.setEmail(responseJSON.optString("email"));
                     user.setFacebookId(responseJSON.getString("id"));
                     user.setImageUrl(String.format(FACEBOOK_IMAGE_URL, user.getFacebookId()));
-                    user.saveInBackground();
+                    user.saveInternal();
                     QuipitApplication.setCurrentUser(user);
                 } catch (JSONException jsonException) {
                     Log.e("FacebookClient", "Unable to parse JSON in Facebook response.");
