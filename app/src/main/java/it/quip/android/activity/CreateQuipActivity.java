@@ -16,7 +16,6 @@ import it.quip.android.fragment.QuipSelectFragment;
 import it.quip.android.model.Circle;
 import it.quip.android.model.Quip;
 import it.quip.android.model.User;
-import it.quip.android.util.TimeUtils;
 
 public class CreateQuipActivity
         extends AppCompatActivity
@@ -57,18 +56,15 @@ public class CreateQuipActivity
     private void onPostQuip() {
         if (mQuip != null) {
             List<Circle> circles = mQuipSelectFragment.getSelected();
-            long timestamp = TimeUtils.currentTimestampInS();
 
             // TODO: Figure out how to add a "Share with all friends" option rather than not selecting any circles...
             if (circles.size() > 0) {
                 for (Circle circle : circles) {
                     Quip quip = new Quip(mQuip);
                     quip.setCircle(circle);
-                    quip.setTimestamp(timestamp);
                     quip.saveInternal();
                 }
             } else {
-                mQuip.setTimestamp(timestamp);
                 mQuip.saveInternal();
             }
 
