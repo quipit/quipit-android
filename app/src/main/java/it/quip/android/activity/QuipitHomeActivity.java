@@ -1,4 +1,4 @@
-package it.quip.android.actvitiy;
+package it.quip.android.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorInflater;

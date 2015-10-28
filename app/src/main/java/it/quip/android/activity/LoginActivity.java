@@ -1,4 +1,4 @@
-package it.quip.android.actvitiy;
+package it.quip.android.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +13,6 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 import it.quip.android.R;
-import it.quip.android.model.Notification;
 import it.quip.android.model.User;
 import it.quip.android.network.FacebookClient;
 

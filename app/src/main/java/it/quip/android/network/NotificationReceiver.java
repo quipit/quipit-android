@@ -12,7 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import it.quip.android.QuipitApplication;
-import it.quip.android.actvitiy.QuipitHomeActivity;
+import it.quip.android.activity.QuipitHomeActivity;
 import it.quip.android.model.Notification;
 import it.quip.android.util.TimeUtils;
 

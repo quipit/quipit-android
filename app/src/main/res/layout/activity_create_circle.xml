@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="it.quip.android.actvitiy.CreateCircleActivity">
+    tools:context="it.quip.android.activity.CreateCircleActivity">
 
     <FrameLayout android:id="@+id/fl_circle_info"
         android:layout_width="wrap_content"
