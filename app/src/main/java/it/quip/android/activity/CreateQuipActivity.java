@@ -58,6 +58,7 @@ public class CreateQuipActivity
     private void showShareFragment() {
         Intent i = new Intent(CreateQuipActivity.this, ShareQuipActivity.class);
         startActivityForResult(i, SHARE_QUIP_REQUEST);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     @Override
@@ -68,6 +69,7 @@ public class CreateQuipActivity
                 createQuip(selectedCircles);
             }
             finish();
+            overridePendingTransition(R.anim.slide_down, R.anim.zoom_in);
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }

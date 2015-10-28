@@ -41,6 +41,7 @@ public class ShareQuipActivity extends AppCompatActivity {
                 responseData.putParcelableArrayListExtra(SELECTED_CIRCLES, (ArrayList<Circle>) mCircles);
                 setResult(RESULT_OK, responseData);
                 finish();
+                overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left);
             }
 
         });
