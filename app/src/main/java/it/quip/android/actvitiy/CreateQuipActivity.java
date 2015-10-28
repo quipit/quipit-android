@@ -11,8 +11,8 @@ import java.util.List;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
-import it.quip.android.fragment.QuipSelectFragment;
 import it.quip.android.fragment.QuipComposeFragment;
+import it.quip.android.fragment.QuipSelectFragment;
 import it.quip.android.model.Circle;
 import it.quip.android.model.Quip;
 import it.quip.android.model.User;
@@ -65,11 +65,11 @@ public class CreateQuipActivity
                     Quip quip = new Quip(mQuip);
                     quip.setCircle(circle);
                     quip.setTimestamp(timestamp);
-                    quip.saveInBackground();
+                    quip.saveInternal();
                 }
             } else {
                 mQuip.setTimestamp(timestamp);
-                mQuip.saveInBackground();
+                mQuip.saveInternal();
             }
 
             finish();
@@ -101,4 +101,5 @@ public class CreateQuipActivity
     public void onBackPressed() {
         finish();
     }
+
 }

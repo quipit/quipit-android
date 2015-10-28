@@ -13,9 +13,8 @@ import java.util.List;
 
 import it.quip.android.R;
 import it.quip.android.adapter.QuipsAdapter;
-import it.quip.android.model.Quip;
 import it.quip.android.listener.EndlessScrollListener;
-import it.quip.android.util.MockUtils;
+import it.quip.android.model.Quip;
 
 public class QuipFeedFragment extends BaseFragment {
 
@@ -72,7 +71,7 @@ public class QuipFeedFragment extends BaseFragment {
                 mQuips.clear();
             }
 
-            mQuips.addAll(MockUtils.getQuips());
+            //mQuips.addAll(MockUtils.getQuips());
             mQuipsAdapter.notifyDataSetChanged();
         }
 

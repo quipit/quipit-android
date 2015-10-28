@@ -10,6 +10,8 @@ import com.parse.ParseQuery;
 
 import java.util.List;
 
+import it.quip.android.QuipitApplication;
+
 @ParseClassName("Quip")
 public class Quip extends BaseParseObject implements Parcelable {
 
@@ -68,7 +70,7 @@ public class Quip extends BaseParseObject implements Parcelable {
 
     public void setCircle(Circle circle) {
         this.circle = circle;
-        this.safePut(CIRCLE, circle == null ? null : circle.getObjectId());
+        this.safePut(CIRCLE, circle);
     }
 
     public void setTimestamp(Long timestamp) {
@@ -164,5 +166,18 @@ public class Quip extends BaseParseObject implements Parcelable {
         }
 
         return quips;
+    }
+
+    @Override
+    public void saveInternal() {
+        User user = QuipitApplication.getCurrentUser();
+        Notification notification = new Notification.with(null)
+                .sender(user)
+                .circle(getCircle())
+                .type(Notification.STANDARD_NOTIFICATION)
+                .body(user.getName() + " just quipped to circle @" + getCircle().getName())
+                .deliver();
+
+        super.saveInternal();
     }
 }

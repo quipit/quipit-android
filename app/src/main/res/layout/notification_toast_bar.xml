@@ -1,0 +1,26 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbarContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <!-- Notification bar -->
+    <RelativeLayout
+        android:layout_alignParentTop="true"
+        android:visibility="gone"
+        android:id="@+id/toolbar_notification_toast_bard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:background="?attr/colorPrimary">
+        <TextView
+            android:id="@+id/toolbaNotificationText"
+            android:layout_width="match_parent"
+            android:textColor="@color/notification_card_background_unread"
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/abc_text_size_small_material"
+            android:layout_centerInParent="true"
+            android:text="TEST"/>
+    </RelativeLayout>
+</RelativeLayout>

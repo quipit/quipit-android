@@ -56,16 +56,21 @@ public class MockUtils {
         return fakeQuips;
     }
 
-    public static User userWithName(String name) {
+    private static User userWithName(String name) {
         User user = new User();
+
         user.setName(name);
         user.setEmail("");
         user.setImageUrl("https://cloud.githubusercontent.com/assets/1068249/10568603/4ddda6ac-75cf-11e5-8016-8d0c504c0051.png");
         user.setFacebookId(randomId());
+        if (name.equals("Hasham Ali")) {
+            String s = "Oo7iDf8gIH";
+            user.setObjectId(s);
+        }
         return user;
     }
 
-    public static Circle circleWithName(String name) {
+    private static Circle circleWithName(String name) {
         List<User> members = new ArrayList<>();
         for (int i = 0; i < generator.nextInt(fakeUsers.size()); i++) {
             members.add(fakeUsers.get(generator.nextInt(fakeUsers.size())));
@@ -81,7 +86,7 @@ public class MockUtils {
         return circle;
     }
 
-    public static Quip quipWithText(String text) {
+    private static Quip quipWithText(String text) {
         return new Quip(text, randomUser(), randomUser(), randomCircle(), randomTimestamp(), null);
     }
 

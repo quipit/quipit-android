@@ -1,5 +1,8 @@
 package it.quip.android.actvitiy;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -13,6 +16,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -25,9 +30,8 @@ import it.quip.android.fragment.QuipFeedFragment;
 import it.quip.android.fragment.ViewCircleFragment;
 import it.quip.android.listener.TagClickListener;
 import it.quip.android.model.Circle;
-import it.quip.android.repository.circle.CircleRepository;
-import it.quip.android.repository.circle.CirclesResponseHandler;
-import it.quip.android.repository.circle.ParseCircleRepository;
+import it.quip.android.model.Notification;
+
 
 public class QuipitHomeActivity extends AppCompatActivity implements TagClickListener {
 
@@ -36,12 +40,11 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
 
     private List<Circle> mCircles;
 
-    private CircleRepository mCirclesRepo;
-
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationView mNavDrawer;
+    private RelativeLayout mNotificationBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +52,6 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
         setContentView(R.layout.activity_quipit_home);
 
         mCircles = new ArrayList<>();
-        mCirclesRepo = new ParseCircleRepository();
 
         setupViews();
     }
@@ -67,6 +69,7 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
         fetchCircles();
 
         displayDefaultQuipStream();
+        setupNotificationToastBar();
     }
 
     private ActionBarDrawerToggle setupDrawerToggle() {
@@ -94,15 +97,15 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
     }
 
     private void fetchCircles() {
-        mCirclesRepo.getAllForUser(QuipitApplication.getCurrentUser(), new CirclesResponseHandler() {
-            @Override
-            public void onSuccess(List<Circle> fetchedCircles) {
-                mCircles.clear();
-                mCircles.addAll(fetchedCircles);
+        List<Circle> fetchedCircles = QuipitApplication.getCurrentUser().getCircles();
+        mCircles.clear();
+        mCircles.addAll(fetchedCircles);
 
-                updateSidebarMenu();
-            }
-        });
+        updateSidebarMenu();
+    }
+
+    private void setupNotificationToastBar() {
+        mNotificationBar = (RelativeLayout) findViewById(R.id.toolbar_notification_toast_bard);
     }
 
     private void selectDrawerItem(MenuItem menuItem) {
@@ -183,8 +186,7 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (CREATE_CIRCLE_REQUEST == requestCode) {
             if (RESULT_OK == resultCode) {
-                Circle createdCircle = data.getParcelableExtra(CreateCircleActivity.CREATED_CIRCLE);
-                onCircleCreated(createdCircle);
+                onCircleCreated();
             }
         } else if (CREATE_QUIP_REQUEST == requestCode) {
             // TODO: reload feed...
@@ -201,10 +203,11 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
         startActivityForResult(intent, CREATE_QUIP_REQUEST);
     }
 
-    private void onCircleCreated(Circle createdCircle) {
-        mCircles.add(createdCircle);
+    private void onCircleCreated() {
+        mCircles.clear();
+        mCircles.addAll(QuipitApplication.getCurrentUser().getCircles());
         updateSidebarMenu();
-        prepareFragment(ViewCircleFragment.newInstance(createdCircle)).commitAllowingStateLoss();
+        prepareFragment(ViewCircleFragment.newInstance(mCircles.get(mCircles.size() - 1))).commitAllowingStateLoss();
     }
 
     @Override
@@ -222,5 +225,21 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
     @Override
     public void clickedTag(CharSequence tag) {
         Toast.makeText(this, tag.toString(), Toast.LENGTH_LONG).show();
+    }
+
+    public void onNotificationToast(Notification notification) {
+        Animator anim = AnimatorInflater.loadAnimator(this, R.animator.notification);
+        anim.setTarget(mNotificationBar);
+        mNotificationBar.setVisibility(View.VISIBLE);
+        mNotificationBar.setAlpha(1);
+        anim.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                mNotificationBar.setVisibility(View.GONE);
+                mNotificationBar.setAlpha(0);
+            }
+        });
+        anim.start();
     }
 }

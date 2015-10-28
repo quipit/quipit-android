@@ -11,10 +11,16 @@ import it.quip.android.model.Circle;
 import it.quip.android.model.Notification;
 import it.quip.android.model.Quip;
 import it.quip.android.model.User;
+import it.quip.android.repository.circle.CircleRepository;
+import it.quip.android.repository.circle.ParseCircleRepository;
+import it.quip.android.repository.user.ParseUserRepository;
+import it.quip.android.repository.user.UserRepository;
 
 public class QuipitApplication extends Application {
 
     private static User sUser;
+    private static CircleRepository sCircleRepo;
+    private static UserRepository sUserRepo;
 
     private void setupParse() {
         Parse.enableLocalDatastore(this);
@@ -34,11 +40,17 @@ public class QuipitApplication extends Application {
         FacebookSdk.sdkInitialize(getApplicationContext());
     }
 
+    private void setupRepos() {
+        sCircleRepo = new ParseCircleRepository();
+        sUserRepo = new ParseUserRepository();
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
         setupParse();
         setupFacebook();
+        setupRepos();
     }
 
     public String stringRes(int resId) {
@@ -47,6 +59,14 @@ public class QuipitApplication extends Application {
 
     public static User getCurrentUser() {
         return sUser;
+    }
+
+    public static CircleRepository getCircleRepo() {
+        return sCircleRepo;
+    }
+
+    public static UserRepository getUserRepo() {
+        return sUserRepo;
     }
 
     public static void setCurrentUser(User user) {

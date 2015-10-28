@@ -3,10 +3,10 @@ package it.quip.android.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.quip.android.QuipitApplication;
 import it.quip.android.adapter.CirclesArrayAdapter;
 import it.quip.android.adapter.SearchArrayAdapter;
 import it.quip.android.model.Circle;
-import it.quip.android.util.MockUtils;
 
 
 public class QuipSelectFragment extends SearchListFragment<Circle> {
@@ -25,7 +25,8 @@ public class QuipSelectFragment extends SearchListFragment<Circle> {
 
     protected List<Circle> searchFor(String query) {
         List<Circle> circles = new ArrayList<>();
-        for (Circle circle : MockUtils.getCircles()) {
+        List<Circle> searchCircles = QuipitApplication.getCurrentUser().getCircles();
+        for (Circle circle : searchCircles) {
             if (!"".equals(query) &&
                     circle.getName().toLowerCase().contains(query) &&
                     !alreadySelected(circle)) {
