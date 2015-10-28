@@ -76,7 +76,7 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
             String action = intent.getAction();
 
             if (Notification.NOTIFICATION_RECEIVED_ACTION.equals(action)) {
-                Notification notification = (Notification) intent.getExtras().get("new_notification");
+                Notification notification = (Notification) intent.getExtras().get(Notification.MARSHALL_INTENT_KEY);
                 onNotificationToast(notification);
             }
         }

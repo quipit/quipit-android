@@ -80,7 +80,7 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
         Intent pupInt = new Intent(Notification.NOTIFICATION_RECEIVED_ACTION);
         pupInt.setFlags(Notification.FLAG_NOTIFICATION_RECEIVED);
         pupInt.setAction(Notification.NOTIFICATION_RECEIVED_ACTION);
-        pupInt.putExtra("new_notification", notification);
+        pupInt.putExtra(Notification.MARSHALL_INTENT_KEY, notification);
         LocalBroadcastManager.getInstance(context).sendBroadcast(pupInt);
     }
 
