@@ -64,11 +64,7 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
                 if (json.has(Notification.PUSH_TEXT_BODY_KEY)) {
 
                     Notification notification = Notification.fromJson(json);
-                    User loggedInUser = QuipitApplication.getCurrentUser();
-                    String sender = notification.getSenderUid();
-                    if (loggedInUser != null && !loggedInUser.equals(sender)) {
-                        triggerBroadcastToActivity(context, notification);
-                    }
+                    triggerBroadcastToActivity(context, notification);
                 } else {
                     // This is a global push, just use alert
                     Notification notification = new Notification();

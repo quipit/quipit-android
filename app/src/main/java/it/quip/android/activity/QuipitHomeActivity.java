@@ -36,6 +36,7 @@ import it.quip.android.fragment.ViewCircleFragment;
 import it.quip.android.listener.TagClickListener;
 import it.quip.android.model.Circle;
 import it.quip.android.model.Notification;
+import it.quip.android.model.User;
 import it.quip.android.repository.circle.CirclesResponseHandler;
 
 
@@ -77,7 +78,11 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
 
             if (Notification.NOTIFICATION_RECEIVED_ACTION.equals(action)) {
                 Notification notification = (Notification) intent.getExtras().get(Notification.MARSHALL_INTENT_KEY);
-                onNotificationToast(notification);
+                User loggedInUser = QuipitApplication.getCurrentUser();
+                String sender = notification.getSenderUid();
+                if (loggedInUser != null && !loggedInUser.getObjectId().equals(sender)) {
+                    onNotificationToast(notification);
+                }
             }
         }
     };
