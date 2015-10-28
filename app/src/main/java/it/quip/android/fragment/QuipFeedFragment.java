@@ -54,14 +54,13 @@ public abstract class QuipFeedFragment extends BaseFragment {
 
         mQuips = new ArrayList<>();
         mQuipsAdapter = new QuipsAdapter(mQuips, this);
-
-        loadInitialQuips();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
         setupViewDependencies(view);
+        loadInitialQuips();
         return view;
     }
 
