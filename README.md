@@ -4,21 +4,21 @@ quipit™ is an Android app that allows users to quote their friends and choose 
 
 ## User Stories
 The following are required user stories:
-* [ ] User can log-in to quipit with Facebook authentication. Facebook contacts will be used for friend invites.
-* [ ] User can view a feed of quips:
-  * [ ] User can view a feed for all friends.
-  * [ ] User can view a feed for any cirlce they are part of.
-* [ ] User can belong to circles:
-  * [ ] User can create a new circle of friends and invite friends to join it.
+* [x] User can log-in to quipit with Facebook authentication. Facebook contacts will be used for friend invites.
+* [x] User can view a feed of quips:
+  * [x] User can view a feed for all friends.
+  * [x] User can view a feed for any cirlce they are part of.
+* [x] User can belong to circles:
+  * [x] User can create a new circle of friends and invite friends to join it.
   * [ ] User can accept or decline circle invites.
-* [ ] User can submit quip:
-  * [ ] User can submit a text quip.
-  * [ ] User can optionally tag a friend with a quip. By default, quip's will be tagged as 'anon'.
-  * [ ] User can select which cirlce to share quip with. By default, quip's will be shared with all friends.
-* [ ] User is notified of the following events via push notifications:
+* [x] User can submit quip:
+  * [x] User can submit a text quip.
+  * [x] User can optionally tag a friend with a quip. By default, quip's will be tagged as 'anon'.
+  * [x] User can select which cirlce to share quip with. By default, quip's will be shared with all friends.
+* [x] User is notified of the following events via push notifications:
   * [ ] If the user is the source of a quip.
-  * [ ] If a quip is shared in a private circle that user is part of.
-  * [ ] Invites to new circles.
+  * [x] If a quip is shared in a private circle that user is part of.
+  * [x] Invites to new circles.
 
 The following are optional user stories: 
 * [ ] User has alternative sign up options:
