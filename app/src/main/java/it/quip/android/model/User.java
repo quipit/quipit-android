@@ -135,12 +135,13 @@ public class User extends BaseParseObject implements Parcelable {
         if (null == currentUser) {
             try {
                 FacebookClient.createNewUser();
+                currentUser = new User();
             } catch (FacebookClient.FacebookClientException facebookClientException) {
                 Log.e("FacebookClient", "Could not create new user from Facebook.");
             }
-        } else {
-            QuipitApplication.setCurrentUser(currentUser);
         }
+
+        QuipitApplication.setCurrentUser(currentUser);
     }
 
     private List<String> circlesToIds() {
