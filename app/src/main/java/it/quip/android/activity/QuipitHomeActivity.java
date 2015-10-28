@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -53,9 +54,17 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
         setContentView(R.layout.activity_quipit_home);
 
         mCircles = new ArrayList<>();
-
+        registerBroadcastReceivers();
         setupViews();
+
     }
+
+    private void registerBroadcastReceivers() {
+        // setting up for new notification
+        //IntentFilter filter = new IntentFilter(CONNECTIVITY_CHANGE_ACTION);
+        //this.registerReceiver(mChangeConnectionReceiver, filter);
+    }
+
 
     private void setupViews() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);

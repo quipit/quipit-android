@@ -77,10 +77,9 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
 
     private void triggerBroadcastToActivity(Context context, Notification notification) {
         Intent pupInt = new Intent(context, QuipitHomeActivity.class);
-        pupInt.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
         pupInt.putExtra("new_notification", notification);
         LocalBroadcastManager.getInstance(context).sendBroadcast(pupInt);
     }
-
 
 }

@@ -15,6 +15,7 @@ import it.quip.android.QuipitApplication;
 import it.quip.android.R;
 import it.quip.android.listener.NotificationHandler;
 import it.quip.android.model.Notification;
+import it.quip.android.model.Quip;
 import it.quip.android.view.TagTextSpanner;
 
 public class NotificationBaseViewHolder extends RecyclerView.ViewHolder {
@@ -57,8 +58,12 @@ public class NotificationBaseViewHolder extends RecyclerView.ViewHolder {
                 Notification notification = new Notification.with(context)
                         .body("Jean Claude Van Como deposited some darkness in @sfsewers thangs")
                         .sender(QuipitApplication.getCurrentUser())
+                        .receiver(QuipitApplication.getCurrentUser())
                         .type(Notification.STANDARD_NOTIFICATION)
-                        .deliver();
+                        .imageUrl("https://scontent.xx.fbcdn.net/hphotos-xpa1/v/t1.0-9/1506408_10205437954245349_5292698869694708416_n.jpg?oh=fb5f9c98209217c65fd4ddeb7aaaafc1&oe=56C2F425")
+                        .build();
+                notification.saveInBackground();
+                notification.deliver();
 
             }
         });
