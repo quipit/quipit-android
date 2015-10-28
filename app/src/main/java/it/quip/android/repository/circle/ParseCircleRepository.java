@@ -75,7 +75,9 @@ public class ParseCircleRepository implements CircleRepository {
                             circles = new ArrayList<>();
                         }
 
-                        handler.onSuccess(circles);
+                        if (handler != null) {
+                            handler.onSuccess(circles);
+                        }
                     }
                 });
     }
