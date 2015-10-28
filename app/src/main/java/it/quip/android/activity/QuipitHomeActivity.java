@@ -206,7 +206,7 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
                 onCircleCreated();
             }
         } else if (CREATE_QUIP_REQUEST == requestCode) {
-            // TODO: reload feed...
+
         }
     }
 

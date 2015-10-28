@@ -64,8 +64,8 @@ public class CreateQuipActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == SHARE_QUIP_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                List<Circle> selectedCircles = data.getParcelableArrayListExtra(ShareQuipActivity.SELECTED_CIRCLES);
+            List<Circle> selectedCircles = ShareQuipActivity.getCircles();
+            if (null != selectedCircles) {
                 createQuip(selectedCircles);
             }
             finish();
