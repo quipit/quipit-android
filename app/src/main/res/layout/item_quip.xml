@@ -4,7 +4,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="15dp"
+    android:layout_marginLeft="@dimen/standard_margin"
+    android:layout_marginStart="@dimen/standard_margin"
     android:layout_margin="15dp"
     >
 
@@ -23,6 +24,7 @@
         android:layout_alignTop="@id/quip_profile"
         android:layout_alignBottom="@id/quip_profile"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:id="@+id/tv_quip_timestamp"
         />
 
@@ -34,11 +36,12 @@
         android:textSize="20sp"
         />
 
-    <EditText
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_quip_body"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:id="@+id/tv_quip_source_user_name"
         />
 
