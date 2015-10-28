@@ -3,14 +3,13 @@ package it.quip.android.fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,7 +22,7 @@ import it.quip.android.R;
 import it.quip.android.graphics.CircleTransformation;
 import it.quip.android.model.User;
 
-public class QuipComposeFragment extends DialogFragment {
+public class QuipComposeFragment extends Fragment {
 
     public interface OnComposeQuipListener {
         void onComposeQuip(String text, User source);
@@ -34,16 +33,10 @@ public class QuipComposeFragment extends DialogFragment {
     private TextView mTvUserName;
     private EditText mEtQuipBody;
     private TextView mTvQuipCount;
-    private Button mBtQuip;
+    private EditText mEtQuipSource;
 
     public static QuipComposeFragment newInstance() {
         return new QuipComposeFragment();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme_NoActionBar);
     }
 
     @Nullable
@@ -93,17 +86,23 @@ public class QuipComposeFragment extends DialogFragment {
         mTvQuipCount = (TextView) v.findViewById(R.id.tv_quip_create_count);
         mTvQuipCount.setText("0");
 
-        mBtQuip = (Button) v.findViewById(R.id.bt_quip_create_share);
-        mBtQuip.setOnClickListener(new View.OnClickListener() {
+        mEtQuipSource = (EditText) v.findViewById(R.id.tv_quip_source_user_name);
+        mEtQuipSource.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                onCompose();
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // TODO: Send character back to activity...
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
-    }
-
-    private void onCompose() {
-        ((OnComposeQuipListener) getActivity()).onComposeQuip(mEtQuipBody.getText().toString(), null);
     }
 
 }

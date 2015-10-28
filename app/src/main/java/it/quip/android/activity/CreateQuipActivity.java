@@ -6,13 +6,15 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
 import java.util.List;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
+import it.quip.android.fragment.FriendSearchListFragment;
 import it.quip.android.fragment.QuipComposeFragment;
-import it.quip.android.fragment.QuipSelectFragment;
+import it.quip.android.fragment.CirclesSelectListFragment;
 import it.quip.android.model.Circle;
 import it.quip.android.model.Quip;
 import it.quip.android.model.User;
@@ -25,9 +27,17 @@ public class CreateQuipActivity
     private static final String COMPOSE = "compose_fragment";
 
     private QuipComposeFragment mCreateQuipComposeFragment;
-    private QuipSelectFragment mQuipSelectFragment;
+    private FriendSearchListFragment mFriendSearchListFragment;
+
     private Quip mQuip;
     private Button mBtQuip;
+    private FrameLayout mFlCompose;
+    private FrameLayout mFlSourcePicker;
+
+    private void setupFragments() {
+        mCreateQuipComposeFragment = QuipComposeFragment.newInstance();
+        mFriendSearchListFragment = FriendSearchListFragment.newInstance();
+    }
 
     private void setupView() {
         mBtQuip = (Button) findViewById(R.id.bt_quip_create_post);
@@ -37,11 +47,9 @@ public class CreateQuipActivity
                 onPostQuip();
             }
         });
-    }
 
-    private void setupFragments() {
-        mCreateQuipComposeFragment = QuipComposeFragment.newInstance();
-        mQuipSelectFragment = QuipSelectFragment.newInstance();
+        mFlCompose = (FrameLayout) findViewById(R.id.fl_create_quip_content);
+        mFlSourcePicker = (FrameLayout) findViewById(R.id.fl_create_quip_source);
     }
 
     private void showComposeFragment() {
@@ -50,13 +58,13 @@ public class CreateQuipActivity
 
     private void showShareFragment() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fl_create_quip_circle_picker, mQuipSelectFragment);
+        ft.replace(R.id.fl_create_quip_circle_picker, mCirclesSelectListFragment);
         ft.commit();
     }
 
     private void onPostQuip() {
         if (mQuip != null) {
-            List<Circle> circles = mQuipSelectFragment.getSelected();
+            List<Circle> circles = mCirclesSelectListFragment.getSelectedValues();
             long timestamp = TimeUtils.currentTimestampInS();
 
             // TODO: Figure out how to add a "Share with all friends" option rather than not selecting any circles...
@@ -80,8 +88,8 @@ public class CreateQuipActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_quip);
-        setupView();
         setupFragments();
+        setupView();
         showComposeFragment();
     }
 

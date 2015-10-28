@@ -34,7 +34,7 @@
         android:layout_marginLeft="@dimen/standard_margin"
         />
 
-    <TextView
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -42,15 +42,6 @@
         android:id="@+id/tv_quip_create_source"
         android:layout_marginRight="@dimen/standard_margin"
         android:text="@string/quip_create_source"
-        />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/bt_quip_create_share"
-        android:text="@string/share_quip"
-        android:textColor="@color/quipit_alt"
         />
 
 </RelativeLayout>

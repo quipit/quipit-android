@@ -1,27 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginLeft="@dimen/standard_margin"
-    android:layout_marginRight="@dimen/standard_margin"
-    >
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fl_create_quip_content"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:id="@+id/fl_create_quip_circle_picker"/>
+        />
+
+    <FrameLayout
+        android:id="@+id/fl_create_quip_source"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fl_create_quip_content"
+    />
 
     <Button
-        android:id="@+id/bt_quip_create_post"
+        android:id="@+id/bt_quip_create_share"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/quipit_main"
+        android:text="@string/share_quip"
         android:textColor="@color/quipit_alt"
-        />
+    />
 
 </RelativeLayout>
 
