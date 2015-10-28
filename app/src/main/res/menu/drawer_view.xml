@@ -9,10 +9,7 @@
 
         <item android:id="@+id/navCircles"
             android:title="@string/circles">
-            <menu android:id="@+id/menuCircles">
-                <item android:title="#somethangs" />
-                <item android:title="SF crew" />
-            </menu>
+            <menu android:id="@+id/menuCircles"/>
         </item>
 
     </group>
