@@ -50,11 +50,16 @@ public class User extends BaseParseObject implements Parcelable {
     }
 
     public List<Circle> getCircles() {
+        return getCircles(null);
+    }
+
+    public List<Circle> getCircles(final CirclesResponseHandler responseHandler) {
         if ((null == circles) || (circles.isEmpty())) {
             QuipitApplication.getCircleRepo().getAllForUser(this, new CirclesResponseHandler() {
                 @Override
                 public void onSuccess(List<Circle> fetchedCircles) {
                     User.this.setCircles(fetchedCircles);
+                    responseHandler.onSuccess(fetchedCircles);
                 }
             });
         }
