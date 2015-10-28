@@ -12,7 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import it.quip.android.QuipitApplication;
-import it.quip.android.actvitiy.QuipitHomeActivity;
+import it.quip.android.activity.QuipitHomeActivity;
 import it.quip.android.model.Notification;
 import it.quip.android.util.TimeUtils;
 
@@ -77,10 +77,9 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
 
     private void triggerBroadcastToActivity(Context context, Notification notification) {
         Intent pupInt = new Intent(context, QuipitHomeActivity.class);
-        pupInt.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
         pupInt.putExtra("new_notification", notification);
         LocalBroadcastManager.getInstance(context).sendBroadcast(pupInt);
     }
-
 
 }

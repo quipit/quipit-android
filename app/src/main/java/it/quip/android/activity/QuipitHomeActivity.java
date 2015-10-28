@@ -1,9 +1,10 @@
-package it.quip.android.actvitiy;
+package it.quip.android.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -31,6 +32,7 @@ import it.quip.android.fragment.ViewCircleFragment;
 import it.quip.android.listener.TagClickListener;
 import it.quip.android.model.Circle;
 import it.quip.android.model.Notification;
+import it.quip.android.repository.circle.CirclesResponseHandler;
 
 
 public class QuipitHomeActivity extends AppCompatActivity implements TagClickListener {
@@ -52,9 +54,17 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
         setContentView(R.layout.activity_quipit_home);
 
         mCircles = new ArrayList<>();
-
+        registerBroadcastReceivers();
         setupViews();
+
     }
+
+    private void registerBroadcastReceivers() {
+        // setting up for new notification
+        //IntentFilter filter = new IntentFilter(CONNECTIVITY_CHANGE_ACTION);
+        //this.registerReceiver(mChangeConnectionReceiver, filter);
+    }
+
 
     private void setupViews() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -97,9 +107,17 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
     }
 
     private void fetchCircles() {
-        List<Circle> fetchedCircles = QuipitApplication.getCurrentUser().getCircles();
+        QuipitApplication.getCurrentUser().getCircles(new CirclesResponseHandler() {
+            @Override
+            public void onSuccess(List<Circle> circles) {
+                onCirclesFetched(circles);
+            }
+        });
+    }
+
+    private void onCirclesFetched(List<Circle> circles) {
         mCircles.clear();
-        mCircles.addAll(fetchedCircles);
+        mCircles.addAll(circles);
 
         updateSidebarMenu();
     }

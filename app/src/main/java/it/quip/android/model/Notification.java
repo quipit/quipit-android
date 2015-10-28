@@ -250,10 +250,10 @@ public class Notification extends BaseParseObject implements Parcelable {
         try {
             notification.setText(json.getString(Notification.PUSH_TEXT_BODY_KEY));
             notification.setViewed(json.getBoolean(Notification.PUSH_VIEWED_KEY));
-            notification.setSenderUid(json.getString(Notification.PUSH_SENDER_ID));
+            notification.setSenderUid(json.optString(Notification.PUSH_SENDER_ID, ""));
             notification.setTimestamp(json.getLong(Notification.PUSH_TIMESTAMP_KEY));
             notification.setType(json.getInt(Notification.PUSH_TYPE_KEY));
-            notification.setNotificationImageUrl(Notification.PUSH_IMAGE_URL_KEY);
+            notification.setNotificationImageUrl(json.optString(Notification.PUSH_IMAGE_URL_KEY, "https://scontent.xx.fbcdn.net/hphotos-xpa1/v/t1.0-9/1506408_10205437954245349_5292698869694708416_n.jpg?oh=fb5f9c98209217c65fd4ddeb7aaaafc1&oe=56C2F425"));
 
         } catch (JSONException e) {
             // This is a global alert, just return default

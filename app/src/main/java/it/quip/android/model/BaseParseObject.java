@@ -21,6 +21,8 @@ public class BaseParseObject extends ParseObject {
             return ((ParseObject) o).getObjectId().equals(getObjectId());
         } catch (ClassCastException classCastException) {
             return false;
+        } catch (NullPointerException e) {
+            return false;
         }
     }
 
