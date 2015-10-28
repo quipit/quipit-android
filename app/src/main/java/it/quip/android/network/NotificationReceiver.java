@@ -56,8 +56,9 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
                 if (json.has(Notification.PUSH_TEXT_BODY_KEY)) {
                     Notification notification = Notification.fromJson(json);
                     if ((notification != null) && (!notification.getSenderUid().equals(QuipitApplication.getCurrentUser().getObjectId()))) {
-                        triggerBroadcastToActivity(context, notification);
+                        //triggerBroadcastToActivity(context, notification);
                     }
+                    triggerBroadcastToActivity(context, notification);
                 } else {
                     // This is a global push, just use alert
                     Notification notification = new Notification();
@@ -76,9 +77,10 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
     }
 
     private void triggerBroadcastToActivity(Context context, Notification notification) {
-        Intent pupInt = new Intent(context, QuipitHomeActivity.class);
-
-        pupInt.putExtra("new_notification", notification);
+        Intent pupInt = new Intent(Notification.NOTIFICATION_RECEIVED_ACTION);
+        pupInt.setFlags(Notification.FLAG_NOTIFICATION_RECEIVED);
+        pupInt.setAction(Notification.NOTIFICATION_RECEIVED_ACTION);
+        pupInt.putExtra(Notification.MARSHALL_INTENT_KEY, notification);
         LocalBroadcastManager.getInstance(context).sendBroadcast(pupInt);
     }
 

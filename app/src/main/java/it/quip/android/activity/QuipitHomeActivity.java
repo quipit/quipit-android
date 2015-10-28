@@ -3,6 +3,8 @@ package it.quip.android.activity;
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorListenerAdapter;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
@@ -10,6 +12,7 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -19,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -47,6 +51,7 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationView mNavDrawer;
     private RelativeLayout mNotificationBar;
+    private TextView mNotificationBarNotificationText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +65,29 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
     }
 
     private void registerBroadcastReceivers() {
-        // setting up for new notification
-        //IntentFilter filter = new IntentFilter(CONNECTIVITY_CHANGE_ACTION);
-        //this.registerReceiver(mChangeConnectionReceiver, filter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mNotificationReceiver,
+                new IntentFilter(Notification.NOTIFICATION_RECEIVED_ACTION));
+    }
+
+    private final BroadcastReceiver mNotificationReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            if (Notification.NOTIFICATION_RECEIVED_ACTION.equals(action)) {
+                Notification notification = (Notification) intent.getExtras().get(Notification.MARSHALL_INTENT_KEY);
+                onNotificationToast(notification);
+            }
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        if(mNotificationReceiver != null) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mNotificationReceiver);
+        }
+        super.onDestroy();
     }
 
 
@@ -124,6 +149,7 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
 
     private void setupNotificationToastBar() {
         mNotificationBar = (RelativeLayout) findViewById(R.id.toolbar_notification_toast_bard);
+        mNotificationBarNotificationText = (TextView) findViewById(R.id.toolbaNotificationText);
     }
 
     private void selectDrawerItem(MenuItem menuItem) {
@@ -247,6 +273,7 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
 
     public void onNotificationToast(Notification notification) {
         Animator anim = AnimatorInflater.loadAnimator(this, R.animator.notification);
+        mNotificationBarNotificationText.setText(notification.getText());
         anim.setTarget(mNotificationBar);
         mNotificationBar.setVisibility(View.VISIBLE);
         mNotificationBar.setAlpha(1);
