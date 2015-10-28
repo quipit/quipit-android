@@ -59,7 +59,10 @@ public class User extends BaseParseObject implements Parcelable {
                 @Override
                 public void onSuccess(List<Circle> fetchedCircles) {
                     User.this.setCircles(fetchedCircles);
-                    responseHandler.onSuccess(fetchedCircles);
+
+                    if (responseHandler != null) {
+                        responseHandler.onSuccess(fetchedCircles);
+                    }
                 }
             });
         }
