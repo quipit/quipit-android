@@ -1,8 +1,10 @@
 package it.quip.android.network;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -12,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import it.quip.android.QuipitApplication;
+import it.quip.android.R;
 import it.quip.android.activity.QuipitHomeActivity;
 import it.quip.android.model.Notification;
 import it.quip.android.util.TimeUtils;
@@ -38,6 +41,7 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
         if (intent == null) {
             Log.d(TAG, "Receiver intent null");
         } else {
+
             processPush(context, intent);
         }
         super.onPushReceive(context, intent);
@@ -77,6 +81,14 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
     }
 
     private void triggerBroadcastToActivity(Context context, Notification notification) {
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.drawable.quipit)
+                        .setContentTitle("Quipit")
+                        .setContentText(notification.getText());
+
+        // mId allows you to update the notification later on.
+        QuipitApplication.notificationManager().notify(0, mBuilder.build());
         Intent pupInt = new Intent(Notification.NOTIFICATION_RECEIVED_ACTION);
         pupInt.setFlags(Notification.FLAG_NOTIFICATION_RECEIVED);
         pupInt.setAction(Notification.NOTIFICATION_RECEIVED_ACTION);
