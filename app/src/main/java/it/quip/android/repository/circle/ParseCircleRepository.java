@@ -1,11 +1,15 @@
 package it.quip.android.repository.circle;
 
 
+import android.graphics.Bitmap;
+
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +17,7 @@ import java.util.List;
 import it.quip.android.model.Circle;
 import it.quip.android.model.User;
 import it.quip.android.repository.user.UsersResponseHandler;
+import it.quip.android.util.ImageUtils;
 
 public class ParseCircleRepository implements CircleRepository {
 
@@ -80,4 +85,31 @@ public class ParseCircleRepository implements CircleRepository {
 
     }
 
+    @Override
+    public void saveAndUpload(final Circle circle, Bitmap avatar, Bitmap background, final CircleResponseHandler handler) {
+        ParseFile avatarFile = new ParseFile("avatar.jpg", ImageUtils.getBytes(avatar));
+        ParseFile backgroundFile = new ParseFile("background.jpg", ImageUtils.getBytes(background));
+
+        circle.setAvatarImage(avatarFile);
+        circle.setBackgroundImage(backgroundFile);
+
+        try {
+            avatarFile.save();
+            backgroundFile.save();
+        } catch (ParseException e) {
+            // TODO: put an error handler here
+            e.printStackTrace();
+        }
+
+        circle.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    e.printStackTrace();
+                }
+
+                handler.onSuccess(circle);
+            }
+        });
+    }
 }

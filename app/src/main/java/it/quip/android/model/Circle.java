@@ -62,15 +62,11 @@ public class Circle extends BaseParseObject implements Parcelable {
     }
 
     public ParseFile getAvatarImage() {
-        return avatarImage;
+        return getParseFile(AVATAR_IMAGE_KEY);
     }
 
     public String getAvatarImageURL() {
-        if (null == avatarImage) {
-            return null;
-        } else {
-            return avatarImage.getUrl();
-        }
+        return getParseFileUrl(AVATAR_IMAGE_KEY);
     }
 
     public void setAvatarImage(ParseFile avatarImage) {
@@ -79,15 +75,11 @@ public class Circle extends BaseParseObject implements Parcelable {
     }
 
     public ParseFile getBackgroundImage() {
-        return backgroundImage;
+        return getParseFile(BACKGROUND_IMAGE_KEY);
     }
 
     public String getBackgroundImageURL() {
-        if (null == backgroundImage) {
-            return null;
-        } else {
-            return backgroundImage.getUrl();
-        }
+        return getParseFileUrl(BACKGROUND_IMAGE_KEY);
     }
 
     public void setBackgroundImage(ParseFile backgroundImage) {
