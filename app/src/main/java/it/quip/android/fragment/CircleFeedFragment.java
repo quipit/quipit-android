@@ -35,7 +35,7 @@ public class CircleFeedFragment extends QuipFeedFragment {
     public void loadInitialQuips() {
         new ParseQuery<>(Quip.class)
                 .whereEqualTo(Quip.CIRCLE, mCircle)
-                .addDescendingOrder("created_at")
+                .addDescendingOrder("createdAt")
                 .findInBackground(new FindCallback<Quip>() {
                     @Override
                     public void done(List<Quip> quips, ParseException e) {

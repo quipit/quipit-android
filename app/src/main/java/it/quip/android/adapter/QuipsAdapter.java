@@ -18,6 +18,7 @@ import it.quip.android.fragment.QuipFeedFragment;
 import it.quip.android.graphics.CircleTransformation;
 import it.quip.android.model.Quip;
 import it.quip.android.model.User;
+import it.quip.android.util.FormatUtils;
 
 public class QuipsAdapter extends RecyclerView.Adapter<QuipsViewHolder> {
 
@@ -68,7 +69,7 @@ public class QuipsAdapter extends RecyclerView.Adapter<QuipsViewHolder> {
 
     private void setupViews(Quip quip, QuipsViewHolder viewHolder) {
         setupProfile(quip, viewHolder);
-        viewHolder.mTvQuipTimestamp.setText("2d");
+        viewHolder.mTvQuipTimestamp.setText(FormatUtils.getRelativeTimeAgo(quip.getTimestamp()));
         viewHolder.mTvQuipBody.setText(quip.getText());
 
         String sourceName;

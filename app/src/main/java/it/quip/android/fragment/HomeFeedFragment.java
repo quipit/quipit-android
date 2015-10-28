@@ -14,7 +14,7 @@ public class HomeFeedFragment extends QuipFeedFragment {
     public void loadInitialQuips() {
         // TODO: should be scoped to users circles/friends
         new ParseQuery<>(Quip.class)
-                .addDescendingOrder("created_at")
+                .addDescendingOrder("createdAt")
                 .findInBackground(new FindCallback<Quip>() {
                     @Override
                     public void done(List<Quip> quips, ParseException e) {

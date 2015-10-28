@@ -19,14 +19,12 @@ public class Quip extends BaseParseObject implements Parcelable {
     public static final String AUTHOR = "author";
     public static final String SOURCE = "source";
     public static final String CIRCLE = "circle";
-    public static final String TIMESTAMP = "timestamp";
     public static final String IMAGE_URL = "image_url";
 
     private String text;
     private User author;
     private User source;
     private Circle circle;
-    private long timestamp;
     private String imageUrl;
 
     public String getText() {
@@ -44,11 +42,7 @@ public class Quip extends BaseParseObject implements Parcelable {
     public Circle getCircle() {
         return getRelated(CIRCLE);
     }
-
-    public long getTimestamp() {
-        return getLong(TIMESTAMP);
-    }
-
+    
     public String getImageUrl() {
         return getString(IMAGE_URL);
     }
@@ -73,11 +67,6 @@ public class Quip extends BaseParseObject implements Parcelable {
         this.safePut(CIRCLE, circle);
     }
 
-    public void setTimestamp(Long timestamp) {
-        this.timestamp = timestamp;
-        this.safePut(TIMESTAMP, timestamp);
-    }
-
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
         this.safePut(IMAGE_URL, imageUrl);
@@ -94,7 +83,6 @@ public class Quip extends BaseParseObject implements Parcelable {
         dest.writeParcelable(this.author, flags);
         dest.writeParcelable(this.source, flags);
         dest.writeParcelable(this.circle, flags);
-        dest.writeLong(this.timestamp);
         dest.writeString(this.imageUrl);
     }
 
@@ -107,7 +95,6 @@ public class Quip extends BaseParseObject implements Parcelable {
         this.setAuthor(clone.getAuthor());
         this.setSource(clone.getSource());
         this.setCircle(clone.getCircle());
-        this.setTimestamp(clone.getTimestamp());
         this.setImageUrl(clone.getImageUrl());
     }
 
@@ -116,7 +103,6 @@ public class Quip extends BaseParseObject implements Parcelable {
         this.setAuthor(author);
         this.setSource(source);
         this.setCircle(circle);
-        this.setTimestamp(timestamp);
         this.setImageUrl(imageUrl);
     }
 
@@ -125,7 +111,6 @@ public class Quip extends BaseParseObject implements Parcelable {
         this.setAuthor((User) in.readParcelable(User.class.getClassLoader()));
         this.setSource((User) in.readParcelable(User.class.getClassLoader()));
         this.setCircle((Circle) in.readParcelable(Circle.class.getClassLoader()));
-        this.setTimestamp(in.readLong());
         this.setImageUrl(in.readString());
     }
 
@@ -153,12 +138,12 @@ public class Quip extends BaseParseObject implements Parcelable {
                 // TODO: figure out how to query quips by only your facebook friends...
                 quips = getQuery()
                         .whereDoesNotExist(CIRCLE)
-                        .orderByDescending(TIMESTAMP)
+                        .orderByDescending(CREATED_AT)
                         .find();
             } else {
                 quips = getQuery()
                         .whereEqualTo(CIRCLE, circle.getObjectId())
-                        .orderByDescending(TIMESTAMP)
+                        .orderByDescending(CREATED_AT)
                         .find();
             }
         } catch (ParseException parseException) {
