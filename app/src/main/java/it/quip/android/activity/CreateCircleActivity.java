@@ -1,14 +1,14 @@
 package it.quip.android.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import com.parse.ParseException;
-import com.parse.SaveCallback;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
@@ -17,18 +17,21 @@ import it.quip.android.fragment.InviteFriendsFragment;
 import it.quip.android.model.Circle;
 import it.quip.android.model.Notification;
 import it.quip.android.model.User;
+import it.quip.android.repository.circle.CircleResponseHandler;
 
 public class CreateCircleActivity extends AppCompatActivity
         implements InviteFriendsFragment.OnFriendsListChangedListener {
 
-    public static final String CREATED_CIRCLE = "it.quip.android.CREATED_CIRCLE";
-
     private CircleHeaderFragment circleHeaderFragment;
+    private ProgressDialog pdUploading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_circle);
+
+        pdUploading = new ProgressDialog(this, DialogFragment.STYLE_NO_TITLE);
+        pdUploading.setCancelable(false);
 
         if (null == savedInstanceState) {
             setupFragments();
@@ -70,20 +73,17 @@ public class CreateCircleActivity extends AppCompatActivity
 
     private void createCircle() {
         Circle createdCircle = circleHeaderFragment.getCircle();
-        createdCircle.saveInBackground(new SaveCallback() {
+        Bitmap avatar = circleHeaderFragment.getAvatar();
+        Bitmap background = circleHeaderFragment.getBackground();
+
+        showProgressDialog("Creating the circle " + createdCircle.getName() + "...");
+        QuipitApplication.getCircleRepo().saveAndUpload(createdCircle, avatar, background, new CircleResponseHandler() {
             @Override
-            public void done(ParseException e) {
+            public void onSuccess(Circle circle) {
+                hideProgressDialog();
                 finishWithResult();
             }
         });
-
-        // TODO: do something with theme images
-//        Bitmap avatar = circleHeaderFragment.getAvatar();
-//        new ParseFile("avatar.jpg", ImageUtils.getBytes(avatar));
-//
-//        Bitmap background = circleHeaderFragment.getBackground();
-//        new ParseFile("background.jpg", ImageUtils.getBytes(background));
-
     }
 
     private void finishWithResult() {
@@ -96,7 +96,7 @@ public class CreateCircleActivity extends AppCompatActivity
             u.saveInBackground();
         }
 
-        Notification n = new Notification.with(null)
+        new Notification.with(null)
                 .body(QuipitApplication.getCurrentUser().getName() + " just added you to circle @" + createdCircle.getName())
                 .circle(createdCircle)
                 .sender(QuipitApplication.getCurrentUser())
@@ -116,5 +116,14 @@ public class CreateCircleActivity extends AppCompatActivity
     @Override
     public void onFriendUninvited(User friend) {
         circleHeaderFragment.removeMember(friend);
+    }
+
+    private void showProgressDialog(String message) {
+        pdUploading.setMessage(message);
+        pdUploading.show();
+    }
+
+    private void hideProgressDialog() {
+        pdUploading.hide();
     }
 }

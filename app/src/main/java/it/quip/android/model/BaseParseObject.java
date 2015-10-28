@@ -1,6 +1,7 @@
 package it.quip.android.model;
 
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 
 
@@ -9,6 +10,15 @@ public class BaseParseObject extends ParseObject {
     protected void safePut(String key, Object value) {
         if (value != null) {
             this.put(key, value);
+        }
+    }
+
+    protected String getParseFileUrl(String key) {
+        ParseFile file = getParseFile(key);
+        if (null == file) {
+            return null;
+        } else {
+            return file.getUrl();
         }
     }
 

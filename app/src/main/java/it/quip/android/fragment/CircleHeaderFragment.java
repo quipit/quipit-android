@@ -129,6 +129,16 @@ public class CircleHeaderFragment extends Fragment {
 
     private void updateViewState() {
         updateQuipsterCount();
+
+        String avatarUrl = mCircle.getAvatarImageURL();
+        if (avatarUrl != null) {
+            loadAvatarImage(Picasso.with(getContext()).load(avatarUrl));
+        }
+
+        String backgroundUrl = mCircle.getBackgroundImageURL();
+        if (backgroundUrl != null) {
+            loadBackgroundImage(Picasso.with(getContext()).load(backgroundUrl));
+        }
     }
 
     private void setupViews(View v) {
