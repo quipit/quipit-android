@@ -5,10 +5,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -30,39 +28,34 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-
         <activity
-            android:name=".actvitiy.LoginActivity"
-            android:theme="@style/AppTheme.Login"
-            android:label="@string/app_name" >
+            android:name=".activity.LoginActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.Login" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name=".actvitiy.QuipitHomeActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/app_name">
+            android:name=".activity.QuipitHomeActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" >
         </activity>
-
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:label="@string/app_name" />
-
         <activity
-            android:name=".actvitiy.CreateCircleActivity"
-            android:label="@string/title_create_circle">
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".activity.CreateCircleActivity"
+            android:label="@string/title_create_circle" >
         </activity>
-
         <activity
-            android:name=".actvitiy.CreateQuipActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/title_create_quip" >
+            android:name=".activity.CreateQuipActivity"
+            android:label="@string/title_create_quip"
+            android:theme="@style/AppTheme.NoActionBar" >
         </activity>
 
         <service android:name="com.parse.PushService" />
@@ -84,12 +77,22 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
                 <action android:name="com.google.android.c2dm.intent.SEND" />
+
                 <category android:name="it.quip.android" />
             </intent-filter>
         </receiver>
 
-        <meta-data android:name="com.parse.push.notification_icon" android:resource="@drawable/ic_quipit_notification_logo"/>
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.parse.push.notification_icon"
+            android:resource="@drawable/ic_quipit_notification_logo" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity
+            android:name=".activity.ShareQuipActivity"
+            android:label="@string/title_activity_share_quip" >
+        </activity>
     </application>
 
 </manifest>

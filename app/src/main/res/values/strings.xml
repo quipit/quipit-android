@@ -35,4 +35,7 @@
 
     <string name="share_quip">share</string>
     <string name="post_quip">post</string>
+    <string name="title_activity_share_quip">ShareQuipActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>

@@ -123,4 +123,8 @@ public class Circle extends BaseParseObject implements Parcelable {
         }
     };
 
+    @Override
+    public void saveInternal() {
+        super.saveInternal();
+    }
 }

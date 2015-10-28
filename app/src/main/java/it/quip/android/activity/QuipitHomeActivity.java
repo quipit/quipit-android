@@ -1,4 +1,4 @@
-package it.quip.android.actvitiy;
+package it.quip.android.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
@@ -31,6 +31,7 @@ import it.quip.android.fragment.ViewCircleFragment;
 import it.quip.android.listener.TagClickListener;
 import it.quip.android.model.Circle;
 import it.quip.android.model.Notification;
+import it.quip.android.repository.circle.CirclesResponseHandler;
 
 
 public class QuipitHomeActivity extends AppCompatActivity implements TagClickListener {
@@ -97,9 +98,17 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
     }
 
     private void fetchCircles() {
-        List<Circle> fetchedCircles = QuipitApplication.getCurrentUser().getCircles();
+        QuipitApplication.getCurrentUser().getCircles(new CirclesResponseHandler() {
+            @Override
+            public void onSuccess(List<Circle> circles) {
+                onCirclesFetched(circles);
+            }
+        });
+    }
+
+    private void onCirclesFetched(List<Circle> circles) {
         mCircles.clear();
-        mCircles.addAll(fetchedCircles);
+        mCircles.addAll(circles);
 
         updateSidebarMenu();
     }

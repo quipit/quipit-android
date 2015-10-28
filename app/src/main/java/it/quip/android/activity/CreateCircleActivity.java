@@ -1,4 +1,4 @@
-package it.quip.android.actvitiy;
+package it.quip.android.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -103,6 +103,7 @@ public class CreateCircleActivity extends AppCompatActivity
                 .type(Notification.STANDARD_NOTIFICATION)
                 .imageUrl(createdCircle.getAvatarImageURL())
                 .deliver();
+
         setResult(RESULT_OK, data);
         finish();
     }
