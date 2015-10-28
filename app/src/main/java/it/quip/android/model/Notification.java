@@ -28,6 +28,9 @@ import it.quip.android.util.TimeUtils;
 @ParseClassName("Notification")
 public class Notification extends BaseParseObject implements Parcelable {
 
+    public static final int FLAG_NOTIFICATION_RECEIVED = 45678;
+    public static final String NOTIFICATION_RECEIVED_ACTION = "com.notifications.ReceivedQuipNotification";
+
     public static final int STANDARD_NOTIFICATION = 0;
     public static final String PUSH_TEXT_BODY_KEY = "text_body";
     public static final String PUSH_SENDER_ID = "sender_uid";
