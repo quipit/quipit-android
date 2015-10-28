@@ -233,7 +233,13 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
                 onCircleCreated();
             }
         } else if (CREATE_QUIP_REQUEST == requestCode) {
-            // TODO: reload feed...
+            if (RESULT_OK == resultCode) {
+                String createdQuipCircleId = data.getStringExtra(CreateQuipActivity.CREATED_QUIP_CIRCLE_ID);
+                if (null != createdQuipCircleId) {
+                    Circle c = Circle.findById(mCircles, createdQuipCircleId);
+                    viewCircle(c);
+                }
+            }
         }
     }
 
@@ -245,13 +251,18 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
     private void createQuip() {
         Intent intent = new Intent(this, CreateQuipActivity.class);
         startActivityForResult(intent, CREATE_QUIP_REQUEST);
+        overridePendingTransition(R.anim.slide_up, R.anim.zoom_out);
     }
 
     private void onCircleCreated() {
         mCircles.clear();
         mCircles.addAll(QuipitApplication.getCurrentUser().getCircles());
         updateSidebarMenu();
-        prepareFragment(ViewCircleFragment.newInstance(mCircles.get(mCircles.size() - 1))).commitAllowingStateLoss();
+        viewCircle(mCircles.get(mCircles.size() - 1));
+    }
+
+    private void viewCircle(Circle circle) {
+        prepareFragment(ViewCircleFragment.newInstance(circle)).commitAllowingStateLoss();
     }
 
     @Override

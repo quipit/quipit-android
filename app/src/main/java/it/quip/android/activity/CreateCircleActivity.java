@@ -13,14 +13,15 @@ import android.view.MenuItem;
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
 import it.quip.android.fragment.CircleHeaderFragment;
-import it.quip.android.fragment.InviteFriendsFragment;
+import it.quip.android.fragment.FriendsSearchListFragment;
+import it.quip.android.fragment.SearchListFragment;
 import it.quip.android.model.Circle;
 import it.quip.android.model.Notification;
 import it.quip.android.model.User;
 import it.quip.android.repository.circle.CircleResponseHandler;
 
 public class CreateCircleActivity extends AppCompatActivity
-        implements InviteFriendsFragment.OnFriendsListChangedListener {
+        implements SearchListFragment.OnSearchListChangedListener<User> {
 
     private CircleHeaderFragment circleHeaderFragment;
     private ProgressDialog pdUploading;
@@ -45,12 +46,12 @@ public class CreateCircleActivity extends AppCompatActivity
         circleHeaderFragment = CircleHeaderFragment.newInstance(circle);
         circleHeaderFragment.setEditing(true);
 
-        InviteFriendsFragment inviteFriendsFragment = InviteFriendsFragment.newInstance();
-        inviteFriendsFragment.setOnFriendsListChangedListener(this);
+        FriendsSearchListFragment friendsSearchListFragment = FriendsSearchListFragment.newInstance();
+        friendsSearchListFragment.setOnSearchListChangedListener(this);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fl_circle_info, circleHeaderFragment);
-        ft.replace(R.id.fl_circle_friends, inviteFriendsFragment);
+        ft.replace(R.id.fl_circle_friends, friendsSearchListFragment);
         ft.commit();
     }
 
@@ -108,13 +109,11 @@ public class CreateCircleActivity extends AppCompatActivity
         finish();
     }
 
-    @Override
-    public void onFriendInvited(User friend) {
+    public void onSelect(User friend) {
         circleHeaderFragment.addMember(friend);
     }
 
-    @Override
-    public void onFriendUninvited(User friend) {
+    public void onUnselect(User friend) {
         circleHeaderFragment.removeMember(friend);
     }
 

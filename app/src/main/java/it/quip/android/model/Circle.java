@@ -119,4 +119,14 @@ public class Circle extends BaseParseObject implements Parcelable {
     public void saveInternal() {
         super.saveInternal();
     }
+
+    public static Circle findById(List<Circle> circles, String objectId) {
+        for (Circle c : circles) {
+            if (c.getObjectId().equals(objectId)) {
+                return c;
+            }
+        }
+
+        return null;
+    }
 }

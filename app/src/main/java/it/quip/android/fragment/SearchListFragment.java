@@ -30,32 +30,46 @@ public abstract class SearchListFragment<T extends ParseObject> extends Fragment
 
     private EditText mEtSearch;
 
-    private SearchArrayAdapter<T> mFilteredValues;
+    private List<T> mSearchValues;
 
-    private ArrayList<T> mValues;
-    private SearchArrayAdapter<T> mSelectedValues;
+    private SearchArrayAdapter<T> mFilteredValuesAdapter;
 
-    private OnSearchListChangedListener onSearchListChangedListener;
+    private List<T> mSelectedValues;
+    private SearchArrayAdapter<T> mSelectedValuesAdapter;
 
-    public List<T> getSelected() {
-        return mValues;
+    private OnSearchListChangedListener mOnSearchListChangedListener;
+
+    private boolean mUseCustomInput = false;
+
+    public List<T> getSelectedValues() {
+        return mSelectedValues;
     }
 
-    public void setOnSearchListChangedListener(OnSearchListChangedListener onSearchListChangedListener) {
-        this.onSearchListChangedListener = onSearchListChangedListener;
+    public void setUseCustomInput(boolean useCustomInput) {
+        mUseCustomInput = useCustomInput;
+    }
+
+    public void setOnSearchListChangedListener(OnSearchListChangedListener mOnSearchListChangedListener) {
+        this.mOnSearchListChangedListener = mOnSearchListChangedListener;
+    }
+
+    public void search(String name) {
+        mFilteredValuesAdapter.clear();
+        mFilteredValuesAdapter.addAll(searchFor(name));
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        loadSearchValues();
 
         List<T> filteredValues = new ArrayList<>();
-        mFilteredValues = getFilterAdapter(filteredValues);
+        mFilteredValuesAdapter = getFilterAdapter(filteredValues);
 
-        mValues = new ArrayList<>();
-        mSelectedValues = getSelectAdapter(mValues);
+        mSelectedValues = new ArrayList<>();
+        mSelectedValuesAdapter = getSelectAdapter(mSelectedValues);
 
-        mSelectedValues.setOnLongClickListener(new SearchArrayAdapter.OnLongClickListener<T>() {
+        mSelectedValuesAdapter.setOnLongClickListener(new SearchArrayAdapter.OnLongClickListener<T>() {
             @Override
             public boolean onLongClick(int position, T value) {
                 unselectValue(value);
@@ -70,38 +84,50 @@ public abstract class SearchListFragment<T extends ParseObject> extends Fragment
         View v = inflater.inflate(R.layout.fragment_searchable_list, container, false);
 
         mEtSearch = (EditText) v.findViewById(R.id.et_search);
+        if (mUseCustomInput) {
+            mEtSearch.setVisibility(View.INVISIBLE);
+        } else {
+            setupSearchField();
+        }
 
         OverlayListView valuesOverlay = (OverlayListView) v.findViewById(R.id.overlay_values);
-        valuesOverlay.setAdapter(mFilteredValues);
+        valuesOverlay.setAdapter(mFilteredValuesAdapter);
         valuesOverlay.setOnItemSelectedListener(new OverlayListView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(int position, View view) {
-                selectValue(mFilteredValues.getItem(position));
+                selectValue(mFilteredValuesAdapter.getItem(position));
             }
         });
 
         ListView lvSelectedValues = (ListView) v.findViewById(R.id.lv_selected_values);
-        lvSelectedValues.setAdapter(mSelectedValues);
+        lvSelectedValues.setAdapter(mSelectedValuesAdapter);
+        if (mUseCustomInput) {
+            lvSelectedValues.setVisibility(View.INVISIBLE);
+        }
 
-        setupSearchField();
         return v;
     }
 
     private void selectValue(T value) {
-        mSelectedValues.add(value);
+        Integer maxSelectCount = getMaxSelectCount();
+        if ((null != maxSelectCount) && (mSelectedValuesAdapter.getCount() >= maxSelectCount)) {
+            mSelectedValuesAdapter.remove(mSelectedValuesAdapter.getItem(0));
+        }
+
+        mSelectedValuesAdapter.add(value);
 
         mEtSearch.setText("");
-        mFilteredValues.clear();
+        mFilteredValuesAdapter.clear();
 
-        if (onSearchListChangedListener != null) {
-            onSearchListChangedListener.onSelect(value);
+        if (mOnSearchListChangedListener != null) {
+            mOnSearchListChangedListener.onSelect(value);
         }
     }
 
     private void unselectValue(T value) {
-        mSelectedValues.remove(value);
-        if (onSearchListChangedListener != null) {
-            onSearchListChangedListener.onUnselect(value);
+        mSelectedValuesAdapter.remove(value);
+        if (mOnSearchListChangedListener != null) {
+            mOnSearchListChangedListener.onUnselect(value);
         }
     }
 
@@ -124,19 +150,26 @@ public abstract class SearchListFragment<T extends ParseObject> extends Fragment
         });
     }
 
-    private void search(String name) {
-        mFilteredValues.clear();
-        mFilteredValues.addAll(searchFor(name));
+    protected List<T> getSearchValues() {
+        return mSearchValues;
+    }
+
+    protected void setSearchValues(List<T> searchValues) {
+        mSearchValues = searchValues;
     }
 
     protected boolean alreadySelected(T value) {
-        return mValues.contains(value);
+        return mSelectedValues.contains(value);
     }
+
+    protected abstract void loadSearchValues();
 
     protected abstract SearchArrayAdapter<T> getFilterAdapter(List<T> filteredValues);
 
     protected abstract SearchArrayAdapter<T> getSelectAdapter(List<T> selectedValues);
 
     protected abstract List<T> searchFor(String query);
+
+    protected abstract Integer getMaxSelectCount();
 
 }
