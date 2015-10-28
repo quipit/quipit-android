@@ -15,12 +15,12 @@ import it.quip.android.QuipitApplication;
 @ParseClassName("Quip")
 public class Quip extends BaseParseObject implements Parcelable {
 
-    private static final String TEXT = "text";
-    private static final String AUTHOR = "author";
-    private static final String SOURCE = "source";
-    private static final String CIRCLE = "circle";
-    private static final String TIMESTAMP = "timestamp";
-    private static final String IMAGE_URL = "image_url";
+    public static final String TEXT = "text";
+    public static final String AUTHOR = "author";
+    public static final String SOURCE = "source";
+    public static final String CIRCLE = "circle";
+    public static final String TIMESTAMP = "timestamp";
+    public static final String IMAGE_URL = "image_url";
 
     private String text;
     private User author;
@@ -30,27 +30,27 @@ public class Quip extends BaseParseObject implements Parcelable {
     private String imageUrl;
 
     public String getText() {
-        return text;
+        return getString(TEXT);
     }
 
     public User getAuthor() {
-        return author;
+        return getRelated(AUTHOR);
     }
 
     public User getSource() {
-        return source;
+        return getRelated(SOURCE);
     }
 
     public Circle getCircle() {
-        return circle;
+        return getRelated(CIRCLE);
     }
 
     public long getTimestamp() {
-        return timestamp;
+        return getLong(TIMESTAMP);
     }
 
     public String getImageUrl() {
-        return imageUrl;
+        return getString(IMAGE_URL);
     }
 
     public void setText(String text) {

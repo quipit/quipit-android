@@ -45,10 +45,11 @@ public class ViewCircleFragment extends BaseFragment {
 
     private void setupFragments() {
         CircleHeaderFragment circleHeader = CircleHeaderFragment.newInstance(circle);
-        // TODO: drop in the fragment for displaying quips
+        CircleFeedFragment circleFeed = CircleFeedFragment.newInstance(circle);
 
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fl_header, circleHeader)
+                .replace(R.id.fl_quips, circleFeed)
                 .commit();
     }
 

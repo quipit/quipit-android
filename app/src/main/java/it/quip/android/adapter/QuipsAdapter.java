@@ -17,6 +17,7 @@ import it.quip.android.R;
 import it.quip.android.fragment.QuipFeedFragment;
 import it.quip.android.graphics.CircleTransformation;
 import it.quip.android.model.Quip;
+import it.quip.android.model.User;
 
 public class QuipsAdapter extends RecyclerView.Adapter<QuipsViewHolder> {
 
@@ -69,7 +70,16 @@ public class QuipsAdapter extends RecyclerView.Adapter<QuipsViewHolder> {
         setupProfile(quip, viewHolder);
         viewHolder.mTvQuipTimestamp.setText("2d");
         viewHolder.mTvQuipBody.setText(quip.getText());
-        viewHolder.mTvQuipSourceUserName.setText(quip.getSource().getName());
+
+        String sourceName;
+        User source = quip.getSource();
+        if (null == source) {
+            sourceName = "anon";
+        } else {
+            sourceName = source.getName();
+        }
+
+        viewHolder.mTvQuipSourceUserName.setText(sourceName);
     }
 
 }
