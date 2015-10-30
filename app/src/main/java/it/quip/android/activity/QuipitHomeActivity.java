@@ -54,6 +54,7 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
     private NavigationView mNavDrawer;
     private RelativeLayout mNotificationBar;
     private TextView mNotificationBarNotificationText;
+    private FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +69,8 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
     }
 
     private void setupFabActionBar() {
-        FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab);
-        myFab.setOnClickListener(new View.OnClickListener() {
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 createQuip();
             }
