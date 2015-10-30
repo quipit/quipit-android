@@ -7,7 +7,7 @@
     <!-- Notification bar -->
     <RelativeLayout
         android:layout_alignParentTop="true"
-
+        android:visibility="gone"
         android:id="@+id/toolbar_notification_toast_bard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

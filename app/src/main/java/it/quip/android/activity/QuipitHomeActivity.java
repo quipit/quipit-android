@@ -148,6 +148,13 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
         }
     }
 
+    private void updateNotificationCountSidebarMenu(int count) {
+        MenuItem navigationMenu = mNavDrawer.getMenu().findItem(R.id.navNotifications);
+        if (count > 0) {
+
+        }
+    }
+
     private void fetchCircles() {
         QuipitApplication.getCurrentUser().getCircles(new CirclesResponseHandler() {
             @Override
