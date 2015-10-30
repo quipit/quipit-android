@@ -26,11 +26,31 @@
             layout="@layout/notification_toast_bar"
             ></include>
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_marginBottom="@dimen/big_margin"
+            android:layout_alignParentBottom="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_quip_new"
+            android:layout_alignParentRight="true"
+            app:fabSize="normal" />
         <FrameLayout
             android:id="@+id/fl_content"
             android:layout_below="@id/sub_tool_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <FrameLayout
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="-50dp">
+
+
+        </FrameLayout>
 
     </RelativeLayout>
 

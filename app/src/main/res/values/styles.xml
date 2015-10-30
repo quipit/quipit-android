@@ -4,6 +4,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="actionBarStyle">@style/AppTheme.QuipItBar</item>
+        <item name="colorAccent">@color/quipit_main</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="AppTheme">
