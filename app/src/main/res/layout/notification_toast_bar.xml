@@ -7,20 +7,28 @@
     <!-- Notification bar -->
     <RelativeLayout
         android:layout_alignParentTop="true"
-        android:visibility="gone"
+
         android:id="@+id/toolbar_notification_toast_bard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:background="?attr/colorPrimary">
+        android:background="@color/quipit_alt">
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:id="@+id/cv_tweet"
+            android:background="@color/notification_card_background_read"
+            >
         <TextView
             android:id="@+id/toolbaNotificationText"
             android:layout_width="match_parent"
-            android:textColor="@color/notification_card_background_unread"
-            android:gravity="center_horizontal"
+            android:textColor="@color/quipit_main"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/abc_text_size_small_material"
-            android:layout_centerInParent="true"
-            android:text="TEST"/>
+            android:textSize="@dimen/abc_text_size_menu_material"
+            android:text="Hasham just quipped in @darkness"
+            android:textStyle="bold" />
+        </android.support.v7.widget.CardView>
     </RelativeLayout>
 </RelativeLayout>
