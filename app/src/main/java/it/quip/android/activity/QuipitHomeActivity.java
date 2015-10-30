@@ -64,11 +64,11 @@ public class QuipitHomeActivity extends AppCompatActivity implements TagClickLis
         mCircles = new ArrayList<>();
         registerBroadcastReceivers();
         setupViews();
-        setupFabActionBar();
+        setupFloatingActionBar();
 
     }
 
-    private void setupFabActionBar() {
+    private void setupFloatingActionBar() {
         mFab = (FloatingActionButton) findViewById(R.id.fab);
         mFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
