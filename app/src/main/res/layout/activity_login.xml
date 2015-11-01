@@ -12,6 +12,8 @@
         app:initialSrc="@drawable/nyc"
         app:transitionDuration="2000"
         app:transitionDelay="15000"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

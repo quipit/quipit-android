@@ -13,8 +13,6 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
-
 import it.quip.android.R;
 
 public class RotatingImageView extends FrameLayout {
@@ -69,11 +67,9 @@ public class RotatingImageView extends FrameLayout {
         addView(ivCurrent);
         addView(ivNext);
 
-        Picasso.with(getContext())
-                .load(initialDrawable)
-                .fit()
-                .centerCrop()
-                .into(ivCurrent);
+        if (initialDrawable > 0) {
+            ivCurrent.setImageResource(initialDrawable);
+        }
 
         doTransition();
     }
@@ -108,11 +104,7 @@ public class RotatingImageView extends FrameLayout {
     }
 
     private void loadDrawable(int resId) {
-        Picasso.with(getContext())
-                .load(resId)
-                .fit()
-                .centerCrop()
-                .into(ivNext);
+        ivNext.setImageResource(resId);
     }
 
     private void transitionViews() {
