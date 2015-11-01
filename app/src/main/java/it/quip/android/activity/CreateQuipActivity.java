@@ -4,7 +4,6 @@ package it.quip.android.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
@@ -20,7 +19,7 @@ import it.quip.android.model.Quip;
 import it.quip.android.model.User;
 
 public class CreateQuipActivity
-        extends AppCompatActivity
+        extends BaseActivity
         implements QuipComposeFragment.OnSearchFriend, SearchListFragment.OnSearchListChangedListener<User> {
 
     public static final String CREATED_QUIP_CIRCLE_ID = "CREATED_QUIP_CIRCLE_ID";

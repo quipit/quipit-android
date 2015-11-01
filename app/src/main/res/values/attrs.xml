@@ -5,4 +5,10 @@
         <attr name="maxItems" format="integer" />
     </declare-styleable>
 
+    <declare-styleable name="RotatingImageView">
+        <attr name="initialSrc" format="integer" />
+        <attr name="transitionDuration" format="integer" />
+        <attr name="transitionDelay" format="integer" />
+    </declare-styleable>
+
 </resources>

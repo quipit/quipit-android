@@ -6,5 +6,5 @@
     <dimen name="standard_margin">16dp</dimen>
     <dimen name="small_margin">8dp</dimen>
     <dimen name="tiny_margin">2dp</dimen>
-    <dimen name="login_margin_bottom">40dp</dimen>
+    <dimen name="login_margin_bottom">50dp</dimen>
 </resources>

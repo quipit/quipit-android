@@ -16,7 +16,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,7 +39,7 @@ import it.quip.android.model.User;
 import it.quip.android.repository.circle.CirclesResponseHandler;
 
 
-public class QuipitHomeActivity extends AppCompatActivity implements TagClickListener {
+public class QuipitHomeActivity extends BaseActivity implements TagClickListener {
 
     private static final int CREATE_CIRCLE_REQUEST = 158;
     private static final int CREATE_QUIP_REQUEST = 321;

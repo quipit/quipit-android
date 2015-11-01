@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -20,7 +19,7 @@ import it.quip.android.model.Notification;
 import it.quip.android.model.User;
 import it.quip.android.repository.circle.CircleResponseHandler;
 
-public class CreateCircleActivity extends AppCompatActivity
+public class CreateCircleActivity extends BaseActivity
         implements SearchListFragment.OnSearchListChangedListener<User> {
 
     private CircleHeaderFragment circleHeaderFragment;

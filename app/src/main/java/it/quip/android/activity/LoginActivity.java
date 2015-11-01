@@ -2,7 +2,6 @@ package it.quip.android.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.facebook.AccessToken;
@@ -15,8 +14,9 @@ import com.facebook.login.widget.LoginButton;
 import it.quip.android.R;
 import it.quip.android.model.User;
 import it.quip.android.network.FacebookClient;
+import it.quip.android.view.RotatingImageView;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     private CallbackManager mCallbackManager;
     private LoginButton mBtnLogin;
@@ -24,7 +24,6 @@ public class LoginActivity extends AppCompatActivity {
     private void setupLoginButton() {
         mCallbackManager = CallbackManager.Factory.create();
 
-        setContentView(R.layout.activity_login);
         mBtnLogin = (LoginButton) findViewById(R.id.btn_login);
         mBtnLogin.setReadPermissions("user_friends");
         mBtnLogin.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
@@ -55,6 +54,16 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+
+        RotatingImageView mCarousel = (RotatingImageView) findViewById(R.id.iv_carousel);
+        mCarousel.setDrawables(new int[] {
+                R.drawable.nyc,
+                R.drawable.nyc_dusk,
+                R.drawable.tokyo,
+                R.drawable.vancouver,
+        });
+
         if (FacebookClient.getInstance() == null) {
             setupLoginButton();
 

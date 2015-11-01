@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="quipit_main">#FD8917</color>
+    <color name="quipit_main">#FD9927</color>
     <color name="quipit_alt">#FFFFFF</color>
+
+    <color name="fb_blue">#3B5998</color>
+    <color name="fb_blue_light">#8B9DC3</color>
 
     <color name="notification_card_background_unread">#c0deed</color>
     <color name="notification_card_background_read">#FFFFFF</color>

@@ -17,6 +17,7 @@ import it.quip.android.repository.circle.CircleRepository;
 import it.quip.android.repository.circle.ParseCircleRepository;
 import it.quip.android.repository.user.ParseUserRepository;
 import it.quip.android.repository.user.UserRepository;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class QuipitApplication extends Application {
 
@@ -24,6 +25,15 @@ public class QuipitApplication extends Application {
     private static CircleRepository sCircleRepo;
     private static UserRepository sUserRepo;
     public static NotificationManager sNotificationManager;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        setupParse();
+        setupFacebook();
+        setupRepos();
+        setupFonts();
+    }
 
     private void setupParse() {
         Parse.enableLocalDatastore(this);
@@ -48,12 +58,13 @@ public class QuipitApplication extends Application {
         sUserRepo = new ParseUserRepository();
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        setupParse();
-        setupFacebook();
-        setupRepos();
+    private void setupFonts() {
+        CalligraphyConfig.initDefault(
+                new CalligraphyConfig.Builder()
+                        .setDefaultFontPath("fonts/Lato-Regular.ttf")
+                        .setFontAttrId(R.attr.fontPath)
+                        .build()
+        );
     }
 
     public String stringRes(int resId) {
