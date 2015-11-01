@@ -12,7 +12,6 @@
     </style>
 
     <style name="AppTheme.Login" parent="AppTheme.NoActionBar">
-        <item name="android:background">@color/quipit_main</item>
     </style>
 
     <style name="AppTheme.QuipItBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">

@@ -2,7 +2,6 @@ package it.quip.android.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
@@ -12,7 +11,7 @@ import it.quip.android.R;
 import it.quip.android.fragment.CirclesSelectListFragment;
 import it.quip.android.model.Circle;
 
-public class ShareQuipActivity extends AppCompatActivity {
+public class ShareQuipActivity extends BaseActivity {
 
     public static final int SHARE_QUIP_RESULT = 1111;
     public static final String SELECTED_CIRCLES = "SELECTED_CIRCLES";

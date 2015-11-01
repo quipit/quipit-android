@@ -1,31 +1,49 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingPrefix"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/quipit_main"
     tools:context=".LoginActivity">
 
+    <it.quip.android.view.RotatingImageView
+        android:id="@+id/iv_carousel"
+        app:initialSrc="@drawable/nyc"
+        app:transitionDuration="2000"
+        app:transitionDelay="15000"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:src="@drawable/shape_gradient_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <TextView
+        android:text="@string/app_name_lower"
+        android:textSize="54sp"
+        android:textColor="@color/quipit_alt"
+        fontPath="fonts/Lato-Semibold.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
-        android:textColor="@color/quipit_alt"
-        android:textSize="50sp"
-        android:layout_marginTop="220dp"
-        android:text="@string/app_name_lower"
-        />
+        android:layout_marginTop="220dp" />
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/btn_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        app:com_facebook_login_text="Login with Facebook"
+        app:com_facebook_logout_text="Logout"
+        android:textSize="16sp"
+        android:background="@drawable/selector_rounded_button"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:drawablePadding="26dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:background="@color/quipit_alt"
-        android:textColor="@color/quipit_main"
-        android:layout_marginBottom="@dimen/login_margin_bottom"
-        />
+        android:layout_marginBottom="@dimen/login_margin_bottom" />
 
 </RelativeLayout>
