@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -69,6 +70,7 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
 
         mUser = QuipitApplication.getCurrentUser();
         mCircles = new ArrayList<>();
+        aCircles = new CirclesAdapter(this, mCircles);
 
         registerBroadcastReceivers();
         setupViews();
@@ -133,9 +135,21 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
     }
 
     private void setupDrawerContent() {
-        aCircles = new CirclesAdapter(this, mCircles);
         mNavDrawer = (ListView) findViewById(R.id.nav_drawer);
+        mNavDrawer.addHeaderView(inflateHeaderView());
+        mNavDrawer.setAdapter(aCircles);
+        mNavDrawer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // The actual position is off by one because the header view is an "item" in the list
+                if (position > 0) {
+                    selectDrawerItem(position - 1);
+                }
+            }
+        });
+    }
 
+    private View inflateHeaderView() {
         View header = getLayoutInflater().inflate(R.layout.nav_header, mNavDrawer, false);
 
         TextView tvName = (TextView) header.findViewById(R.id.tv_name);
@@ -144,27 +158,12 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
         ImageView ivProfile = (ImageView) header.findViewById(R.id.iv_profile);
         Picasso.with(this)
                 .load(mUser.getImageUrl())
-                .transform(new CircleTransformation())
+                .transform(new CircleTransformation(4, Color.WHITE))
                 .fit()
                 .centerCrop()
                 .into(ivProfile);
 
-        mNavDrawer.addHeaderView(header);
-        mNavDrawer.setAdapter(aCircles);
-        mNavDrawer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // The actual position is off by one because the header view is an "item" in the list
-                // This will be fixed with an adapter
-                if (position > 0) {
-                    selectDrawerItem(position - 1);
-                }
-            }
-        });
-    }
-
-    private void updateSidebarMenu() {
-
+        return header;
     }
 
     private void fetchCircles() {
@@ -177,11 +176,8 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
     }
 
     private void onCirclesFetched(List<Circle> circles) {
-        mCircles.clear();
-        mCircles.addAll(circles);
-        aCircles.notifyDataSetChanged();
-
-        updateSidebarMenu();
+        aCircles.clear();
+        aCircles.addAll(circles);
     }
 
     private void setupNotificationToastBar() {
@@ -284,9 +280,8 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
     }
 
     private void onCircleCreated() {
-        mCircles.clear();
-        mCircles.addAll(mUser.getCircles());
-        updateSidebarMenu();
+        aCircles.clear();
+        aCircles.addAll(mUser.getCircles());
         viewCircle(mCircles.get(mCircles.size() - 1));
     }
 

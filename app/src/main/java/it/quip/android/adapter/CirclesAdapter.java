@@ -25,23 +25,35 @@ public class CirclesAdapter extends ArrayAdapter<Circle> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Circle circle = getItem(position);
+        ViewHolder holder;
 
         if (null == convertView) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_circle, parent, false);
+
+            holder = new ViewHolder();
+            holder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
+            holder.ivAvatar = (ImageView) convertView.findViewById(R.id.iv_avatar);
+
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
 
-        TextView tvName = (TextView) convertView.findViewById(R.id.tv_name);
-        tvName.setText(circle.getName());
+        holder.tvName.setText(circle.getName());
 
-        ImageView ivAvatar = (ImageView) convertView.findViewById(R.id.iv_avatar);
         Picasso.with(getContext())
                 .load(circle.getAvatarImageURL())
                 .transform(new CircleTransformation())
                 .fit()
                 .centerCrop()
-                .into(ivAvatar);
+                .into(holder.ivAvatar);
 
         return convertView;
+    }
+
+    private class ViewHolder {
+        public TextView tvName;
+        public ImageView ivAvatar;
     }
 
 }
