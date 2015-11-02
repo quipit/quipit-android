@@ -31,6 +31,7 @@ import it.quip.android.QuipitApplication;
 import it.quip.android.R;
 import it.quip.android.fragment.HomeFeedFragment;
 import it.quip.android.fragment.NotificationsFragment;
+import it.quip.android.fragment.OnActionRequestedListener;
 import it.quip.android.fragment.ViewCircleFragment;
 import it.quip.android.listener.TagClickListener;
 import it.quip.android.model.Circle;
@@ -204,7 +205,20 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
 
     private void displayDefaultQuipStream() {
         // TODO: We shouldn't be creating a new fragment each time. We should manage these
-        prepareFragment(new HomeFeedFragment(), false).commit();
+        HomeFeedFragment homeFragment = new HomeFeedFragment();
+        homeFragment.setOnActionRequestedListener(new OnActionRequestedListener() {
+            @Override
+            public void onCreateQuip() {
+                createQuip();
+            }
+
+            @Override
+            public void onCreateCircle() {
+                createCircle();
+            }
+        });
+
+        prepareFragment(homeFragment, false).commit();
     }
 
     @Override
@@ -218,12 +232,6 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
         switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-            case R.id.miNewCircle:
-                createCircle();
-                return true;
-            case R.id.miNewQuip:
-                createQuip();
                 return true;
         }
 
