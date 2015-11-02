@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -52,6 +53,7 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
     private NavigationView mNavDrawer;
     private RelativeLayout mNotificationBar;
     private TextView mNotificationBarNotificationText;
+    private FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +63,17 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
         mCircles = new ArrayList<>();
         registerBroadcastReceivers();
         setupViews();
+        setupFloatingActionBar();
 
+    }
+
+    private void setupFloatingActionBar() {
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                createQuip();
+            }
+        });
     }
 
     private void registerBroadcastReceivers() {
@@ -132,6 +144,13 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
 
         for (int i = 0; i < mCircles.size(); i++) {
             circlesSubMenu.add(0, i, Menu.NONE, mCircles.get(i).getName());
+        }
+    }
+
+    private void updateNotificationCountSidebarMenu(int count) {
+        MenuItem navigationMenu = mNavDrawer.getMenu().findItem(R.id.navNotifications);
+        if (count > 0) {
+
         }
     }
 
