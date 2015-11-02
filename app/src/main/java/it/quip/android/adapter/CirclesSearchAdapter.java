@@ -7,9 +7,9 @@ import java.util.List;
 import it.quip.android.model.Circle;
 
 
-public class CirclesArrayAdapter extends SearchArrayAdapter<Circle> {
+public class CirclesSearchAdapter extends SearchArrayAdapter<Circle> {
 
-    public CirclesArrayAdapter(Context context, List<Circle> objects) {
+    public CirclesSearchAdapter(Context context, List<Circle> objects) {
         super(context, objects);
     }
 

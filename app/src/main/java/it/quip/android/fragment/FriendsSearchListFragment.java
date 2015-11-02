@@ -5,7 +5,7 @@ import java.util.List;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.adapter.SearchArrayAdapter;
-import it.quip.android.adapter.UsersArrayAdapter;
+import it.quip.android.adapter.UsersSearchAdapter;
 import it.quip.android.model.User;
 import it.quip.android.repository.user.UsersResponseHandler;
 
@@ -25,11 +25,11 @@ public class FriendsSearchListFragment extends SearchListFragment<User> {
     }
 
     protected SearchArrayAdapter<User> getFilterAdapter(List<User> filteredFriends) {
-        return new UsersArrayAdapter(getContext(), filteredFriends);
+        return new UsersSearchAdapter(getContext(), filteredFriends);
     }
 
     protected SearchArrayAdapter<User> getSelectAdapter(List<User> selectedFriends) {
-        return new UsersArrayAdapter(getContext(), selectedFriends);
+        return new UsersSearchAdapter(getContext(), selectedFriends);
     }
 
     protected List<User> searchFor(String name) {

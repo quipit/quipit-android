@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -23,8 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/toolbar"
-            layout="@layout/notification_toast_bar"
-            ></include>
+            layout="@layout/notification_toast_bar" />
 
         <FrameLayout
             android:id="@+id/fl_content"
@@ -34,13 +30,12 @@
 
     </RelativeLayout>
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nv_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
+    <ListView android:id="@+id/nav_drawer"
         android:background="@android:color/white"
-        app:menu="@menu/drawer_view"
-        app:headerLayout="@layout/nav_header" />
+        android:divider="@null"
+        android:dividerHeight="8sp"
+        android:layout_width="320dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start" />
 
 </android.support.v4.widget.DrawerLayout>
