@@ -1,5 +1,6 @@
 package it.quip.android.adapter;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 import it.quip.android.R;
+import it.quip.android.graphics.CircleTransformation;
 import it.quip.android.listener.TagClickListener;
 import it.quip.android.listener.NotificationHandler;
 import it.quip.android.model.Notification;
@@ -98,16 +100,18 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         vh.getHeadLineText().setMovementMethod(LinkMovementMethod.getInstance());
         String headlineText =  notification.getText().toString();
         vh.getHeadLineText().setText(vh.getCircleParser().tagParse(
-                                    FormatUtils.CIRCLE_PATTERN,
-                                    headlineText,
-                                    (TagClickListener) mContext,
-                                    false,
-                                    FormatUtils.CIRCLE_MENTION_COLOR),
+                        FormatUtils.CIRCLE_PATTERN,
+                        headlineText,
+                        (TagClickListener) mContext,
+                        false,
+                        FormatUtils.CIRCLE_MENTION_COLOR),
                 TextView.BufferType.SPANNABLE);
-        vh.getTimestampText().setText(notification.getTimestampString());
+        vh.getTimestampText().setText(FormatUtils.getRelativeTimeAgo(notification.getTimestamp()));
         vh.getNotificationImage().setImageResource(0);
         Picasso.with(mContext)
                 .load(notification.getNotificationImageUrl())
+                .centerCrop()
+                .transform(new CircleTransformation(4, Color.WHITE))
                 .fit()
                 .into(vh.getNotificationImage());
 

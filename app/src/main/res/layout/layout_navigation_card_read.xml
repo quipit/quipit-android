@@ -32,6 +32,7 @@
                 android:id="@+id/tv_notification_headline"
                 android:focusable="false"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/big_margin"
                 android:layout_toRightOf="@+id/iv_notification_image"
                 android:layout_toEndOf="@+id/iv_notification_image"
                 android:layout_margin="@dimen/small_margin"/>
@@ -42,8 +43,11 @@
                 android:text="2h"
                 android:id="@+id/tv_notification_timestamp"
                 android:layout_centerVertical="true"
-
+                android:layout_alignRight="@+id/tv_notification_headline"
+                android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginRight="@dimen/big_margin"
                 android:layout_margin="@dimen/small_margin" />
 
         </RelativeLayout>
