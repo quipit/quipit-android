@@ -68,7 +68,6 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
                 } else {
                     // This is a global push, just use alert
                     Notification notification = new Notification();
-                    notification.setTimestamp(TimeUtils.currentTimestampInS());
                     notification.setReceiverUid(QuipitApplication.getCurrentUser().getObjectId());
                     notification.setText(json.getString(PARSE_ALERT_KEY));
                     notification.saveInternal();

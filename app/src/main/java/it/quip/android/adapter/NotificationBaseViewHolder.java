@@ -50,24 +50,6 @@ public class NotificationBaseViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
-        timestampText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Context context = mAdapter.getContext();
-                Notification notification = new Notification.with(context)
-                        .body("Jean Claude Van Como deposited some darkness in @sfsewers thangs")
-                        .sender(QuipitApplication.getCurrentUser())
-                        .receiver(QuipitApplication.getCurrentUser())
-                        .type(Notification.STANDARD_NOTIFICATION)
-                        .imageUrl("https://scontent.xx.fbcdn.net/hphotos-xpa1/v/t1.0-9/1506408_10205437954245349_5292698869694708416_n.jpg?oh=fb5f9c98209217c65fd4ddeb7aaaafc1&oe=56C2F425")
-                        .build();
-                notification.saveInBackground();
-                notification.deliver();
-
-            }
-        });
-
     }
 
     public TextView getHeadLineText() {
