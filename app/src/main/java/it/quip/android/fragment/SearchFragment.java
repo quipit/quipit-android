@@ -16,11 +16,10 @@ import java.util.List;
 
 import it.quip.android.R;
 import it.quip.android.adapter.SearchArrayAdapter;
-import it.quip.android.adapter.SearchHolder;
 import it.quip.android.model.BaseParseObject;
 
 
-public abstract class SearchFragment <T extends BaseParseObject, U extends SearchHolder> extends Fragment {
+public abstract class SearchFragment <T extends BaseParseObject> extends Fragment {
 
     public interface OnSearchListChangedListener <T extends BaseParseObject> {
         void onSelect(T object);
@@ -33,7 +32,7 @@ public abstract class SearchFragment <T extends BaseParseObject, U extends Searc
     private List<T> mValues;
     private List<T> mSelectedValues;
     private List<T> mFilteredValues;
-    private SearchArrayAdapter<T, U> mFilteredAdapter;
+    private SearchArrayAdapter<T> mFilteredAdapter;
     private OnSearchListChangedListener mOnSearchListChangedListener;
     private RecyclerView.LayoutManager mLayoutManager;
 
@@ -57,15 +56,11 @@ public abstract class SearchFragment <T extends BaseParseObject, U extends Searc
         mFilteredAdapter.setOnClickListener(new SearchArrayAdapter.OnClickListener<T>() {
             @Override
             public void onClick(int position, T value) {
-                selectValue(value);
-            }
-        });
-
-        mFilteredAdapter.setOnLongClickListener(new SearchArrayAdapter.OnLongClickListener<T>() {
-            @Override
-            public boolean onLongClick(int position, T value) {
-                unselectValue(value);
-                return true;
+                if (mSelectedValues.contains(value)) {
+                    unselectValue(value);
+                } else {
+                    selectValue(value);
+                }
             }
         });
 
@@ -105,19 +100,11 @@ public abstract class SearchFragment <T extends BaseParseObject, U extends Searc
         }
 
         mSelectedValues.add(value);
-        //moveValueToTop(value);
         mEtSearch.setText("");
 
         if (mOnSearchListChangedListener != null) {
             mOnSearchListChangedListener.onSelect(value);
         }
-    }
-
-    private void moveValueToTop(T value) {
-        int previousLocation = mValues.indexOf(value);
-        mValues.remove(value);
-        mValues.add(0, value);
-        mFilteredAdapter.notifyItemMoved(previousLocation, 0);
     }
 
     private void unselectValue(T value) {
@@ -160,13 +147,9 @@ public abstract class SearchFragment <T extends BaseParseObject, U extends Searc
         mFilteredAdapter.notifyDataSetChanged();
     }
 
-    protected boolean alreadySelected(T value) {
-        return mSelectedValues.contains(value);
-    }
-
     protected abstract void loadSearchValues();
 
-    protected abstract SearchArrayAdapter<T, U> getAdapter(List<T> filteredValues);
+    protected abstract SearchArrayAdapter<T> getAdapter(List<T> filteredValues);
 
     protected abstract List<T> searchFor(String query);
 

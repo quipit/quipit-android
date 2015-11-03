@@ -9,7 +9,7 @@ import java.util.List;
 import it.quip.android.R;
 import it.quip.android.model.User;
 
-public class UsersArrayAdapter extends SearchArrayAdapter<User, ListSearchHolder> {
+public class UsersArrayAdapter extends SearchArrayAdapter<User> {
 
     public UsersArrayAdapter(List<User> values) {
         super(values);
@@ -23,9 +23,9 @@ public class UsersArrayAdapter extends SearchArrayAdapter<User, ListSearchHolder
         return user.getImageUrl();
     }
 
-    protected ListSearchHolder getViewHolder(LayoutInflater inflater, ViewGroup parent) {
+    protected SearchHolder getViewHolder(LayoutInflater inflater, ViewGroup parent) {
         View contactView = inflater.inflate(R.layout.item_user, parent, false);
-        return new ListSearchHolder(parent.getContext(), contactView);
+        return new SearchHolder(parent.getContext(), contactView);
     }
 
 }

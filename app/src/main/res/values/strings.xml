@@ -39,4 +39,5 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_source_quip">Source</string>
+    <string name="search_hint">Search...</string>
 </resources>
