@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.github.clans.fab.FloatingActionMenu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fab_menu"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    fab:menu_colorNormal="@color/quipit_main"
+    fab:menu_colorPressed="@color/quipit_pressed"
+    fab:menu_labels_ellipsize="end"
+    fab:menu_labels_singleLine="true"
+    fab:menu_backgroundColor="#44ffffff">
+
+    <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/fab_circle_new"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_circle_new"
+        app:fab_colorNormal="@color/quipit_main"
+        app:fab_colorPressed="@color/quipit_pressed"
+        fab:fab_size="mini" />
+
+    <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/fab_quip_new"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_quip_new"
+        app:fab_colorNormal="@color/quipit_main"
+        app:fab_colorPressed="@color/quipit_pressed"
+        fab:fab_size="mini" />
+
+</com.github.clans.fab.FloatingActionMenu>
