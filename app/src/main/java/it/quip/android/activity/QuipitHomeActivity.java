@@ -8,31 +8,37 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
+import it.quip.android.adapter.CirclesAdapter;
 import it.quip.android.fragment.HomeFeedFragment;
-import it.quip.android.fragment.NotificationsFragment;
 import it.quip.android.fragment.OnActionRequestedListener;
 import it.quip.android.fragment.ViewCircleFragment;
+import it.quip.android.graphics.CircleTransformation;
 import it.quip.android.listener.TagClickListener;
 import it.quip.android.model.Circle;
 import it.quip.android.model.Notification;
@@ -45,12 +51,15 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
     private static final int CREATE_CIRCLE_REQUEST = 158;
     private static final int CREATE_QUIP_REQUEST = 321;
 
+    private User mUser;
+
     private List<Circle> mCircles;
+    private CirclesAdapter aCircles;
+    private RecyclerView mNavDrawer;
 
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-    private NavigationView mNavDrawer;
     private RelativeLayout mNotificationBar;
     private TextView mNotificationBarNotificationText;
 
@@ -59,10 +68,20 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quipit_home);
 
+        mUser = QuipitApplication.getCurrentUser();
         mCircles = new ArrayList<>();
+        aCircles = new CirclesAdapter(this, mCircles);
+
         registerBroadcastReceivers();
         setupViews();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Refresh the current user when coming and going between activities
+        mUser = QuipitApplication.getCurrentUser();
     }
 
     private void registerBroadcastReceivers() {
@@ -78,9 +97,8 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
 
             if (Notification.NOTIFICATION_RECEIVED_ACTION.equals(action)) {
                 Notification notification = (Notification) intent.getExtras().get(Notification.MARSHALL_INTENT_KEY);
-                User loggedInUser = QuipitApplication.getCurrentUser();
                 String sender = notification.getSenderUid();
-                if (loggedInUser != null && !loggedInUser.getObjectId().equals(sender)) {
+                if (mUser != null && !mUser.getObjectId().equals(sender)) {
                     onNotificationToast(notification);
                 }
             }
@@ -104,7 +122,6 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
         mDrawerToggle = setupDrawerToggle();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        mNavDrawer = (NavigationView) findViewById(R.id.nv_view);
         setupDrawerContent();
         fetchCircles();
 
@@ -118,26 +135,37 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
     }
 
     private void setupDrawerContent() {
-        mNavDrawer.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        mNavDrawer = (RecyclerView) findViewById(R.id.nav_drawer);
+        mNavDrawer.setLayoutManager(new LinearLayoutManager(this));
+
+        aCircles.setOnItemClickListener(new CirclesAdapter.OnClickListener() {
             @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-                selectDrawerItem(menuItem);
-                return true;
+            public void onClick(Circle circle, int position) {
+                selectDrawerItem(position);
             }
         });
+
+        mNavDrawer.setAdapter(aCircles);
+        setupHeaderView();
     }
 
-    private void updateSidebarMenu() {
-        Menu circlesSubMenu = mNavDrawer.getMenu().findItem(R.id.navCircles).getSubMenu();
-        circlesSubMenu.clear();
+    private void setupHeaderView() {
+        View header = findViewById(R.id.nav_header);
 
-        for (int i = 0; i < mCircles.size(); i++) {
-            circlesSubMenu.add(0, i, Menu.NONE, mCircles.get(i).getName());
-        }
+        TextView tvName = (TextView) header.findViewById(R.id.tv_name);
+        tvName.setText(mUser.getName());
+
+        ImageView ivProfile = (ImageView) header.findViewById(R.id.iv_profile);
+        Picasso.with(this)
+                .load(mUser.getImageUrl())
+                .transform(new CircleTransformation(4, Color.WHITE))
+                .fit()
+                .centerCrop()
+                .into(ivProfile);
     }
 
     private void fetchCircles() {
-        QuipitApplication.getCurrentUser().getCircles(new CirclesResponseHandler() {
+        mUser.getCircles(new CirclesResponseHandler() {
             @Override
             public void onSuccess(List<Circle> circles) {
                 onCirclesFetched(circles);
@@ -148,8 +176,7 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
     private void onCirclesFetched(List<Circle> circles) {
         mCircles.clear();
         mCircles.addAll(circles);
-
-        updateSidebarMenu();
+        aCircles.notifyDataSetChanged();
     }
 
     private void setupNotificationToastBar() {
@@ -157,27 +184,11 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
         mNotificationBarNotificationText = (TextView) findViewById(R.id.toolbaNotificationText);
     }
 
-    private void selectDrawerItem(MenuItem menuItem) {
-        Fragment fragment;
+    private void selectDrawerItem(int position) {
+        Circle circle = mCircles.get(position);
+        Fragment circleFragment = ViewCircleFragment.newInstance(circle);
 
-        int itemId = menuItem.getItemId();
-        switch (itemId) {
-            case R.id.navNotifications:
-                fragment = new NotificationsFragment();
-                break;
-            default:
-                // If we end up here, the menu item selected was one of the user's circles
-                Circle circle = mCircles.get(itemId);
-                if (null == circle) {
-                    throw new RuntimeException("Attempted to select circle id " + itemId
-                            + " but it doesn't exist in the menu");
-                }
-
-                fragment = ViewCircleFragment.newInstance(circle);
-        }
-
-        menuItem.setChecked(true);
-        prepareFragment(fragment).commit();
+        prepareFragment(circleFragment).commit();
         mDrawerLayout.closeDrawers();
     }
 
@@ -268,8 +279,8 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
 
     private void onCircleCreated() {
         mCircles.clear();
-        mCircles.addAll(QuipitApplication.getCurrentUser().getCircles());
-        updateSidebarMenu();
+        mCircles.addAll(mUser.getCircles());
+        aCircles.notifyDataSetChanged();
         viewCircle(mCircles.get(mCircles.size() - 1));
     }
 

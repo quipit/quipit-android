@@ -6,9 +6,9 @@ import java.util.List;
 
 import it.quip.android.model.User;
 
-public class UsersArrayAdapter extends SearchArrayAdapter<User> {
+public class UsersSearchAdapter extends SearchArrayAdapter<User> {
 
-    public UsersArrayAdapter(Context context, List<User> users) {
+    public UsersSearchAdapter(Context context, List<User> users) {
         super(context, users);
     }
 

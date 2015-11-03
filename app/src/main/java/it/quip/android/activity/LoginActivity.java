@@ -49,6 +49,7 @@ public class LoginActivity extends BaseActivity {
         User.setUserForSession();
         Intent intent = new Intent(this, QuipitHomeActivity.class);
         startActivity(intent);
+        finish();
     }
 
     @Override

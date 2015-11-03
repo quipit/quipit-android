@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
+    android:layout_marginTop="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:ignore="MissingPrefix">
+    
+    <ImageView android:id="@+id/iv_avatar"
+        android:src="@drawable/quipit"
+        android:contentDescription="@string/description_avatar"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:layout_width="40dp"
+        android:layout_height="40dp" />
+
+    <TextView android:id="@+id/tv_name"
+        android:text="SF Crew"
+        android:textColor="@color/quipit_text"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        fontPath="fonts/Lato-Semibold.ttf" />
+
+</FrameLayout>

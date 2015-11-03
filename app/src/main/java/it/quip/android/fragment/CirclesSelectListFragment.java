@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.quip.android.QuipitApplication;
-import it.quip.android.adapter.CirclesArrayAdapter;
+import it.quip.android.adapter.CirclesSearchAdapter;
 import it.quip.android.adapter.SearchArrayAdapter;
 import it.quip.android.model.Circle;
 
@@ -20,11 +20,11 @@ public class CirclesSelectListFragment extends SearchListFragment<Circle> {
     }
 
     protected SearchArrayAdapter<Circle> getFilterAdapter(List<Circle> filteredValues) {
-        return new CirclesArrayAdapter(getContext(), filteredValues);
+        return new CirclesSearchAdapter(getContext(), filteredValues);
     }
 
     protected SearchArrayAdapter<Circle> getSelectAdapter(List<Circle> selectedValues) {
-        return new CirclesArrayAdapter(getContext(), selectedValues);
+        return new CirclesSearchAdapter(getContext(), selectedValues);
     }
 
     protected List<Circle> searchFor(String query) {
