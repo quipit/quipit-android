@@ -1,19 +1,21 @@
 package it.quip.android.adapter;
 
-import android.content.Context;
-
 import java.util.List;
 
 import it.quip.android.model.User;
 
 public class UsersArrayAdapter extends SearchArrayAdapter<User> {
 
-    public UsersArrayAdapter(Context context, List<User> users) {
-        super(context, users);
+    public UsersArrayAdapter(List<User> values) {
+        super(values);
     }
 
-    protected String getSearchName(User user) {
+    protected String getName(User user) {
         return user.getName();
+    }
+
+    protected String getImageUrl(User user) {
+        return user.getImageUrl();
     }
 
 }

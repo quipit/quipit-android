@@ -13,14 +13,14 @@ import it.quip.android.QuipitApplication;
 import it.quip.android.R;
 import it.quip.android.fragment.FriendSearchListFragment;
 import it.quip.android.fragment.QuipComposeFragment;
-import it.quip.android.fragment.SearchListFragment;
+import it.quip.android.fragment.SearchFragment;
 import it.quip.android.model.Circle;
 import it.quip.android.model.Quip;
 import it.quip.android.model.User;
 
 public class CreateQuipActivity
         extends BaseActivity
-        implements QuipComposeFragment.OnSearchFriend, SearchListFragment.OnSearchListChangedListener<User> {
+        implements QuipComposeFragment.OnSearchFriend, SearchFragment.OnSearchListChangedListener<User> {
 
     public static final String CREATED_QUIP_CIRCLE_ID = "CREATED_QUIP_CIRCLE_ID";
     private static final int SHARE_QUIP_REQUEST = 479;
@@ -33,7 +33,6 @@ public class CreateQuipActivity
     private void setupFragments() {
         mCreateQuipComposeFragment = QuipComposeFragment.newInstance();
         mFriendSearchListFragment = FriendSearchListFragment.newInstance();
-        mFriendSearchListFragment.setUseCustomInput(true);
         mFriendSearchListFragment.setOnSearchListChangedListener(this);
     }
 

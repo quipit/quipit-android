@@ -8,7 +8,7 @@ import android.widget.Button;
 import java.util.List;
 
 import it.quip.android.R;
-import it.quip.android.fragment.CirclesSelectListFragment;
+import it.quip.android.fragment.CirclesSearchGridFragment;
 import it.quip.android.model.Circle;
 
 public class ShareQuipActivity extends BaseActivity {
@@ -17,12 +17,12 @@ public class ShareQuipActivity extends BaseActivity {
     public static final String SELECTED_CIRCLES = "SELECTED_CIRCLES";
 
     private Button btPost;
-    private CirclesSelectListFragment mCirclesSelectListFragment;
+    private CirclesSearchGridFragment mCirclesSearchGridFragment;
 
     private static List<Circle> sCircles;
 
     private void setupDependencies() {
-        mCirclesSelectListFragment = CirclesSelectListFragment.newInstance();
+        mCirclesSearchGridFragment = CirclesSearchGridFragment.newInstance();
     }
 
     private void setupView() {
@@ -32,7 +32,7 @@ public class ShareQuipActivity extends BaseActivity {
 
             @Override
             public void onClick(View v) {
-                sCircles = mCirclesSelectListFragment.getSelectedValues();
+                sCircles = mCirclesSearchGridFragment.getSelectedValues();
                 finish();
                 overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left);
             }
@@ -42,7 +42,7 @@ public class ShareQuipActivity extends BaseActivity {
 
     private void showCircleSelectFragment() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fl_share_quip_circle_picker, mCirclesSelectListFragment);
+        ft.replace(R.id.fl_share_quip_circle_picker, mCirclesSearchGridFragment);
         ft.commit();
     }
 

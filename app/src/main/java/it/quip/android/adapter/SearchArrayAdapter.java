@@ -1,25 +1,43 @@
 package it.quip.android.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import com.parse.ParseObject;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import it.quip.android.R;
 
 
-public abstract class SearchArrayAdapter <T extends ParseObject> extends ArrayAdapter<T> {
+public abstract class SearchArrayAdapter <T extends ParseObject> extends RecyclerView.Adapter<SearchItemHolder> {
 
     private OnLongClickListener onLongClickListener;
+    private OnClickListener onClickListener;
+    private List<T> mValues;
 
-    public SearchArrayAdapter(Context context, List<T> values) {
-        super(context, 0, values);
+    protected abstract String getName(T value);
+
+    protected abstract String getImageUrl(T value);
+
+    public interface OnClickListener <T extends ParseObject> {
+        void onClick(int position, T value);
+    }
+
+    public interface OnLongClickListener <T extends ParseObject> {
+        boolean onLongClick(int position, T value);
+    }
+
+    public SearchArrayAdapter(List<T> values) {
+        mValues = values;
+    }
+
+    public void setOnClickListener(OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
     }
 
     public void setOnLongClickListener(OnLongClickListener onLongClickListener) {
@@ -27,46 +45,46 @@ public abstract class SearchArrayAdapter <T extends ParseObject> extends ArrayAd
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        T value = getItem(position);
+    public SearchItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
 
-        if (null == convertView) {
-            convertView = LayoutInflater.from(getContext())
-                    .inflate(R.layout.item_user, parent, false);
+        View contactView = inflater.inflate(R.layout.item_user, parent, false);
 
-            holder = new ViewHolder();
-            holder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
+        SearchItemHolder viewHolder = new SearchItemHolder(parent.getContext(), contactView);
+        return viewHolder;
+    }
 
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
+    @Override
+    public void onBindViewHolder(SearchItemHolder viewHolder, final int position) {
+        T value = mValues.get(position);
+        viewHolder.tvName.setText(getName(value));
+        Picasso.with(viewHolder.context).load(getImageUrl(value)).into(viewHolder.ivProfile);
 
-        holder.tvName.setText(getSearchName(value));
+        viewHolder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != onClickListener) {
+                    onClickListener.onClick(position, mValues.get(position));
+                }
+            }
+        });
 
-        convertView.setOnLongClickListener(new View.OnLongClickListener() {
+        viewHolder.layout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 if (onLongClickListener != null) {
-                    return onLongClickListener.onLongClick(position, getItem(position));
+                    return onLongClickListener.onLongClick(position, mValues.get(position));
                 }
 
                 return false;
             }
         });
-
-        return convertView;
     }
 
-    public interface OnLongClickListener <T extends ParseObject> {
-        boolean onLongClick(int position, T value);
+    @Override
+    public int getItemCount() {
+        return mValues.size();
     }
-
-    public class ViewHolder {
-        TextView tvName;
-    }
-
-    protected abstract String getSearchName(T value);
 
 }

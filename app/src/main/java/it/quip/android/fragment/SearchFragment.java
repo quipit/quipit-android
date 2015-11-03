@@ -3,73 +3,65 @@ package it.quip.android.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ListView;
-
-import com.parse.ParseObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import it.quip.android.R;
 import it.quip.android.adapter.SearchArrayAdapter;
-import it.quip.android.view.OverlayListView;
+import it.quip.android.model.BaseParseObject;
 
 
-public abstract class SearchListFragment<T extends ParseObject> extends Fragment {
+public abstract class SearchFragment <T extends BaseParseObject> extends Fragment {
 
-    public interface OnSearchListChangedListener <T extends ParseObject> {
+    public interface OnSearchListChangedListener <T extends BaseParseObject> {
         void onSelect(T object);
         void onUnselect(T object);
     }
 
     private EditText mEtSearch;
+    private RecyclerView mRvValues;
 
-    private List<T> mSearchValues;
-
-    private SearchArrayAdapter<T> mFilteredValuesAdapter;
-
+    private List<T> mValues;
     private List<T> mSelectedValues;
-    private SearchArrayAdapter<T> mSelectedValuesAdapter;
-
+    private List<T> mFilteredValues;
+    private SearchArrayAdapter<T> mFilteredAdapter;
     private OnSearchListChangedListener mOnSearchListChangedListener;
-
-    private boolean mUseCustomInput = false;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     public List<T> getSelectedValues() {
         return mSelectedValues;
-    }
-
-    public void setUseCustomInput(boolean useCustomInput) {
-        mUseCustomInput = useCustomInput;
     }
 
     public void setOnSearchListChangedListener(OnSearchListChangedListener mOnSearchListChangedListener) {
         this.mOnSearchListChangedListener = mOnSearchListChangedListener;
     }
 
-    public void search(String name) {
-        mFilteredValuesAdapter.clear();
-        mFilteredValuesAdapter.addAll(searchFor(name));
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loadSearchValues();
 
-        List<T> filteredValues = new ArrayList<>();
-        mFilteredValuesAdapter = getFilterAdapter(filteredValues);
-
         mSelectedValues = new ArrayList<>();
-        mSelectedValuesAdapter = getSelectAdapter(mSelectedValues);
+        mFilteredValues = new ArrayList<>();
 
-        mSelectedValuesAdapter.setOnLongClickListener(new SearchArrayAdapter.OnLongClickListener<T>() {
+        mFilteredAdapter = getAdapter(mFilteredValues);
+        mFilteredAdapter.setOnClickListener(new SearchArrayAdapter.OnClickListener<T>() {
+            @Override
+            public void onClick(int position, T value) {
+                selectValue(value);
+            }
+        });
+
+        mFilteredAdapter.setOnLongClickListener(new SearchArrayAdapter.OnLongClickListener<T>() {
             @Override
             public boolean onLongClick(int position, T value) {
                 unselectValue(value);
@@ -84,48 +76,50 @@ public abstract class SearchListFragment<T extends ParseObject> extends Fragment
         View v = inflater.inflate(R.layout.fragment_searchable_list, container, false);
 
         mEtSearch = (EditText) v.findViewById(R.id.et_search);
-        if (mUseCustomInput) {
-            mEtSearch.setVisibility(View.INVISIBLE);
-        } else {
-            setupSearchField();
-        }
+        setupSearchField();
 
-        OverlayListView valuesOverlay = (OverlayListView) v.findViewById(R.id.overlay_values);
-        valuesOverlay.setAdapter(mFilteredValuesAdapter);
-        valuesOverlay.setOnItemSelectedListener(new OverlayListView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(int position, View view) {
-                selectValue(mFilteredValuesAdapter.getItem(position));
-            }
-        });
-
-        ListView lvSelectedValues = (ListView) v.findViewById(R.id.lv_selected_values);
-        lvSelectedValues.setAdapter(mSelectedValuesAdapter);
-        if (mUseCustomInput) {
-            lvSelectedValues.setVisibility(View.INVISIBLE);
-        }
+        mRvValues = (RecyclerView) v.findViewById(R.id.rv_values);
+        mRvValues.setAdapter(mFilteredAdapter);
+        mRvValues.setLayoutManager(mLayoutManager);
 
         return v;
     }
 
-    private void selectValue(T value) {
-        Integer maxSelectCount = getMaxSelectCount();
-        if ((null != maxSelectCount) && (mSelectedValuesAdapter.getCount() >= maxSelectCount)) {
-            mSelectedValuesAdapter.remove(mSelectedValuesAdapter.getItem(0));
+    public void search(String name) {
+        mFilteredValues.clear();
+        if (name.isEmpty()) {
+            mFilteredValues.addAll(mValues);
+        } else {
+            mFilteredValues.addAll(searchFor(name));
         }
 
-        mSelectedValuesAdapter.add(value);
+        mFilteredAdapter.notifyDataSetChanged();
+    }
 
+    private void selectValue(T value) {
+        Integer maxSelectCount = getMaxSelectCount();
+        if ((null != maxSelectCount) && (mSelectedValues.size() >= maxSelectCount)) {
+            mSelectedValues.remove(0);
+        }
+
+        mSelectedValues.add(value);
+        //moveValueToTop(value);
         mEtSearch.setText("");
-        mFilteredValuesAdapter.clear();
 
         if (mOnSearchListChangedListener != null) {
             mOnSearchListChangedListener.onSelect(value);
         }
     }
 
+    private void moveValueToTop(T value) {
+        int previousLocation = mValues.indexOf(value);
+        mValues.remove(value);
+        mValues.add(0, value);
+        mFilteredAdapter.notifyItemMoved(previousLocation, 0);
+    }
+
     private void unselectValue(T value) {
-        mSelectedValuesAdapter.remove(value);
+        mSelectedValues.remove(value);
         if (mOnSearchListChangedListener != null) {
             mOnSearchListChangedListener.onUnselect(value);
         }
@@ -150,12 +144,18 @@ public abstract class SearchListFragment<T extends ParseObject> extends Fragment
         });
     }
 
+    protected void setLayoutManager(RecyclerView.LayoutManager layoutManager) {
+        this.mLayoutManager = layoutManager;
+    }
+
     protected List<T> getSearchValues() {
-        return mSearchValues;
+        return mValues;
     }
 
     protected void setSearchValues(List<T> searchValues) {
-        mSearchValues = searchValues;
+        mValues = searchValues;
+        mFilteredValues.addAll(mValues);
+        mFilteredAdapter.notifyDataSetChanged();
     }
 
     protected boolean alreadySelected(T value) {
@@ -164,9 +164,7 @@ public abstract class SearchListFragment<T extends ParseObject> extends Fragment
 
     protected abstract void loadSearchValues();
 
-    protected abstract SearchArrayAdapter<T> getFilterAdapter(List<T> filteredValues);
-
-    protected abstract SearchArrayAdapter<T> getSelectAdapter(List<T> selectedValues);
+    protected abstract SearchArrayAdapter<T> getAdapter(List<T> filteredValues);
 
     protected abstract List<T> searchFor(String query);
 

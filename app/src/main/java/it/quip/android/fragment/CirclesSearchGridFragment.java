@@ -1,5 +1,7 @@
 package it.quip.android.fragment;
 
+import android.support.v7.widget.GridLayoutManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,22 +11,25 @@ import it.quip.android.adapter.SearchArrayAdapter;
 import it.quip.android.model.Circle;
 
 
-public class CirclesSelectListFragment extends SearchListFragment<Circle> {
+public class CirclesSearchGridFragment extends SearchFragment<Circle> {
 
-    public static CirclesSelectListFragment newInstance() {
-        return new CirclesSelectListFragment();
+    private static final int GRID_WIDTH = 3;
+
+    public static CirclesSearchGridFragment newInstance() {
+        return new CirclesSearchGridFragment();
+    }
+
+    public CirclesSearchGridFragment() {
+        super();
+        setLayoutManager(new GridLayoutManager(getContext(), GRID_WIDTH));
     }
 
     protected void loadSearchValues() {
         setSearchValues(QuipitApplication.getCurrentUser().getCircles());
     }
 
-    protected SearchArrayAdapter<Circle> getFilterAdapter(List<Circle> filteredValues) {
-        return new CirclesArrayAdapter(getContext(), filteredValues);
-    }
-
-    protected SearchArrayAdapter<Circle> getSelectAdapter(List<Circle> selectedValues) {
-        return new CirclesArrayAdapter(getContext(), selectedValues);
+    protected SearchArrayAdapter<Circle> getAdapter(List<Circle> circles) {
+        return new CirclesArrayAdapter(circles);
     }
 
     protected List<Circle> searchFor(String query) {

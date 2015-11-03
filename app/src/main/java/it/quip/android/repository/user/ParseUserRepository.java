@@ -18,8 +18,7 @@ public class ParseUserRepository implements UserRepository {
 
     @Override
     public void getFriends(User user, final UsersResponseHandler handler) {
-        // TODO: Actually scope this to a user
-        ParseQuery.getQuery(User.class).findInBackground(new FindCallback<User>() {
+        ParseQuery.getQuery(User.class).whereNotEqualTo("objectId", user.getObjectId()).findInBackground(new FindCallback<User>() {
             @Override
             public void done(List<User> users, ParseException e) {
                 if (e != null) {

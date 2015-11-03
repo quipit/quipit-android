@@ -1,7 +1,5 @@
 package it.quip.android.adapter;
 
-import android.content.Context;
-
 import java.util.List;
 
 import it.quip.android.model.Circle;
@@ -9,12 +7,16 @@ import it.quip.android.model.Circle;
 
 public class CirclesArrayAdapter extends SearchArrayAdapter<Circle> {
 
-    public CirclesArrayAdapter(Context context, List<Circle> objects) {
-        super(context, objects);
+    public CirclesArrayAdapter(List<Circle> values) {
+        super(values);
     }
 
-    protected String getSearchName(Circle circle) {
+    protected String getName(Circle circle) {
         return circle.getName();
+    }
+
+    protected String getImageUrl(Circle circle) {
+        return circle.getAvatarImageURL();
     }
 
 }
