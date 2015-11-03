@@ -6,12 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.quip.android.QuipitApplication;
+import it.quip.android.adapter.ListSearchHolder;
 import it.quip.android.adapter.SearchArrayAdapter;
 import it.quip.android.adapter.UsersArrayAdapter;
 import it.quip.android.model.User;
 import it.quip.android.repository.user.UsersResponseHandler;
 
-public class FriendsSearchListFragment extends SearchFragment<User> {
+public class FriendsSearchListFragment extends SearchFragment<User, ListSearchHolder> {
 
     public static FriendsSearchListFragment newInstance() {
         return new FriendsSearchListFragment();
@@ -31,7 +32,7 @@ public class FriendsSearchListFragment extends SearchFragment<User> {
         });
     }
 
-    protected SearchArrayAdapter<User> getAdapter(List<User> filteredFriends) {
+    protected SearchArrayAdapter<User, ListSearchHolder> getAdapter(List<User> filteredFriends) {
         return new UsersArrayAdapter(filteredFriends);
     }
 

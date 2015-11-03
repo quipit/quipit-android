@@ -19,13 +19,14 @@ import com.squareup.picasso.Picasso;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
+import it.quip.android.activity.CreateQuipActivity;
 import it.quip.android.graphics.CircleTransformation;
 import it.quip.android.model.User;
 
 public class QuipComposeFragment extends Fragment {
 
     public interface OnSearchFriend {
-        void onSearchFriend(String text);
+        void onSearchFriend();
     }
 
     private LinearLayout mLlProfile;
@@ -33,7 +34,7 @@ public class QuipComposeFragment extends Fragment {
     private TextView mTvUserName;
     private EditText mEtQuipBody;
     private TextView mTvQuipCount;
-    private EditText mEtQuipSource;
+    private TextView mTvQuipSource;
 
     public static QuipComposeFragment newInstance() {
         return new QuipComposeFragment();
@@ -86,23 +87,15 @@ public class QuipComposeFragment extends Fragment {
         mTvQuipCount = (TextView) v.findViewById(R.id.tv_quip_create_count);
         mTvQuipCount.setText("0");
 
-        mEtQuipSource = (EditText) v.findViewById(R.id.et_quip_create_source);
-        mEtQuipSource.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                ((OnSearchFriend) getActivity()).onSearchFriend(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+        mTvQuipSource = (TextView) v.findViewById(R.id.et_quip_create_source);
+        mTvQuipSource.setOnClickListener(
+                new View.OnClickListener() {
+                     @Override
+                     public void onClick(View v) {
+                         ((CreateQuipActivity) getContext()).onSearchFriend();
+                     }
+                 }
+        );
     }
 
     public String getBody() {
@@ -110,8 +103,8 @@ public class QuipComposeFragment extends Fragment {
     }
 
     public void setSourceName(String body) {
-        mEtQuipSource.clearFocus();
-        mEtQuipSource.setText(body);
+        mTvQuipSource.clearFocus();
+        mTvQuipSource.setText(body);
     }
 
 }

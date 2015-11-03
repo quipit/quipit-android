@@ -16,10 +16,11 @@ import java.util.List;
 
 import it.quip.android.R;
 import it.quip.android.adapter.SearchArrayAdapter;
+import it.quip.android.adapter.SearchHolder;
 import it.quip.android.model.BaseParseObject;
 
 
-public abstract class SearchFragment <T extends BaseParseObject> extends Fragment {
+public abstract class SearchFragment <T extends BaseParseObject, U extends SearchHolder> extends Fragment {
 
     public interface OnSearchListChangedListener <T extends BaseParseObject> {
         void onSelect(T object);
@@ -32,7 +33,7 @@ public abstract class SearchFragment <T extends BaseParseObject> extends Fragmen
     private List<T> mValues;
     private List<T> mSelectedValues;
     private List<T> mFilteredValues;
-    private SearchArrayAdapter<T> mFilteredAdapter;
+    private SearchArrayAdapter<T, U> mFilteredAdapter;
     private OnSearchListChangedListener mOnSearchListChangedListener;
     private RecyclerView.LayoutManager mLayoutManager;
 
@@ -48,7 +49,6 @@ public abstract class SearchFragment <T extends BaseParseObject> extends Fragmen
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loadSearchValues();
 
         mSelectedValues = new ArrayList<>();
         mFilteredValues = new ArrayList<>();
@@ -68,6 +68,8 @@ public abstract class SearchFragment <T extends BaseParseObject> extends Fragmen
                 return true;
             }
         });
+
+        loadSearchValues();
     }
 
     @Nullable
@@ -164,7 +166,7 @@ public abstract class SearchFragment <T extends BaseParseObject> extends Fragmen
 
     protected abstract void loadSearchValues();
 
-    protected abstract SearchArrayAdapter<T> getAdapter(List<T> filteredValues);
+    protected abstract SearchArrayAdapter<T, U> getAdapter(List<T> filteredValues);
 
     protected abstract List<T> searchFor(String query);
 

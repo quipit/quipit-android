@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         />
 
     <TextView android:id="@+id/tv_search_name"
@@ -17,7 +17,17 @@
         android:padding="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/iv_search_pic"
-        android:layout_centerHorizontal="true"/>
+        android:layout_toRightOf="@id/iv_search_pic"
+        android:layout_centerVertical="true"
+        />
+
+    <ImageView
+        android:id="@+id/iv_search_checked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_unchecked"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        />
 
 </RelativeLayout>

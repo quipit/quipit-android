@@ -34,13 +34,12 @@
         android:layout_marginLeft="@dimen/standard_margin"
         />
 
-    <EditText
+    <TextView
         android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@id/et_quip_create_body"
         android:id="@+id/et_quip_create_source"
-        android:inputType="text"
         android:layout_marginRight="@dimen/standard_margin"
         android:hint="@string/quip_create_source"
         />

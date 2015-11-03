@@ -7,11 +7,12 @@ import java.util.List;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.adapter.CirclesArrayAdapter;
+import it.quip.android.adapter.GridSearchHolder;
 import it.quip.android.adapter.SearchArrayAdapter;
 import it.quip.android.model.Circle;
 
 
-public class CirclesSearchGridFragment extends SearchFragment<Circle> {
+public class CirclesSearchGridFragment extends SearchFragment<Circle, GridSearchHolder> {
 
     private static final int GRID_WIDTH = 3;
 
@@ -28,7 +29,7 @@ public class CirclesSearchGridFragment extends SearchFragment<Circle> {
         setSearchValues(QuipitApplication.getCurrentUser().getCircles());
     }
 
-    protected SearchArrayAdapter<Circle> getAdapter(List<Circle> circles) {
+    protected SearchArrayAdapter<Circle, GridSearchHolder> getAdapter(List<Circle> circles) {
         return new CirclesArrayAdapter(circles);
     }
 

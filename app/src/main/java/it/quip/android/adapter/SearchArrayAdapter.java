@@ -11,10 +11,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import it.quip.android.R;
 
-
-public abstract class SearchArrayAdapter <T extends ParseObject> extends RecyclerView.Adapter<SearchItemHolder> {
+public abstract class SearchArrayAdapter <T extends ParseObject, U extends SearchHolder> extends RecyclerView.Adapter<U> {
 
     private OnLongClickListener onLongClickListener;
     private OnClickListener onClickListener;
@@ -23,6 +21,8 @@ public abstract class SearchArrayAdapter <T extends ParseObject> extends Recycle
     protected abstract String getName(T value);
 
     protected abstract String getImageUrl(T value);
+
+    protected abstract U getViewHolder(LayoutInflater inflater, ViewGroup parent);
 
     public interface OnClickListener <T extends ParseObject> {
         void onClick(int position, T value);
@@ -45,18 +45,15 @@ public abstract class SearchArrayAdapter <T extends ParseObject> extends Recycle
     }
 
     @Override
-    public SearchItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public U onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View contactView = inflater.inflate(R.layout.item_user, parent, false);
-
-        SearchItemHolder viewHolder = new SearchItemHolder(parent.getContext(), contactView);
-        return viewHolder;
+        return getViewHolder(inflater, parent);
     }
 
     @Override
-    public void onBindViewHolder(SearchItemHolder viewHolder, final int position) {
+    public void onBindViewHolder(U viewHolder, final int position) {
         T value = mValues.get(position);
         viewHolder.tvName.setText(getName(value));
         Picasso.with(viewHolder.context).load(getImageUrl(value)).into(viewHolder.ivProfile);
