@@ -100,11 +100,12 @@ public abstract class SearchFragment <T extends BaseParseObject> extends Fragmen
         }
 
         mSelectedValues.add(value);
-        mEtSearch.setText("");
 
         if (mOnSearchListChangedListener != null) {
             mOnSearchListChangedListener.onSelect(value);
         }
+
+        mEtSearch.setText("");
     }
 
     private void unselectValue(T value) {

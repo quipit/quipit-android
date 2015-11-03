@@ -1,5 +1,6 @@
 package it.quip.android.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -32,9 +33,7 @@ public class ShareQuipActivity extends BaseActivity {
 
             @Override
             public void onClick(View v) {
-                sCircles = mCirclesSearchGridFragment.getSelectedValues();
-                finish();
-                overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left);
+                finishWithResult();
             }
 
         });
@@ -44,6 +43,14 @@ public class ShareQuipActivity extends BaseActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fl_share_quip_circle_picker, mCirclesSearchGridFragment);
         ft.commit();
+    }
+
+    private void finishWithResult() {
+        Intent i = new Intent();
+        setResult(RESULT_OK, i);
+        sCircles = mCirclesSearchGridFragment.getSelectedValues();
+        finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
     @Override

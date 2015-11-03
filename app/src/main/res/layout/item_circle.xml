@@ -6,7 +6,9 @@
     <FrameLayout
         android:id="@+id/fl_search"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        >
 
         <ImageView
             android:id="@+id/iv_search_pic"
@@ -32,7 +34,7 @@
         android:padding="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/fl_search"
+        android:layout_below="@id/fl_search"
         android:layout_centerHorizontal="true"
         />
 

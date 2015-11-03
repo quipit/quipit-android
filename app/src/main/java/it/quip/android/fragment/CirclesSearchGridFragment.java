@@ -13,7 +13,7 @@ import it.quip.android.model.Circle;
 
 public class CirclesSearchGridFragment extends SearchFragment<Circle> {
 
-    private static final int GRID_WIDTH = 3;
+    private static final int GRID_WIDTH = 2;
 
     public static CirclesSearchGridFragment newInstance() {
         return new CirclesSearchGridFragment();

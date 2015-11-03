@@ -1,6 +1,7 @@
 package it.quip.android.activity;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -57,9 +58,11 @@ public class SourceQuipActivity extends BaseActivity {
     }
 
     private void finishWithResult() {
+        Intent i = new Intent();
+        setResult(RESULT_OK, i);
         sSource = mFriendSearchListFragment.getSelectedValues().get(0);
         finish();
-        overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package it.quip.android.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 import it.quip.android.R;
+import it.quip.android.graphics.CircleTransformation;
 
 
 public abstract class SearchArrayAdapter <T extends ParseObject> extends RecyclerView.Adapter<SearchHolder> {
@@ -53,7 +55,7 @@ public abstract class SearchArrayAdapter <T extends ParseObject> extends Recycle
     public void onBindViewHolder(final SearchHolder viewHolder, final int position) {
         T value = mValues.get(position);
         viewHolder.tvName.setText(getName(value));
-        Picasso.with(viewHolder.context).load(getImageUrl(value)).into(viewHolder.ivProfile);
+        Picasso.with(viewHolder.context).load(getImageUrl(value)).transform(new CircleTransformation(4, Color.WHITE)).into(viewHolder.ivProfile);
 
         viewHolder.layout.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -84,7 +84,7 @@ public class CreateQuipActivity
                 setResult(RESULT_OK, i);
                 finish();
 
-                overridePendingTransition(R.anim.slide_down, R.anim.zoom_in);
+                overridePendingTransition(R.anim.zoom_in, R.anim.slide_down);
             } else if (requestCode == SOURCE_QUIP_REQUEST) {
                 User source = SourceQuipActivity.getSource();
                 if (null != source) {
