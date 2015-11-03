@@ -1,8 +1,6 @@
 package it.quip.android.adapter;
 
 
-import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,13 +30,9 @@ public class QuipsAdapter extends RecyclerView.Adapter<QuipsViewHolder> {
 
     @Override
     public QuipsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
-
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View contactView = inflater.inflate(R.layout.item_quip, parent, false);
-
-        QuipsViewHolder viewHolder = new QuipsViewHolder(parent.getContext(), contactView, mFragment);
-        return viewHolder;
+        return new QuipsViewHolder(parent.getContext(), contactView, mFragment);
     }
 
     @Override
@@ -56,8 +50,8 @@ public class QuipsAdapter extends RecyclerView.Adapter<QuipsViewHolder> {
             Picasso.with(viewHolder.mContext)
                     .load(quip.getAuthor().getImageUrl())
                     .fit()
-                    .centerCrop()
-                    .transform(new CircleTransformation(4, Color.WHITE))
+                    .centerInside()
+                    .transform(new CircleTransformation())
                     .into(viewHolder.mIvProfile);
 
         } catch (IllegalArgumentException illegalArgumentException) {
@@ -69,18 +63,17 @@ public class QuipsAdapter extends RecyclerView.Adapter<QuipsViewHolder> {
 
     private void setupViews(Quip quip, QuipsViewHolder viewHolder) {
         setupProfile(quip, viewHolder);
-        viewHolder.mTvQuipTimestamp.setText(FormatUtils.getRelativeTimeAgo(quip.getTimestamp()));
+        viewHolder.mTvQuipTimestamp.setText(FormatUtils.getLongRelativeTimeAgo(quip.getTimestamp()));
         viewHolder.mTvQuipBody.setText(quip.getText());
 
-        String sourceName;
         User source = quip.getSource();
         if (null == source) {
-            sourceName = "anon";
+            viewHolder.mTvQuipSourceUserName.setText("");
+            viewHolder.mIvQuipSource.setVisibility(View.GONE);
         } else {
-            sourceName = source.getName();
+            viewHolder.mTvQuipSourceUserName.setText(source.getName());
+            viewHolder.mIvQuipSource.setVisibility(View.VISIBLE);
         }
-
-        viewHolder.mTvQuipSourceUserName.setText(sourceName);
     }
 
 }

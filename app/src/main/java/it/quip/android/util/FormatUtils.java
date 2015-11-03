@@ -14,18 +14,25 @@ public class FormatUtils {
     private static final int SECOND_IN_MILLISECONDS = 1000;
     private static final String JUST_NOW = "just now";
 
+
+
     public static String getRelativeTimeAgo(long timeInMillis) {
-        return getRelativeTimeAgo(timeInMillis, System.currentTimeMillis());
+        return shortenDate(getLongRelativeTimeAgo(timeInMillis));
     }
 
-    private static String getRelativeTimeAgo(long timeInMillis, long relativeTo) {
-        if (relativeTo - timeInMillis <= SECOND_IN_MILLISECONDS) {
+    public static String getLongRelativeTimeAgo(long timeInMillis) {
+        long now = System.currentTimeMillis();
+
+        if (justNow(timeInMillis, now)) {
             return JUST_NOW;
         } else {
-            String relativeDateCreated = DateUtils.getRelativeTimeSpanString(
-                    timeInMillis, relativeTo, DateUtils.SECOND_IN_MILLIS).toString();
-            return shortenDate(relativeDateCreated);
+            return DateUtils.getRelativeTimeSpanString(
+                    timeInMillis, now, DateUtils.SECOND_IN_MILLIS).toString();
         }
+    }
+
+    private static boolean justNow(long timeInMillis, long relativeTo) {
+        return (relativeTo - timeInMillis) <= 5 * SECOND_IN_MILLISECONDS;
     }
 
     private static String shortenDate(String relativeDate) {

@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
@@ -86,6 +87,7 @@ public class RotatingImageView extends FrameLayout {
 
     private void updateViews() {
         rotateDrawables();
+        recycleCurrentImage();
         loadDrawable(getCurrentDrawable());
     }
 
@@ -107,6 +109,10 @@ public class RotatingImageView extends FrameLayout {
         ivNext.setImageResource(resId);
     }
 
+    private void recycleCurrentImage() {
+        ((BitmapDrawable) ivCurrent.getDrawable()).getBitmap().recycle();
+    }
+
     private void transitionViews() {
         ObjectAnimator fadeOut = ObjectAnimator.ofFloat(ivCurrent, View.ALPHA, 1, 0);
         ObjectAnimator fadeIn = ObjectAnimator.ofFloat(ivNext, View.ALPHA, 0, 1);
@@ -126,6 +132,7 @@ public class RotatingImageView extends FrameLayout {
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                recycleCurrentImage();
                 swapViews();
                 ivNext.setVisibility(INVISIBLE);
             }

@@ -1,48 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="@dimen/standard_margin"
-    android:layout_marginStart="@dimen/standard_margin"
-    android:layout_margin="15dp"
-    >
+    android:padding="15dp"
+    android:layout_marginTop="28dp"
+    android:layout_marginBottom="28dp"
+    tools:ignore="MissingPrefix">
 
-    <include
-        layout="@layout/profile_stub"
-        android:id="@+id/quip_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@id/quip_profile"
-        android:layout_alignBottom="@id/quip_profile"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/tv_quip_timestamp"
-        />
-
-    <TextView
+    <RelativeLayout android:id="@+id/rl_profile"
+        android:gravity="center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_quip_body"
-        android:layout_below="@id/quip_profile"
-        android:textSize="20sp"
-        />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
 
-    <TextView
+        <RelativeLayout android:id="@+id/rl_meta"
+            android:gravity="center"
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/iv_profile"
+            android:layout_toEndOf="@+id/iv_profile">
+
+            <TextView android:id="@+id/tv_user_name"
+                android:text="Jonathan Como"
+                android:textSize="14sp"
+                android:textColor="@color/quipit_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true" />
+
+            <TextView android:id="@+id/tv_quip_timestamp"
+                android:text="2 hours ago"
+                android:textSize="13sp"
+                android:textColor="@color/quipit_text_secondary"
+                android:gravity="center_vertical"
+                android:layout_below="@id/tv_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"/>
+
+        </RelativeLayout>
+
+        <ImageView android:id="@+id/iv_profile"
+            android:src="@mipmap/ic_launcher"
+            android:contentDescription="@string/description_profile"
+            android:layout_alignTop="@id/rl_meta"
+            android:layout_alignBottom="@id/rl_meta"
+            android:layout_width="28dp"
+            android:layout_height="28dp"/>
+
+    </RelativeLayout>
+
+    <TextView android:id="@+id/tv_quip_body"
+        android:text="Jean Claude Van Como deposited some darkness in the SF Sewers."
+        android:textSize="28sp"
+        android:textColor="@color/quipit_text"
+        android:padding="22dp"
+        android:gravity="center_horizontal"
+        android:layout_below="@id/rl_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        fontPath="fonts/Lato-Semibold.ttf" />
+
+    <TextView android:id="@+id/tv_quip_source_user_name"
+        android:text="Daniel Robert Buscaglia"
+        android:textColor="@color/quipit_text"
+        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_quip_body"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/tv_quip_source_user_name"
-        />
+        android:layout_alignParentEnd="true" />
+
+    <ImageView android:id="@+id/iv_quip_source"
+        android:src="@drawable/ic_quip_source"
+        android:layout_alignTop="@id/tv_quip_source_user_name"
+        android:layout_alignBottom="@id/tv_quip_source_user_name"
+        android:layout_toLeftOf="@id/tv_quip_source_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </RelativeLayout>
