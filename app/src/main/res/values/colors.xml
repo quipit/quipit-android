@@ -3,6 +3,8 @@
     <color name="quipit_main">#FD9927</color>
     <color name="quipit_pressed">#FFA641</color>
     <color name="quipit_alt">#FFFFFF</color>
+    <color name="quipit_text">#212121</color>
+    <color name="quipit_text_secondary">#727272</color>
 
     <color name="fb_blue">#3B5998</color>
     <color name="fb_blue_light">#8B9DC3</color>

@@ -16,13 +16,13 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,11 +55,11 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
 
     private List<Circle> mCircles;
     private CirclesAdapter aCircles;
+    private RecyclerView mNavDrawer;
 
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-    private ListView mNavDrawer;
     private RelativeLayout mNotificationBar;
     private TextView mNotificationBarNotificationText;
 
@@ -135,22 +135,22 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
     }
 
     private void setupDrawerContent() {
-        mNavDrawer = (ListView) findViewById(R.id.nav_drawer);
-        mNavDrawer.addHeaderView(inflateHeaderView());
-        mNavDrawer.setAdapter(aCircles);
-        mNavDrawer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mNavDrawer = (RecyclerView) findViewById(R.id.nav_drawer);
+        mNavDrawer.setLayoutManager(new LinearLayoutManager(this));
+
+        aCircles.setOnItemClickListener(new CirclesAdapter.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // The actual position is off by one because the header view is an "item" in the list
-                if (position > 0) {
-                    selectDrawerItem(position - 1);
-                }
+            public void onClick(Circle circle, int position) {
+                selectDrawerItem(position);
             }
         });
+
+        mNavDrawer.setAdapter(aCircles);
+        setupHeaderView();
     }
 
-    private View inflateHeaderView() {
-        View header = getLayoutInflater().inflate(R.layout.nav_header, mNavDrawer, false);
+    private void setupHeaderView() {
+        View header = findViewById(R.id.nav_header);
 
         TextView tvName = (TextView) header.findViewById(R.id.tv_name);
         tvName.setText(mUser.getName());
@@ -162,8 +162,6 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
                 .fit()
                 .centerCrop()
                 .into(ivProfile);
-
-        return header;
     }
 
     private void fetchCircles() {
@@ -176,8 +174,9 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
     }
 
     private void onCirclesFetched(List<Circle> circles) {
-        aCircles.clear();
-        aCircles.addAll(circles);
+        mCircles.clear();
+        mCircles.addAll(circles);
+        aCircles.notifyDataSetChanged();
     }
 
     private void setupNotificationToastBar() {
@@ -189,7 +188,6 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
         Circle circle = mCircles.get(position);
         Fragment circleFragment = ViewCircleFragment.newInstance(circle);
 
-        mNavDrawer.setItemChecked(position, true);
         prepareFragment(circleFragment).commit();
         mDrawerLayout.closeDrawers();
     }
@@ -280,8 +278,9 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
     }
 
     private void onCircleCreated() {
-        aCircles.clear();
-        aCircles.addAll(mUser.getCircles());
+        mCircles.clear();
+        mCircles.addAll(mUser.getCircles());
+        aCircles.notifyDataSetChanged();
         viewCircle(mCircles.get(mCircles.size() - 1));
     }
 

@@ -1,10 +1,10 @@
 package it.quip.android.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,44 +16,76 @@ import it.quip.android.R;
 import it.quip.android.graphics.CircleTransformation;
 import it.quip.android.model.Circle;
 
-public class CirclesAdapter extends ArrayAdapter<Circle> {
+public class CirclesAdapter extends RecyclerView.Adapter<CirclesAdapter.ViewHolder> {
+
+    public interface OnClickListener {
+        void onClick(Circle circle, int position);
+    }
+
+    private Context mContext;
+    private OnClickListener mListener;
+
+    private List<Circle> mCircles;
+
 
     public CirclesAdapter(Context context, List<Circle> circles) {
-        super(context, 0, circles);
+        mContext = context;
+        mCircles = circles;
+    }
+
+    public void setOnItemClickListener(OnClickListener listener) {
+        mListener = listener;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        Circle circle = getItem(position);
-        ViewHolder holder;
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View circleView = inflater.inflate(R.layout.item_circle, parent, false);
+        return new ViewHolder(circleView);
+    }
 
-        if (null == convertView) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_circle, parent, false);
-
-            holder = new ViewHolder();
-            holder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
-            holder.ivAvatar = (ImageView) convertView.findViewById(R.id.iv_avatar);
-
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
+    @Override
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+        Circle circle = mCircles.get(position);
 
         holder.tvName.setText(circle.getName());
+        holder.tvName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemClick(position);
+            }
+        });
 
-        Picasso.with(getContext())
+        Picasso.with(mContext)
                 .load(circle.getAvatarImageURL())
                 .transform(new CircleTransformation())
                 .fit()
                 .centerCrop()
                 .into(holder.ivAvatar);
-
-        return convertView;
     }
 
-    private class ViewHolder {
+    private void onItemClick(int position) {
+        if (mListener != null) {
+            mListener.onClick(mCircles.get(position), position);
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return mCircles.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
         public TextView tvName;
         public ImageView ivAvatar;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+
+            tvName = (TextView) itemView.findViewById(R.id.tv_name);
+            ivAvatar = (ImageView) itemView.findViewById(R.id.iv_avatar);
+        }
     }
 
 }
