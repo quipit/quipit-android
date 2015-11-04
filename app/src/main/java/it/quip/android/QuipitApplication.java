@@ -1,5 +1,6 @@
 package it.quip.android;
 
+import android.app.ActivityManager;
 import android.app.Application;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -25,6 +26,7 @@ public class QuipitApplication extends Application {
     private static CircleRepository sCircleRepo;
     private static UserRepository sUserRepo;
     public static NotificationManager sNotificationManager;
+    public static ActivityManager sActivityManager;
 
     @Override
     public void onCreate() {
@@ -46,6 +48,7 @@ public class QuipitApplication extends Application {
         ParseObject.registerSubclass(Circle.class);
         ParseObject.registerSubclass(Notification.class);
         sNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        sActivityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         ParseInstallation.getCurrentInstallation().saveInBackground();
     }
 
@@ -90,5 +93,7 @@ public class QuipitApplication extends Application {
     public static NotificationManager notificationManager() {
         return sNotificationManager;
     }
+
+    public static ActivityManager activityManager() { return sActivityManager; }
 
 }

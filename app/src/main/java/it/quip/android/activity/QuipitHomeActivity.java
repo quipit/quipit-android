@@ -98,7 +98,7 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-
+            QuipitApplication.notificationManager().cancelAll();
             if (Notification.NOTIFICATION_RECEIVED_ACTION.equals(action)) {
                 Notification notification = (Notification) intent.getExtras().get(Notification.MARSHALL_INTENT_KEY);
                 String sender = notification.getSenderUid();
