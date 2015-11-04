@@ -67,30 +67,38 @@ public class CreateQuipActivity
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
+    private void finishWithResult() {
+        List<Circle> selectedCircles = ShareQuipActivity.getCircles();
+        if (null != selectedCircles) {
+            createQuip(selectedCircles);
+        }
+
+        Intent i = new Intent();
+        if ((null != selectedCircles) && (selectedCircles.size() > 0)) {
+            i.putExtra(CREATED_QUIP_CIRCLE_ID, selectedCircles.get(0).getObjectId());
+        }
+
+        setResult(RESULT_OK, i);
+        finish();
+
+        overridePendingTransition(R.anim.zoom_in, R.anim.slide_down);
+    }
+
+    private void setSourceUser() {
+        User source = SourceQuipActivity.getSource();
+        if (null != source) {
+            mSource = source;
+            mCreateQuipComposeFragment.setSourceName(mSource.getName());
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             if (requestCode == SHARE_QUIP_REQUEST) {
-                List<Circle> selectedCircles = ShareQuipActivity.getCircles();
-                if (null != selectedCircles) {
-                    createQuip(selectedCircles);
-                }
-
-                Intent i = new Intent();
-                if (selectedCircles.size() > 0) {
-                    i.putExtra(CREATED_QUIP_CIRCLE_ID, selectedCircles.get(0).getObjectId());
-                }
-
-                setResult(RESULT_OK, i);
-                finish();
-
-                overridePendingTransition(R.anim.zoom_in, R.anim.slide_down);
+                finishWithResult();
             } else if (requestCode == SOURCE_QUIP_REQUEST) {
-                User source = SourceQuipActivity.getSource();
-                if (null != source) {
-                    mSource = source;
-                    mCreateQuipComposeFragment.setSourceName(mSource.getName());
-                }
+                setSourceUser();
             }
         }
 

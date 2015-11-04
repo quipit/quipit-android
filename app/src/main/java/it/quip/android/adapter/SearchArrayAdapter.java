@@ -2,10 +2,12 @@ package it.quip.android.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.parse.ParseObject;
 import com.squareup.picasso.Picasso;
@@ -56,6 +58,8 @@ public abstract class SearchArrayAdapter <T extends ParseObject> extends Recycle
         T value = mValues.get(position);
         viewHolder.tvName.setText(getName(value));
         Picasso.with(viewHolder.context).load(getImageUrl(value)).transform(new CircleTransformation(4, Color.WHITE)).into(viewHolder.ivProfile);
+        viewHolder.ivChecked.setImageDrawable(ContextCompat.getDrawable(viewHolder.context, R.drawable.ic_checked));
+        viewHolder.ivChecked.setColorFilter(ContextCompat.getColor(viewHolder.context, R.color.quipit_checked));
 
         viewHolder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,21 +83,29 @@ public abstract class SearchArrayAdapter <T extends ParseObject> extends Recycle
     private void setChecked(SearchHolder viewHolder, T value) {
         String uid = value.getObjectId();
         if (mSelected.contains(uid)) {
-            Picasso.with(viewHolder.context).load(R.drawable.ic_checked).into(viewHolder.ivChecked);
+            showChecked(viewHolder.ivChecked);
         } else {
-            Picasso.with(viewHolder.context).load(R.drawable.ic_unchecked).into(viewHolder.ivChecked);
+            hideChecked(viewHolder.ivChecked);
         }
     }
 
     private void toggleChecked(SearchHolder viewHolder, T value) {
         String uid = value.getObjectId();
         if (mSelected.contains(uid)) {
-            Picasso.with(viewHolder.context).load(R.drawable.ic_unchecked).into(viewHolder.ivChecked);
+            hideChecked(viewHolder.ivChecked);
             mSelected.remove(uid);
         } else {
-            Picasso.with(viewHolder.context).load(R.drawable.ic_checked).into(viewHolder.ivChecked);
+            showChecked(viewHolder.ivChecked);
             mSelected.add(uid);
         }
+    }
+
+    private void showChecked(ImageView iv) {
+        iv.setVisibility(View.VISIBLE);
+    }
+
+    private void hideChecked(ImageView iv) {
+        iv.setVisibility(View.INVISIBLE);
     }
 
 }
