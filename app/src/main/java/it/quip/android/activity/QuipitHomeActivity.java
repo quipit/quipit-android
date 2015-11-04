@@ -230,6 +230,11 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
             public void onCreateCircle() {
                 createCircle();
             }
+
+            @Override
+            public void onCreateQuipInCircle(Circle circle) {
+                // TODO: them thangs
+            }
         });
 
         prepareFragment(homeFragment, false).commit();
@@ -274,6 +279,7 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
     private void createCircle() {
         Intent intent = new Intent(this, CreateCircleActivity.class);
         startActivityForResult(intent, CREATE_CIRCLE_REQUEST);
+        overridePendingTransition(R.anim.slide_up, R.anim.zoom_out);
     }
 
     private void createQuip() {

@@ -114,6 +114,12 @@ public class CreateQuipActivity
         showComposeFragment();
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.zoom_in, R.anim.slide_down);
+    }
+
     public void createQuip(List<Circle> circles) {
         Quip quip = new Quip();
         quip.setText(mCreateQuipComposeFragment.getBody());

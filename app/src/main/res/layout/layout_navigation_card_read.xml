@@ -18,7 +18,7 @@
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/rickjames"
+                android:src="@drawable/quipit"
                 android:id="@+id/iv_notification_image"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"

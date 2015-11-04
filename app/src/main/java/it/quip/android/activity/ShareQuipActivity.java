@@ -50,7 +50,7 @@ public class ShareQuipActivity extends BaseActivity {
         setResult(RESULT_OK, i);
         sCircles = mCirclesSearchGridFragment.getSelectedValues();
         finish();
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        animateOut();
     }
 
     @Override
@@ -62,6 +62,15 @@ public class ShareQuipActivity extends BaseActivity {
         showCircleSelectFragment();
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        animateOut();
+    }
+
+    private void animateOut() {
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
     public static List<Circle> getCircles() {
         List<Circle> result = sCircles;
         sCircles = null;

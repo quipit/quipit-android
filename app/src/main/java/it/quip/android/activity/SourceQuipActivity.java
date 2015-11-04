@@ -62,7 +62,7 @@ public class SourceQuipActivity extends BaseActivity {
         setResult(RESULT_OK, i);
         sSource = mFriendSearchListFragment.getSelectedValues().get(0);
         finish();
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        animateOut();
     }
 
     @Override
@@ -72,6 +72,16 @@ public class SourceQuipActivity extends BaseActivity {
         setupDependencies();
         setupView();
         showFriendSelectFragment();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        animateOut();
+    }
+
+    private void animateOut() {
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
     public static User getSource() {

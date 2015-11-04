@@ -38,6 +38,12 @@ public class CreateCircleActivity extends BaseActivity
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.zoom_in, R.anim.slide_down);
+    }
+
     private void setupFragments() {
         Circle circle = new Circle();
         circle.addMember(QuipitApplication.getCurrentUser());
