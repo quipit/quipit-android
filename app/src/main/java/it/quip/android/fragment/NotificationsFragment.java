@@ -131,6 +131,4 @@ public class NotificationsFragment extends BaseFragment implements NotificationH
 
     }
 
-
-
 }
