@@ -1,8 +1,10 @@
 package it.quip.android.network;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
@@ -13,6 +15,8 @@ import com.parse.ParsePushBroadcastReceiver;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
@@ -82,27 +86,22 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
     }
 
     private void triggerBroadcastToActivity(Context context, Notification notification) {
+        ActivityManager am = QuipitApplication.activityManager();
+        List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
+        ComponentName componentInfo = taskInfo.get(0).topActivity;
         Intent intent = new Intent(context, LoginActivity.class);
         int requestID = (int) System.currentTimeMillis(); //unique requestID to differentiate between various notification with same NotifId
         int flags = PendingIntent.FLAG_CANCEL_CURRENT; // cancel old intent and create new one
         PendingIntent pIntent = PendingIntent.getActivity(context, requestID, intent, flags);
-        android.app.Notification mBuilder =
-                new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.drawable.quipit)
-                        .setContentTitle("Quipit")
-                        .setContentText(notification.getText())
-                        .setContentIntent(pIntent)
-                        .setAutoCancel(true)
-                        .build();
+        if(componentInfo.getPackageName().equalsIgnoreCase("it.quip.android")) {
 
+            Intent pupInt = new Intent(Notification.NOTIFICATION_RECEIVED_ACTION);
+            pupInt.setFlags(Notification.FLAG_NOTIFICATION_RECEIVED);
+            pupInt.setAction(Notification.NOTIFICATION_RECEIVED_ACTION);
+            pupInt.putExtra(Notification.MARSHALL_INTENT_KEY, notification);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(pupInt);
+        }
 
-        // mId allows you to update the notification later on.
-        QuipitApplication.notificationManager().notify(0, mBuilder);
-        Intent pupInt = new Intent(Notification.NOTIFICATION_RECEIVED_ACTION);
-        pupInt.setFlags(Notification.FLAG_NOTIFICATION_RECEIVED);
-        pupInt.setAction(Notification.NOTIFICATION_RECEIVED_ACTION);
-        pupInt.putExtra(Notification.MARSHALL_INTENT_KEY, notification);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(pupInt);
     }
 
 }
