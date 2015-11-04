@@ -19,8 +19,7 @@
         android:layout_alignParentBottom="true"
         android:background="@color/quipit_brand"
         android:textColor="@color/quipit_white"
-        android:text="@string/post_quip"
-        />
+        android:text="@string/post_quip" />
 
 </RelativeLayout>
 

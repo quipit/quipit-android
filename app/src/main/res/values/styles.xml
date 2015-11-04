@@ -23,7 +23,7 @@
 
     <style name="AppTheme.QuipItBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <!-- Support library compatibility -->
-        <item name="background">@color/quipit_brand</item>
+        <item name="background">@color/quipit_secondary_light</item>
     </style>
 
 </resources>

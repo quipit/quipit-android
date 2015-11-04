@@ -7,13 +7,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    fab:menu_colorNormal="@color/quipit_main"
-    fab:menu_colorPressed="@color/quipit_pressed"
+    fab:menu_colorNormal="@color/quipit_brand"
+    fab:menu_colorPressed="@color/quipit_brand_light"
     fab:menu_labels_ellipsize="end"
     fab:menu_labels_singleLine="true"
-    fab:menu_backgroundColor="#44ffffff"
-    app:menu_colorNormal="@color/quipit_brand"
-    app:menu_colorPressed="@color/quipit_brand_light">
+    fab:menu_backgroundColor="#44ffffff">
 
     <com.github.clans.fab.FloatingActionButton
         android:id="@+id/fab_circle_new"

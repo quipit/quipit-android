@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -7,16 +7,23 @@
     tools:context="it.quip.android.activity.CreateCircleActivity">
 
     <FrameLayout android:id="@+id/fl_circle_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <View
-        android:background="@android:color/darker_gray"
-        android:layout_width="wrap_content"
-        android:layout_height="1dp" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" />
 
     <FrameLayout android:id="@+id/fl_circle_friends"
-        android:layout_width="wrap_content"
+        android:layout_below="@id/fl_circle_info"
+        android:layout_above="@+id/btn_create_circle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-</LinearLayout>
+    <Button
+        android:id="@+id/btn_create_circle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/quipit_brand"
+        android:textColor="@color/quipit_white"
+        android:text="@string/action_create" />
+
+</RelativeLayout>
