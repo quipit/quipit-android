@@ -29,6 +29,7 @@ public class ViewCircleFragment extends BaseFragment {
         return circle.getName();
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

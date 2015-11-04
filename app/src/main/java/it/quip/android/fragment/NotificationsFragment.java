@@ -44,6 +44,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationH
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         mView = inflater.inflate(R.layout.fragment_notifications, container, false);
         attachNotificationAdapter(mView);
         attachSwipeContainer(mView);
@@ -53,6 +54,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationH
     @Override
     public void onResult(List<Notification> notifications) {
         setNotifications(notifications);
+        hideProgressIndicators();
     }
 
     public void setNotifications(List<Notification> notifications) {
@@ -96,6 +98,8 @@ public class NotificationsFragment extends BaseFragment implements NotificationH
     }
 
     public void refreshNotifications() {
+        showProcessIndicators();
+        Notification.queryNotifcations(this);
         MarkCurrentAsReadAndRefreshNotifications job = new MarkCurrentAsReadAndRefreshNotifications();
         MarkAndRefreshJobData jobData = new MarkAndRefreshJobData(mNotifications, this);
         job.execute(jobData);
