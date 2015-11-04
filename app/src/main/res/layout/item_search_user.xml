@@ -1,33 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_marginBottom="12dp">
 
     <ImageView
         android:id="@+id/iv_search_pic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_centerVertical="true"
-        />
+        android:src="@mipmap/ic_launcher"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_centerVertical="true" />
 
     <TextView android:id="@+id/tv_search_name"
         android:textSize="16sp"
-        android:textColor="@android:color/black"
-        android:padding="10dp"
+        android:textColor="@color/quipit_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/iv_search_pic"
-        android:layout_centerVertical="true"
-        />
+        android:layout_toEndOf="@id/iv_search_pic"
+        android:layout_centerVertical="true" />
 
     <ImageView
         android:id="@+id/iv_search_checked"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:src="@drawable/ic_unchecked"
+        android:layout_marginRight="12dp"
+        android:layout_marginEnd="12dp"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        />
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true" />
 
 </RelativeLayout>

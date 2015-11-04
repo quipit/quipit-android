@@ -1,5 +1,9 @@
 package it.quip.android.adapter;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
@@ -7,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 
 import com.parse.ParseObject;
@@ -21,6 +27,8 @@ import it.quip.android.graphics.CircleTransformation;
 
 
 public abstract class SearchArrayAdapter <T extends ParseObject> extends RecyclerView.Adapter<SearchHolder> {
+
+    public final static int CHECKED_ANIMATION_DURATION = 200;
 
     private OnClickListener onClickListener;
     private List<T> mValues;
@@ -50,7 +58,7 @@ public abstract class SearchArrayAdapter <T extends ParseObject> extends Recycle
     public SearchHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        mSelected = new HashSet<String>();
+        mSelected = new HashSet<>();
 
         return getViewHolder(inflater, parent);
     }
@@ -85,9 +93,9 @@ public abstract class SearchArrayAdapter <T extends ParseObject> extends Recycle
     private void setChecked(SearchHolder viewHolder, T value) {
         String uid = value.getObjectId();
         if (mSelected.contains(uid) || isPreselected(value)) {
-            showChecked(viewHolder.ivChecked);
+            viewHolder.ivChecked.setVisibility(View.VISIBLE);
         } else {
-            hideChecked(viewHolder.ivChecked);
+            viewHolder.ivChecked.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -102,16 +110,45 @@ public abstract class SearchArrayAdapter <T extends ParseObject> extends Recycle
         }
     }
 
-    private void showChecked(ImageView iv) {
-        iv.setVisibility(View.VISIBLE);
-    }
+    private void showChecked(final ImageView iv) {
+        ObjectAnimator appear = ObjectAnimator.ofFloat(iv, View.ALPHA, 0, 1);
+        ObjectAnimator zoomInX = ObjectAnimator.ofFloat(iv, View.SCALE_X, 1.3f, 1.0f);
+        ObjectAnimator zoomInY = ObjectAnimator.ofFloat(iv, View.SCALE_Y, 1.3f, 1.0f);
 
-    private void hideChecked(ImageView iv) {
-        iv.setVisibility(View.INVISIBLE);
+        AnimatorSet zoomOutDisappear = new AnimatorSet();
+        zoomOutDisappear.setDuration(CHECKED_ANIMATION_DURATION);
+        zoomOutDisappear.setInterpolator(new AccelerateInterpolator());
+        zoomOutDisappear.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                iv.setVisibility(View.VISIBLE);
+            }
+        });
+
+        zoomOutDisappear.play(appear).with(zoomInX).with(zoomInY);
+        zoomOutDisappear.start();
     }
 
     private boolean isPreselected(T value) {
         return (null != mPreselectedValues) && (mPreselectedValues.contains(value.getObjectId()));
     }
 
+    private void hideChecked(final ImageView iv) {
+        ObjectAnimator disappear = ObjectAnimator.ofFloat(iv, View.ALPHA, 1, 0);
+        ObjectAnimator zoomOutX = ObjectAnimator.ofFloat(iv, View.SCALE_X, 1.0f, 1.3f);
+        ObjectAnimator zoomOutY = ObjectAnimator.ofFloat(iv, View.SCALE_Y, 1.0f, 1.3f);
+
+        AnimatorSet zoomOutDisappear = new AnimatorSet();
+        zoomOutDisappear.setDuration(CHECKED_ANIMATION_DURATION);
+        zoomOutDisappear.setInterpolator(new DecelerateInterpolator());
+        zoomOutDisappear.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                iv.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        zoomOutDisappear.play(disappear).with(zoomOutX).with(zoomOutY);
+        zoomOutDisappear.start();
+    }
 }
