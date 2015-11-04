@@ -5,8 +5,12 @@
         <!-- Customize your theme here. -->
         <item name="actionBarStyle">@style/AppTheme.QuipItBar</item>
 
-        <item name="background">@color/quipit_alt</item>
-        <item name="android:windowBackground">@color/quipit_alt</item>
+        <item name="background">@color/quipit_white</item>
+        <item name="android:windowBackground">@color/quipit_white</item>
+
+        <item name="colorPrimary">@color/quipit_secondary_light</item>
+        <item name="colorPrimaryDark">@color/quipit_secondary_dark</item>
+        <item name="colorAccent">@color/quipit_brand</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="AppTheme">
@@ -19,7 +23,7 @@
 
     <style name="AppTheme.QuipItBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <!-- Support library compatibility -->
-        <item name="background">@color/quipit_main</item>
+        <item name="background">@color/quipit_secondary_light</item>
     </style>
 
 </resources>

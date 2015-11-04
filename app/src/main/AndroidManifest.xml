@@ -81,7 +81,8 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".activity.CreateCircleActivity"
-            android:label="@string/title_create_circle" >
+            android:label="@string/title_create_circle"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".activity.CreateQuipActivity"

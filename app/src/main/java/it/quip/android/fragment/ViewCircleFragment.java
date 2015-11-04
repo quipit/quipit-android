@@ -3,6 +3,7 @@ package it.quip.android.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,7 @@ import it.quip.android.R;
 import it.quip.android.activity.QuipitHomeActivity;
 import it.quip.android.model.Circle;
 
-public class ViewCircleFragment extends BaseFragment {
+public class ViewCircleFragment extends Fragment {
 
     private static final String CIRCLE = "it.quip.android.CIRCLE";
 
@@ -24,12 +25,6 @@ public class ViewCircleFragment extends BaseFragment {
         fragment.setArguments(args);
         return fragment;
     }
-
-    @Override
-    public CharSequence getTitle() {
-        return circle.getName();
-    }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

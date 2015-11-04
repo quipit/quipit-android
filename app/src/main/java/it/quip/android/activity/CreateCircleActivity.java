@@ -6,8 +6,8 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
@@ -30,9 +30,7 @@ public class CreateCircleActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_circle);
 
-        pdUploading = new ProgressDialog(this, DialogFragment.STYLE_NO_TITLE);
-        pdUploading.setCancelable(false);
-
+        setupViews();
         if (null == savedInstanceState) {
             setupFragments();
         }
@@ -42,6 +40,19 @@ public class CreateCircleActivity extends BaseActivity
     public void onBackPressed() {
         finish();
         animateOut();
+    }
+
+    private void setupViews() {
+        pdUploading = new ProgressDialog(this, DialogFragment.STYLE_NO_TITLE);
+        pdUploading.setCancelable(false);
+
+        Button btnCreate = (Button) findViewById(R.id.btn_create_circle);
+        btnCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createCircle();
+            }
+        });
     }
 
     private void setupFragments() {
@@ -58,23 +69,6 @@ public class CreateCircleActivity extends BaseActivity
         ft.replace(R.id.fl_circle_info, circleHeaderFragment);
         ft.replace(R.id.fl_circle_friends, friendsSearchListFragment);
         ft.commit();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_create_circle, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.miCreateCircle:
-                createCircle();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private void createCircle() {

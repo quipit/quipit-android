@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="quipit_main">#FD9927</color>
-    <color name="quipit_pressed">#FFA641</color>
-    <color name="quipit_alt">#FFFFFF</color>
+    <color name="quipit_brand">#FD9927</color>
+    <color name="quipit_brand_light">#FFA641</color>
+    <color name="quipit_white">#FFFFFF</color>
+    <color name="quipit_secondary_light">#F0F0F0</color>
+    <color name="quipit_secondary">#CACACA</color>
+    <color name="quipit_secondary_dark">#BDBDBD</color>
     <color name="quipit_checked">#3BD93D</color>
     <color name="quipit_text">#212121</color>
     <color name="quipit_text_secondary">#727272</color>
