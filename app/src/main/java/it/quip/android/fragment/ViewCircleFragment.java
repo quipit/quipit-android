@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import it.quip.android.R;
+import it.quip.android.activity.QuipitHomeActivity;
 import it.quip.android.model.Circle;
 
 public class ViewCircleFragment extends BaseFragment {
@@ -47,6 +48,7 @@ public class ViewCircleFragment extends BaseFragment {
     private void setupFragments() {
         CircleHeaderFragment circleHeader = CircleHeaderFragment.newInstance(circle);
         CircleFeedFragment circleFeed = CircleFeedFragment.newInstance(circle);
+        circleFeed.setOnActionRequestedListener(((QuipitHomeActivity) getContext()).getOnActionRequestedListener());
 
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fl_header, circleHeader)

@@ -31,8 +31,8 @@ public class FriendsSearchListFragment extends SearchFragment<User> {
         });
     }
 
-    protected SearchArrayAdapter<User> getAdapter(List<User> filteredFriends) {
-        return new UsersSearchAdapter(filteredFriends);
+    protected SearchArrayAdapter<User> getAdapter(List<User> filteredFriends, List<String> preselectedIds) {
+        return new UsersSearchAdapter(filteredFriends, preselectedIds);
     }
 
     protected List<User> searchFor(String name) {

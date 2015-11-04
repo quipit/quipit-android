@@ -38,6 +38,12 @@ public class CreateCircleActivity extends BaseActivity
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        animateOut();
+    }
+
     private void setupFragments() {
         Circle circle = new Circle();
         circle.addMember(QuipitApplication.getCurrentUser());
@@ -106,6 +112,7 @@ public class CreateCircleActivity extends BaseActivity
 
         setResult(RESULT_OK, data);
         finish();
+        animateOut();
     }
 
     public void onSelect(User friend) {
@@ -123,5 +130,10 @@ public class CreateCircleActivity extends BaseActivity
 
     private void hideProgressDialog() {
         pdUploading.hide();
+    }
+
+    private void animateOut() {
+        pdUploading.dismiss();
+        overridePendingTransition(R.anim.zoom_in, R.anim.slide_down);
     }
 }
