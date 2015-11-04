@@ -11,8 +11,8 @@ import it.quip.android.model.User;
 
 public class UsersSearchAdapter extends SearchArrayAdapter<User> {
 
-    public UsersSearchAdapter(List<User> users) {
-        super(users);
+    public UsersSearchAdapter(List<User> users, List<String> preselectedIds) {
+        super(users, preselectedIds);
     }
 
     protected String getName(User user) {

@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.quip.android.R;
@@ -14,16 +15,14 @@ import it.quip.android.model.Circle;
 
 public class ShareQuipActivity extends BaseActivity {
 
-    public static final int SHARE_QUIP_RESULT = 1111;
-    public static final String SELECTED_CIRCLES = "SELECTED_CIRCLES";
-
     private Button btPost;
     private CirclesSearchGridFragment mCirclesSearchGridFragment;
+    private String mComposeCircleId;
 
     private static List<Circle> sCircles;
 
     private void setupDependencies() {
-        mCirclesSearchGridFragment = CirclesSearchGridFragment.newInstance();
+        mCirclesSearchGridFragment = CirclesSearchGridFragment.newInstance(new ArrayList<String>(){{ add(mComposeCircleId); }});
     }
 
     private void setupView() {
@@ -57,6 +56,7 @@ public class ShareQuipActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mComposeCircleId = getIntent().getStringExtra(CreateQuipActivity.COMPOSE_QUIP_CIRCLE_ID);
         setupDependencies();
         setupView();
         showCircleSelectFragment();

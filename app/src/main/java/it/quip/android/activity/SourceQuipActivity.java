@@ -4,8 +4,6 @@ package it.quip.android.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
-import android.widget.Button;
 
 import it.quip.android.R;
 import it.quip.android.fragment.FriendSearchListFragment;
@@ -15,10 +13,6 @@ import it.quip.android.model.User;
 
 public class SourceQuipActivity extends BaseActivity {
 
-    public static final int SOURCE_QUIP_RESULT = 1112;
-    public static final String SELECTED_FRIEND = "SELECTED_FRIEND";
-
-    private Button btPost;
     private FriendSearchListFragment mFriendSearchListFragment;
 
     private static User sSource;
@@ -40,15 +34,6 @@ public class SourceQuipActivity extends BaseActivity {
 
     private void setupView() {
         setContentView(R.layout.activity_source_quip);
-        btPost = (Button) findViewById(R.id.bt_source_quip_post);
-        btPost.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                finishWithResult();
-            }
-
-        });
     }
 
     private void showFriendSelectFragment() {
@@ -81,7 +66,7 @@ public class SourceQuipActivity extends BaseActivity {
     }
 
     private void animateOut() {
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        overridePendingTransition(R.anim.hold, R.anim.slide_down);
     }
 
     public static User getSource() {

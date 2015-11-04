@@ -41,7 +41,7 @@ public class CreateCircleActivity extends BaseActivity
     @Override
     public void onBackPressed() {
         finish();
-        overridePendingTransition(R.anim.zoom_in, R.anim.slide_down);
+        animateOut();
     }
 
     private void setupFragments() {
@@ -112,6 +112,7 @@ public class CreateCircleActivity extends BaseActivity
 
         setResult(RESULT_OK, data);
         finish();
+        animateOut();
     }
 
     public void onSelect(User friend) {
@@ -129,5 +130,10 @@ public class CreateCircleActivity extends BaseActivity
 
     private void hideProgressDialog() {
         pdUploading.hide();
+    }
+
+    private void animateOut() {
+        pdUploading.dismiss();
+        overridePendingTransition(R.anim.zoom_in, R.anim.slide_down);
     }
 }

@@ -1,8 +1,5 @@
 package it.quip.android.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorListenerAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -63,35 +59,24 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private RelativeLayout mNotificationBar;
-
     private ProgressBar mProgressBar;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quipit_home);
+    private OnActionRequestedListener mOnActionRequestedListener = new OnActionRequestedListener() {
+        @Override
+        public void onCreateQuip() {
+            createQuip(null);
+        }
 
-        mUser = QuipitApplication.getCurrentUser();
-        mCircles = new ArrayList<>();
-        aCircles = new CirclesAdapter(this, mCircles);
+        @Override
+        public void onCreateCircle() {
+            createCircle();
+        }
 
-        mProgressBar = (ProgressBar) findViewById(R.id.pbProgressAction);
-        registerBroadcastReceivers();
-        setupViews();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // Refresh the current user when coming and going between activities
-        mUser = QuipitApplication.getCurrentUser();
-    }
-
-    private void registerBroadcastReceivers() {
-        LocalBroadcastManager.getInstance(this).registerReceiver(mNotificationReceiver,
-                new IntentFilter(Notification.NOTIFICATION_RECEIVED_ACTION));
-    }
+        @Override
+        public void onCreateQuipInCircle(Circle circle) {
+            createQuip(circle);
+        }
+    };
 
     private final BroadcastReceiver mNotificationReceiver = new BroadcastReceiver() {
 
@@ -99,6 +84,7 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             QuipitApplication.notificationManager().cancelAll();
+
             if (Notification.NOTIFICATION_RECEIVED_ACTION.equals(action)) {
                 Notification notification = (Notification) intent.getExtras().get(Notification.MARSHALL_INTENT_KEY);
                 String sender = notification.getSenderUid();
@@ -109,16 +95,14 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
         }
     };
 
-    @Override
-    protected void onDestroy() {
-        if(mNotificationReceiver != null) {
-            LocalBroadcastManager.getInstance(this).unregisterReceiver(mNotificationReceiver);
-        }
-        super.onDestroy();
+    private void registerBroadcastReceivers() {
+        LocalBroadcastManager.getInstance(this).registerReceiver(mNotificationReceiver,
+                new IntentFilter(Notification.NOTIFICATION_RECEIVED_ACTION));
     }
 
-
     private void setupViews() {
+        mProgressBar = (ProgressBar) findViewById(R.id.pbProgressAction);
+
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
@@ -220,43 +204,64 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
     private void displayDefaultQuipStream() {
         // TODO: We shouldn't be creating a new fragment each time. We should manage these
         HomeFeedFragment homeFragment = new HomeFeedFragment();
-        homeFragment.setOnActionRequestedListener(new OnActionRequestedListener() {
-            @Override
-            public void onCreateQuip() {
-                createQuip();
-            }
-
-            @Override
-            public void onCreateCircle() {
-                createCircle();
-            }
-
-            @Override
-            public void onCreateQuipInCircle(Circle circle) {
-                // TODO: them thangs
-            }
-        });
+        homeFragment.setOnActionRequestedListener(mOnActionRequestedListener);
 
         prepareFragment(homeFragment, false).commit();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_quipit_home, menu);
-        return true;
+    private void onCircleCreated() {
+        mCircles.clear();
+        mCircles.addAll(mUser.getCircles());
+        aCircles.notifyDataSetChanged();
+        viewCircle(mCircles.get(mCircles.size() - 1));
+    }
+
+    private void viewCircle(Circle circle) {
+        prepareFragment(ViewCircleFragment.newInstance(circle)).commitAllowingStateLoss();
+    }
+
+    private void createCircle() {
+        Intent intent = new Intent(this, CreateCircleActivity.class);
+        startActivityForResult(intent, CREATE_CIRCLE_REQUEST);
+        overridePendingTransition(R.anim.slide_up, R.anim.zoom_out);
+    }
+
+    private void createQuip(Circle fromCircle) {
+        Intent intent = new Intent(this, CreateQuipActivity.class);
+        if (null != fromCircle) {
+            intent.putExtra(CreateQuipActivity.COMPOSE_QUIP_CIRCLE_ID, fromCircle.getObjectId());
+        }
+        startActivityForResult(intent, CREATE_QUIP_REQUEST);
+        overridePendingTransition(R.anim.slide_up, R.anim.zoom_out);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-
-
+    protected void onDestroy() {
+        if(mNotificationReceiver != null) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mNotificationReceiver);
         }
+        super.onDestroy();
+    }
 
-        return super.onOptionsItemSelected(item);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_quipit_home);
+
+        mUser = QuipitApplication.getCurrentUser();
+        mCircles = new ArrayList<>();
+        aCircles = new CirclesAdapter(this, mCircles);
+
+        registerBroadcastReceivers();
+        setupViews();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Refresh the current user when coming and going between activities
+        mUser = QuipitApplication.getCurrentUser();
     }
 
     @Override
@@ -276,33 +281,27 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
         }
     }
 
-    private void createCircle() {
-        Intent intent = new Intent(this, CreateCircleActivity.class);
-        startActivityForResult(intent, CREATE_CIRCLE_REQUEST);
-        overridePendingTransition(R.anim.slide_up, R.anim.zoom_out);
-    }
-
-    private void createQuip() {
-        Intent intent = new Intent(this, CreateQuipActivity.class);
-        startActivityForResult(intent, CREATE_QUIP_REQUEST);
-        overridePendingTransition(R.anim.slide_up, R.anim.zoom_out);
-    }
-
-    private void onCircleCreated() {
-        mCircles.clear();
-        mCircles.addAll(mUser.getCircles());
-        aCircles.notifyDataSetChanged();
-        viewCircle(mCircles.get(mCircles.size() - 1));
-    }
-
-    private void viewCircle(Circle circle) {
-        prepareFragment(ViewCircleFragment.newInstance(circle)).commitAllowingStateLoss();
-    }
-
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         mDrawerToggle.syncState();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_quipit_home, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -314,6 +313,10 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
     @Override
     public void clickedTag(CharSequence tag) {
         Toast.makeText(this, tag.toString(), Toast.LENGTH_LONG).show();
+    }
+
+    public OnActionRequestedListener getOnActionRequestedListener() {
+        return mOnActionRequestedListener;
     }
 
     public void onNotificationToast(Notification notification) {

@@ -11,7 +11,6 @@ import java.util.List;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
-import it.quip.android.fragment.FriendSearchListFragment;
 import it.quip.android.fragment.QuipComposeFragment;
 import it.quip.android.fragment.SearchFragment;
 import it.quip.android.model.Circle;
@@ -22,21 +21,21 @@ public class CreateQuipActivity
         extends BaseActivity
         implements QuipComposeFragment.OnSearchFriend, SearchFragment.OnSearchListChangedListener<User> {
 
+    public static final String COMPOSE_QUIP_CIRCLE_ID = "COMPOSE_QUIP_CIRCLE_ID";
     public static final String CREATED_QUIP_CIRCLE_ID = "CREATED_QUIP_CIRCLE_ID";
 
     private static final int SHARE_QUIP_REQUEST = 479;
     private static final int SOURCE_QUIP_REQUEST = 499;
 
     private QuipComposeFragment mCreateQuipComposeFragment;
-    private FriendSearchListFragment mFriendSearchListFragment;
+    private String mComposeCircleId;
 
     private Button mBtShare;
     private User mSource;
 
     private void setupFragments() {
+        mComposeCircleId = getIntent().getStringExtra(COMPOSE_QUIP_CIRCLE_ID);
         mCreateQuipComposeFragment = QuipComposeFragment.newInstance();
-        mFriendSearchListFragment = FriendSearchListFragment.newInstance();
-        mFriendSearchListFragment.setOnSearchListChangedListener(this);
     }
 
     private void setupView() {
@@ -58,11 +57,15 @@ public class CreateQuipActivity
     private void showSourceFragment() {
         Intent i = new Intent(CreateQuipActivity.this, SourceQuipActivity.class);
         startActivityForResult(i, SOURCE_QUIP_REQUEST);
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        overridePendingTransition(R.anim.slide_up, R.anim.hold);
     }
 
     private void showShareFragment() {
         Intent i = new Intent(CreateQuipActivity.this, ShareQuipActivity.class);
+        if (null != mComposeCircleId) {
+            i.putExtra(COMPOSE_QUIP_CIRCLE_ID, mComposeCircleId);
+        }
+
         startActivityForResult(i, SHARE_QUIP_REQUEST);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }

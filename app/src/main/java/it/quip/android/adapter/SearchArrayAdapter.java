@@ -25,6 +25,7 @@ public abstract class SearchArrayAdapter <T extends ParseObject> extends Recycle
     private OnClickListener onClickListener;
     private List<T> mValues;
     private Set<String> mSelected;
+    private List<String> mPreselectedValues;
 
     protected abstract String getName(T value);
 
@@ -36,8 +37,9 @@ public abstract class SearchArrayAdapter <T extends ParseObject> extends Recycle
         void onClick(int position, T value);
     }
 
-    public SearchArrayAdapter(List<T> values) {
+    public SearchArrayAdapter(List<T> values, List<String> preselectedValues) {
         mValues = values;
+        mPreselectedValues = preselectedValues;
     }
 
     public void setOnClickListener(OnClickListener onClickListener) {
@@ -82,7 +84,7 @@ public abstract class SearchArrayAdapter <T extends ParseObject> extends Recycle
 
     private void setChecked(SearchHolder viewHolder, T value) {
         String uid = value.getObjectId();
-        if (mSelected.contains(uid)) {
+        if (mSelected.contains(uid) || isPreselected(value)) {
             showChecked(viewHolder.ivChecked);
         } else {
             hideChecked(viewHolder.ivChecked);
@@ -106,6 +108,10 @@ public abstract class SearchArrayAdapter <T extends ParseObject> extends Recycle
 
     private void hideChecked(ImageView iv) {
         iv.setVisibility(View.INVISIBLE);
+    }
+
+    private boolean isPreselected(T value) {
+        return (null != mPreselectedValues) && (mPreselectedValues.contains(value.getObjectId()));
     }
 
 }

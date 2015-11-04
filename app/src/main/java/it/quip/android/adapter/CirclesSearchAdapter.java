@@ -12,8 +12,8 @@ import it.quip.android.model.Circle;
 
 public class CirclesSearchAdapter extends SearchArrayAdapter<Circle> {
 
-    public CirclesSearchAdapter(List<Circle> values) {
-        super(values);
+    public CirclesSearchAdapter(List<Circle> values, List<String> preselectedIds) {
+        super(values, preselectedIds);
     }
 
     protected String getName(Circle circle) {

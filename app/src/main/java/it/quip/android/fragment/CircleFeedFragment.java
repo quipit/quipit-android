@@ -54,13 +54,14 @@ public class CircleFeedFragment extends QuipFeedFragment {
     }
 
     private void setupActionButton() {
+
         mActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mActionButton.toggle(true);
                 OnActionRequestedListener listener = getOnActionRequestedListener();
-                if (listener != null) {
-                    listener.onCreateCircle();
+                if (null != listener) {
+                    listener.onCreateQuipInCircle(mCircle);
                 }
             }
         });
@@ -85,4 +86,9 @@ public class CircleFeedFragment extends QuipFeedFragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mActionButton.setVisibility(View.VISIBLE);
+    }
 }

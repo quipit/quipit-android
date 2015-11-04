@@ -21,6 +21,8 @@ import it.quip.android.model.BaseParseObject;
 
 public abstract class SearchFragment <T extends BaseParseObject> extends Fragment {
 
+    protected static final String PRESELECTED_IDS = "PRESELECTED_IDS";
+
     public interface OnSearchListChangedListener <T extends BaseParseObject> {
         void onSelect(T object);
         void onUnselect(T object);
@@ -29,9 +31,11 @@ public abstract class SearchFragment <T extends BaseParseObject> extends Fragmen
     private EditText mEtSearch;
     private RecyclerView mRvValues;
 
+    private List<String> mPreselectedIds;
     private List<T> mValues;
     private List<T> mSelectedValues;
     private List<T> mFilteredValues;
+
     private SearchArrayAdapter<T> mFilteredAdapter;
     private OnSearchListChangedListener mOnSearchListChangedListener;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -44,15 +48,19 @@ public abstract class SearchFragment <T extends BaseParseObject> extends Fragmen
         this.mOnSearchListChangedListener = mOnSearchListChangedListener;
     }
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Bundle bundle = getArguments();
+        if (null != bundle) {
+            mPreselectedIds = bundle.getStringArrayList(PRESELECTED_IDS);
+        }
+
         mSelectedValues = new ArrayList<>();
         mFilteredValues = new ArrayList<>();
 
-        mFilteredAdapter = getAdapter(mFilteredValues);
+        mFilteredAdapter = getAdapter(mFilteredValues, mPreselectedIds);
         mFilteredAdapter.setOnClickListener(new SearchArrayAdapter.OnClickListener<T>() {
             @Override
             public void onClick(int position, T value) {
@@ -79,8 +87,18 @@ public abstract class SearchFragment <T extends BaseParseObject> extends Fragmen
         mRvValues.setAdapter(mFilteredAdapter);
         mRvValues.setLayoutManager(mLayoutManager);
 
+        if (null != mPreselectedIds) {
+            for (T value : mValues) {
+                if (mPreselectedIds.contains(value.getObjectId())) {
+                    selectValue(value);
+                }
+            }
+        }
+
         return v;
     }
+
+
 
     public void search(String name) {
         mFilteredValues.clear();
@@ -150,7 +168,7 @@ public abstract class SearchFragment <T extends BaseParseObject> extends Fragmen
 
     protected abstract void loadSearchValues();
 
-    protected abstract SearchArrayAdapter<T> getAdapter(List<T> filteredValues);
+    protected abstract SearchArrayAdapter<T> getAdapter(List<T> filteredValues, List<String> preselectedIds);
 
     protected abstract List<T> searchFor(String query);
 
