@@ -10,5 +10,5 @@
     android:layout_marginRight="16dp"
     android:layout_marginEnd="16dp"
     android:src="@drawable/ic_quip_new"
-    app:fab_colorNormal="@color/quipit_main"
-    app:fab_colorPressed="@color/quipit_pressed" />
+    app:fab_colorNormal="@color/quipit_brand"
+    app:fab_colorPressed="@color/quipit_brand_light" />
