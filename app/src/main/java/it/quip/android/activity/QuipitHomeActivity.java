@@ -10,14 +10,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -61,6 +59,8 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
     private ActionBarDrawerToggle mDrawerToggle;
     private RelativeLayout mNotificationBar;
     private ProgressBar mProgressBar;
+
+    private HomeFeedFragment mHomeFeedFragment;
 
     private OnActionRequestedListener mOnActionRequestedListener = new OnActionRequestedListener() {
         @Override
@@ -195,6 +195,7 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
 
     private FragmentTransaction prepareFragment(Fragment fragment, boolean addToBackStack) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.slide_up, R.anim.fade_out);
         ft.replace(R.id.fl_content, fragment);
         if (addToBackStack) {
             ft.addToBackStack(null);
@@ -204,10 +205,16 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
     }
 
     private void displayDefaultQuipStream() {
-        // TODO: We shouldn't be creating a new fragment each time. We should manage these
-        HomeFeedFragment homeFragment = new HomeFeedFragment();
-        homeFragment.setOnActionRequestedListener(mOnActionRequestedListener);
-        prepareFragment(homeFragment, false).commit();
+        if (null == mHomeFeedFragment) {
+            mHomeFeedFragment = new HomeFeedFragment();
+        }
+
+        mHomeFeedFragment.setOnActionRequestedListener(mOnActionRequestedListener);
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.hold, R.anim.slide_down);
+        ft.replace(R.id.fl_content, mHomeFeedFragment);
+        ft.commit();
     }
 
     private void onCircleCreated() {
@@ -234,6 +241,11 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
         }
         startActivityForResult(intent, CREATE_QUIP_REQUEST);
         overridePendingTransition(R.anim.slide_up, R.anim.zoom_out);
+    }
+
+    private void showNotificationFeed() {
+        NotificationsFragment notificationsFragment = new NotificationsFragment();
+        prepareFragment(notificationsFragment).commit();
     }
 
     @Override
@@ -295,17 +307,6 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
@@ -314,6 +315,11 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
     @Override
     public void clickedTag(CharSequence tag) {
         Toast.makeText(this, tag.toString(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        displayDefaultQuipStream();
     }
 
     public OnActionRequestedListener getOnActionRequestedListener() {
