@@ -1,5 +1,7 @@
 package it.quip.android.fragment;
 
+import android.support.v7.widget.LinearLayoutManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,10 +11,15 @@ import it.quip.android.adapter.UsersSearchAdapter;
 import it.quip.android.model.User;
 import it.quip.android.repository.user.UsersResponseHandler;
 
-public class FriendsSearchListFragment extends SearchListFragment<User> {
+public class FriendsSearchListFragment extends SearchFragment<User> {
 
     public static FriendsSearchListFragment newInstance() {
         return new FriendsSearchListFragment();
+    }
+
+    public FriendsSearchListFragment() {
+        super();
+        setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     protected void loadSearchValues() {
@@ -24,12 +31,8 @@ public class FriendsSearchListFragment extends SearchListFragment<User> {
         });
     }
 
-    protected SearchArrayAdapter<User> getFilterAdapter(List<User> filteredFriends) {
-        return new UsersSearchAdapter(getContext(), filteredFriends);
-    }
-
-    protected SearchArrayAdapter<User> getSelectAdapter(List<User> selectedFriends) {
-        return new UsersSearchAdapter(getContext(), selectedFriends);
+    protected SearchArrayAdapter<User> getAdapter(List<User> filteredFriends) {
+        return new UsersSearchAdapter(filteredFriends);
     }
 
     protected List<User> searchFor(String name) {
@@ -37,8 +40,7 @@ public class FriendsSearchListFragment extends SearchListFragment<User> {
         for (User friend : getSearchValues()) {
             if (!"".equals(name)
                     && !myself(friend)
-                    && hasFriendWithName(friend, name)
-                    && !alreadyInvited(friend)) {
+                    && hasFriendWithName(friend, name)) {
                 users.add(friend);
             }
         }
@@ -56,10 +58,6 @@ public class FriendsSearchListFragment extends SearchListFragment<User> {
 
     private boolean myself(User friend) {
         return QuipitApplication.getCurrentUser().getName().equals(friend.getName());
-    }
-
-    private boolean alreadyInvited(User friend) {
-        return getSelectedValues().contains(friend);
     }
 
 }

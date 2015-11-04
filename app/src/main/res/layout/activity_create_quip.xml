@@ -12,12 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true" />
 
-    <FrameLayout
-        android:id="@+id/fl_create_quip_source"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/fl_create_quip_content" />
-
     <Button
         android:id="@+id/bt_quip_create_share"
         android:layout_width="match_parent"

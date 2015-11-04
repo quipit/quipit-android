@@ -13,27 +13,29 @@ import it.quip.android.QuipitApplication;
 import it.quip.android.R;
 import it.quip.android.fragment.FriendSearchListFragment;
 import it.quip.android.fragment.QuipComposeFragment;
-import it.quip.android.fragment.SearchListFragment;
+import it.quip.android.fragment.SearchFragment;
 import it.quip.android.model.Circle;
 import it.quip.android.model.Quip;
 import it.quip.android.model.User;
 
 public class CreateQuipActivity
         extends BaseActivity
-        implements QuipComposeFragment.OnSearchFriend, SearchListFragment.OnSearchListChangedListener<User> {
+        implements QuipComposeFragment.OnSearchFriend, SearchFragment.OnSearchListChangedListener<User> {
 
     public static final String CREATED_QUIP_CIRCLE_ID = "CREATED_QUIP_CIRCLE_ID";
+
     private static final int SHARE_QUIP_REQUEST = 479;
+    private static final int SOURCE_QUIP_REQUEST = 499;
 
     private QuipComposeFragment mCreateQuipComposeFragment;
     private FriendSearchListFragment mFriendSearchListFragment;
 
     private Button mBtShare;
+    private User mSource;
 
     private void setupFragments() {
         mCreateQuipComposeFragment = QuipComposeFragment.newInstance();
         mFriendSearchListFragment = FriendSearchListFragment.newInstance();
-        mFriendSearchListFragment.setUseCustomInput(true);
         mFriendSearchListFragment.setOnSearchListChangedListener(this);
     }
 
@@ -50,8 +52,13 @@ public class CreateQuipActivity
     private void showComposeFragment() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fl_create_quip_content, mCreateQuipComposeFragment);
-        ft.replace(R.id.fl_create_quip_source, mFriendSearchListFragment);
         ft.commit();
+    }
+
+    private void showSourceFragment() {
+        Intent i = new Intent(CreateQuipActivity.this, SourceQuipActivity.class);
+        startActivityForResult(i, SOURCE_QUIP_REQUEST);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     private void showShareFragment() {
@@ -60,26 +67,42 @@ public class CreateQuipActivity
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
+    private void finishWithResult() {
+        List<Circle> selectedCircles = ShareQuipActivity.getCircles();
+        if (null != selectedCircles) {
+            createQuip(selectedCircles);
+        }
+
+        Intent i = new Intent();
+        if ((null != selectedCircles) && (selectedCircles.size() > 0)) {
+            i.putExtra(CREATED_QUIP_CIRCLE_ID, selectedCircles.get(0).getObjectId());
+        }
+
+        setResult(RESULT_OK, i);
+        finish();
+
+        overridePendingTransition(R.anim.zoom_in, R.anim.slide_down);
+    }
+
+    private void setSourceUser() {
+        User source = SourceQuipActivity.getSource();
+        if (null != source) {
+            mSource = source;
+            mCreateQuipComposeFragment.setSourceName(mSource.getName());
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == SHARE_QUIP_REQUEST) {
-            List<Circle> selectedCircles = ShareQuipActivity.getCircles();
-            if (null != selectedCircles) {
-                createQuip(selectedCircles);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SHARE_QUIP_REQUEST) {
+                finishWithResult();
+            } else if (requestCode == SOURCE_QUIP_REQUEST) {
+                setSourceUser();
             }
-
-            Intent i = new Intent();
-            if (selectedCircles.size() > 0) {
-                i.putExtra(CREATED_QUIP_CIRCLE_ID, selectedCircles.get(0).getObjectId());
-            }
-
-            setResult(RESULT_OK, i);
-            finish();
-
-            overridePendingTransition(R.anim.slide_down, R.anim.zoom_in);
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
         }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -96,8 +119,8 @@ public class CreateQuipActivity
         quip.setText(mCreateQuipComposeFragment.getBody());
         quip.setAuthor(QuipitApplication.getCurrentUser());
 
-        if (mFriendSearchListFragment.getSelectedValues().size() > 0) {
-            quip.setSource(mFriendSearchListFragment.getSelectedValues().get(0));
+        if (null != mSource) {
+            quip.setSource(mSource);
         }
 
         if (circles.size() > 0) {
@@ -112,8 +135,8 @@ public class CreateQuipActivity
     }
 
     @Override
-    public void onSearchFriend(String text) {
-        mFriendSearchListFragment.search(text);
+    public void onSearchFriend() {
+        showSourceFragment();
     }
 
     @Override

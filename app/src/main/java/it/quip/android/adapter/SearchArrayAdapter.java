@@ -1,72 +1,111 @@
 package it.quip.android.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.parse.ParseObject;
+import com.squareup.picasso.Picasso;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import it.quip.android.R;
+import it.quip.android.graphics.CircleTransformation;
 
 
-public abstract class SearchArrayAdapter <T extends ParseObject> extends ArrayAdapter<T> {
+public abstract class SearchArrayAdapter <T extends ParseObject> extends RecyclerView.Adapter<SearchHolder> {
 
-    private OnLongClickListener onLongClickListener;
+    private OnClickListener onClickListener;
+    private List<T> mValues;
+    private Set<String> mSelected;
 
-    public SearchArrayAdapter(Context context, List<T> values) {
-        super(context, 0, values);
+    protected abstract String getName(T value);
+
+    protected abstract String getImageUrl(T value);
+
+    protected abstract SearchHolder getViewHolder(LayoutInflater inflater, ViewGroup parent);
+
+    public interface OnClickListener <T extends ParseObject> {
+        void onClick(int position, T value);
     }
 
-    public void setOnLongClickListener(OnLongClickListener onLongClickListener) {
-        this.onLongClickListener = onLongClickListener;
+    public SearchArrayAdapter(List<T> values) {
+        mValues = values;
+    }
+
+    public void setOnClickListener(OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        T value = getItem(position);
+    public SearchHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+        mSelected = new HashSet<String>();
 
-        if (null == convertView) {
-            convertView = LayoutInflater.from(getContext())
-                    .inflate(R.layout.item_user, parent, false);
+        return getViewHolder(inflater, parent);
+    }
 
-            holder = new ViewHolder();
-            holder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
+    @Override
+    public void onBindViewHolder(final SearchHolder viewHolder, final int position) {
+        T value = mValues.get(position);
+        viewHolder.tvName.setText(getName(value));
+        Picasso.with(viewHolder.context).load(getImageUrl(value)).transform(new CircleTransformation(4, Color.WHITE)).into(viewHolder.ivProfile);
+        viewHolder.ivChecked.setImageDrawable(ContextCompat.getDrawable(viewHolder.context, R.drawable.ic_checked));
+        viewHolder.ivChecked.setColorFilter(ContextCompat.getColor(viewHolder.context, R.color.quipit_checked));
 
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-
-        holder.tvName.setText(getSearchName(value));
-
-        convertView.setOnLongClickListener(new View.OnLongClickListener() {
+        viewHolder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-                if (onLongClickListener != null) {
-                    return onLongClickListener.onLongClick(position, getItem(position));
+            public void onClick(View v) {
+                if (null != onClickListener) {
+                    T value = mValues.get(position);
+                    toggleChecked(viewHolder, value);
+                    onClickListener.onClick(position, value);
                 }
-
-                return false;
             }
         });
 
-        return convertView;
+        setChecked(viewHolder, value);
     }
 
-    public interface OnLongClickListener <T extends ParseObject> {
-        boolean onLongClick(int position, T value);
+    @Override
+    public int getItemCount() {
+        return mValues.size();
     }
 
-    public class ViewHolder {
-        TextView tvName;
+    private void setChecked(SearchHolder viewHolder, T value) {
+        String uid = value.getObjectId();
+        if (mSelected.contains(uid)) {
+            showChecked(viewHolder.ivChecked);
+        } else {
+            hideChecked(viewHolder.ivChecked);
+        }
     }
 
-    protected abstract String getSearchName(T value);
+    private void toggleChecked(SearchHolder viewHolder, T value) {
+        String uid = value.getObjectId();
+        if (mSelected.contains(uid)) {
+            hideChecked(viewHolder.ivChecked);
+            mSelected.remove(uid);
+        } else {
+            showChecked(viewHolder.ivChecked);
+            mSelected.add(uid);
+        }
+    }
+
+    private void showChecked(ImageView iv) {
+        iv.setVisibility(View.VISIBLE);
+    }
+
+    private void hideChecked(ImageView iv) {
+        iv.setVisibility(View.INVISIBLE);
+    }
 
 }

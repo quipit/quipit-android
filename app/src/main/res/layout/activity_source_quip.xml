@@ -10,16 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:id="@+id/fl_share_quip_circle_picker"/>
+        android:id="@+id/fl_source_quip_friend_picker"/>
 
     <Button
-        android:id="@+id/bt_share_quip_post"
+        android:id="@+id/bt_source_quip_post"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/quipit_main"
         android:textColor="@color/quipit_alt"
-        android:text="@string/post_quip"
+        android:text="@string/share_quip"
         />
 
 </RelativeLayout>

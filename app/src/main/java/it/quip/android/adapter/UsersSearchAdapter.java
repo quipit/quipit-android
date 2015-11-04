@@ -1,19 +1,31 @@
 package it.quip.android.adapter;
 
-import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import java.util.List;
 
+import it.quip.android.R;
 import it.quip.android.model.User;
 
 public class UsersSearchAdapter extends SearchArrayAdapter<User> {
 
-    public UsersSearchAdapter(Context context, List<User> users) {
-        super(context, users);
+    public UsersSearchAdapter(List<User> users) {
+        super(users);
     }
 
-    protected String getSearchName(User user) {
+    protected String getName(User user) {
         return user.getName();
+    }
+
+    protected String getImageUrl(User user) {
+        return user.getImageUrl();
+    }
+
+    protected SearchHolder getViewHolder(LayoutInflater inflater, ViewGroup parent) {
+        View contactView = inflater.inflate(R.layout.item_search_user, parent, false);
+        return new SearchHolder(parent.getContext(), contactView);
     }
 
 }

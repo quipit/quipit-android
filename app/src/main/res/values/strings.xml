@@ -27,7 +27,7 @@
     <string name="label_quipsters">%d quipsters</string>
 
     <string name="quip_create_hint">some thangs?</string>
-    <string name="quip_create_source">anon</string>
+    <string name="quip_create_source">Who Said It?</string>
 
     <string name="sample_name">Jonathan Como</string>
 
@@ -39,4 +39,7 @@
     <string name="share_quip">share</string>
     <string name="post_quip">post</string>
     <string name="title_activity_share_quip">ShareQuipActivity</string>
+    
+    <string name="title_activity_source_quip">Source</string>
+    <string name="search_hint">Search...</string>
 </resources>

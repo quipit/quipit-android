@@ -15,11 +15,6 @@
         android:layout_width="wrap_content"
         android:layout_height="1dp" />
 
-    <TextView
-        android:text="@string/label_members"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
     <FrameLayout android:id="@+id/fl_circle_friends"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>

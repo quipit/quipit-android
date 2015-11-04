@@ -13,14 +13,14 @@ import it.quip.android.QuipitApplication;
 import it.quip.android.R;
 import it.quip.android.fragment.CircleHeaderFragment;
 import it.quip.android.fragment.FriendsSearchListFragment;
-import it.quip.android.fragment.SearchListFragment;
+import it.quip.android.fragment.SearchFragment;
 import it.quip.android.model.Circle;
 import it.quip.android.model.Notification;
 import it.quip.android.model.User;
 import it.quip.android.repository.circle.CircleResponseHandler;
 
 public class CreateCircleActivity extends BaseActivity
-        implements SearchListFragment.OnSearchListChangedListener<User> {
+        implements SearchFragment.OnSearchListChangedListener<User> {
 
     private CircleHeaderFragment circleHeaderFragment;
     private ProgressDialog pdUploading;
