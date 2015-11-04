@@ -6,8 +6,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import it.quip.android.QuipitApplication;
 import it.quip.android.R;
@@ -60,23 +58,7 @@ public class CreateCircleActivity extends BaseActivity
         ft.commit();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_create_circle, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.miCreateCircle:
-                createCircle();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
+    // TODO: hook this up to the button
     private void createCircle() {
         Circle createdCircle = circleHeaderFragment.getCircle();
         Bitmap avatar = circleHeaderFragment.getAvatar();

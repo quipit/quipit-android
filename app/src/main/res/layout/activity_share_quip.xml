@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -17,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/quipit_brand"
+        android:background="@drawable/selector_action_button"
         android:textColor="@color/quipit_white"
         android:text="@string/post_quip" />
 
