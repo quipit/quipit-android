@@ -19,13 +19,11 @@ public class MarkCurrentAsReadAndRefreshNotifications extends AsyncTask<MarkAndR
     }
 
     private void updateData(List<Notification> notifications, NotificationHandler handler) {
-        for (Notification n : notifications) {
-            if (n.getViewed() == false) {
-                n.setViewed(false);
-                try {
-                    n.save();
-                } catch (ParseException e) {
-                    e.printStackTrace();
+        if (notifications.size() > 0) {
+            for (Notification n : notifications) {
+                if (n.getViewed() == false) {
+                    n.setViewed(false);
+                    n.saveInBackground();
                 }
             }
         }
