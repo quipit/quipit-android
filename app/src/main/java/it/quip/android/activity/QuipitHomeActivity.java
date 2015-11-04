@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,7 +63,8 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private RelativeLayout mNotificationBar;
-    private TextView mNotificationBarNotificationText;
+
+    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,7 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
         mCircles = new ArrayList<>();
         aCircles = new CirclesAdapter(this, mCircles);
 
+        mProgressBar = (ProgressBar) findViewById(R.id.pbProgressAction);
         registerBroadcastReceivers();
         setupViews();
     }
@@ -181,7 +185,6 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
 
     private void setupNotificationToastBar() {
         mNotificationBar = (RelativeLayout) findViewById(R.id.toolbar_notification_toast_bard);
-        mNotificationBarNotificationText = (TextView) findViewById(R.id.toolbaNotificationText);
     }
 
     private void selectDrawerItem(int position) {
@@ -244,6 +247,8 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
+
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -306,19 +311,14 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
     }
 
     public void onNotificationToast(Notification notification) {
-        Animator anim = AnimatorInflater.loadAnimator(this, R.animator.notification);
-        mNotificationBarNotificationText.setText(notification.getText());
-        anim.setTarget(mNotificationBar);
-        mNotificationBar.setVisibility(View.VISIBLE);
-        mNotificationBar.setAlpha(1);
-        anim.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                mNotificationBar.setVisibility(View.GONE);
-                mNotificationBar.setAlpha(0);
-            }
-        });
-        anim.start();
+
+    }
+
+    public void showProgressBar() {
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    public void hideProgressBar() {
+        mProgressBar.setVisibility(View.GONE);
     }
 }

@@ -5,8 +5,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +36,14 @@ public abstract class QuipFeedFragment extends BaseFragment {
     private LinearLayoutManager mLlManager;
 
     public abstract void loadInitialQuips();
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        showProcessIndicators();
+        loadInitialQuips();
+    }
+
     public abstract void loadMoreQuips(int page);
 
     public void addQuip(Quip quip) {
@@ -68,8 +79,10 @@ public abstract class QuipFeedFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
         setupViewDependencies(view);
+        showProcessIndicators();
         loadInitialQuips();
         return view;
     }
@@ -92,18 +105,24 @@ public abstract class QuipFeedFragment extends BaseFragment {
         mRvFeed.addOnScrollListener(new EndlessScrollListener(mLlManager) {
             @Override
             public void onLoadMore(int currentPage) {
+                showProcessIndicators();
                 loadMoreQuips(currentPage);
             }
         });
     }
 
+    @Override
     public void showProcessIndicators() {
         // This will show the network indicator
+        mProgressBar.setVisibility(View.VISIBLE);
+
     }
 
+    @Override
     public void hideProgressIndicators() {
         mSrlFeed.setRefreshing(false);
         // TODO: Hide the network indicator here
+        mProgressBar.setVisibility(View.GONE);
     }
 
 }

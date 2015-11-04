@@ -22,6 +22,14 @@
             android:layout_below="@+id/toolbar"
             layout="@layout/notification_toast_bar" />
 
+        <ProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_below="@id/toolbar"
+            android:backgroundTint="?attr/colorPrimary"
+            android:id="@+id/pbProgressAction" />
+
         <FrameLayout
             android:id="@+id/fl_content"
             android:layout_below="@id/sub_tool_bar"
