@@ -27,7 +27,7 @@
     <string name="label_quipsters">%d quipsters</string>
 
     <string name="quip_create_hint">some thangs?</string>
-    <string name="quip_create_source">anon</string>
+    <string name="quip_create_source">Who Said It?</string>
 
     <string name="description_avatar">Circle Avatar</string>
     <string name="description_background">Circle Background</string>

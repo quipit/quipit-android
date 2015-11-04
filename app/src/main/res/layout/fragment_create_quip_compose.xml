@@ -11,7 +11,7 @@
     <EditText
         android:layout_marginTop="15dp"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="250dp"
         android:layout_below="@id/quip_create_profile"
         android:lines="6"
         android:lineSpacingExtra="2dp"
@@ -35,8 +35,9 @@
         />
 
     <TextView
-        android:layout_width="60dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxWidth="150dp"
         android:layout_alignParentRight="true"
         android:layout_below="@id/et_quip_create_body"
         android:id="@+id/et_quip_create_source"
