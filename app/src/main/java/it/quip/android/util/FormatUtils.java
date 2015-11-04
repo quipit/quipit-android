@@ -14,8 +14,6 @@ public class FormatUtils {
     private static final int SECOND_IN_MILLISECONDS = 1000;
     private static final String JUST_NOW = "just now";
 
-
-
     public static String getRelativeTimeAgo(long timeInMillis) {
         return shortenDate(getLongRelativeTimeAgo(timeInMillis));
     }

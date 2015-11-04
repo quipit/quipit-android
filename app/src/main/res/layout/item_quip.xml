@@ -78,12 +78,15 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-    <ImageView android:id="@+id/iv_quip_source"
-        android:src="@drawable/ic_quip_source"
+    <View android:id="@+id/v_quip_source_indicator"
+        android:background="@color/quipit_divider"
         android:layout_alignTop="@id/tv_quip_source_user_name"
-        android:layout_alignBottom="@id/tv_quip_source_user_name"
         android:layout_toLeftOf="@id/tv_quip_source_user_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_toStartOf="@id/tv_quip_source_user_name"
+        android:layout_marginRight="6dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="10dp"
+        android:layout_height="1dp" />
 
 </RelativeLayout>

@@ -16,21 +16,21 @@ public class QuipsViewHolder extends RecyclerView.ViewHolder {
     private QuipFeedFragment mFragment;
     public Context mContext;
     public ImageView mIvProfile;
-    public ImageView mIvQuipSource;
     public TextView mTvUserName;
     public TextView mTvQuipTimestamp;
     public TextView mTvQuipBody;
     public TextView mTvQuipSourceUserName;
+    public View mQuipSourceIndicator;
 
     public QuipsViewHolder(Context context, View itemView, QuipFeedFragment fragment) {
         super(itemView);
         this.mFragment = fragment;
         this.mContext = context;
         this.mIvProfile = (ImageView) itemView.findViewById(R.id.iv_profile);
-        this.mIvQuipSource = (ImageView) itemView.findViewById(R.id.iv_quip_source);
         this.mTvUserName = (TextView) itemView.findViewById(R.id.tv_user_name);
         this.mTvQuipTimestamp = (TextView) itemView.findViewById(R.id.tv_quip_timestamp);
         this.mTvQuipBody = (TextView) itemView.findViewById(R.id.tv_quip_body);
         this.mTvQuipSourceUserName = (TextView) itemView.findViewById(R.id.tv_quip_source_user_name);
+        this.mQuipSourceIndicator = itemView.findViewById(R.id.v_quip_source_indicator);
     }
 }

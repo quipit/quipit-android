@@ -69,10 +69,10 @@ public class QuipsAdapter extends RecyclerView.Adapter<QuipsViewHolder> {
         User source = quip.getSource();
         if (null == source) {
             viewHolder.mTvQuipSourceUserName.setText("");
-            viewHolder.mIvQuipSource.setVisibility(View.GONE);
+            viewHolder.mQuipSourceIndicator.setVisibility(View.GONE);
         } else {
             viewHolder.mTvQuipSourceUserName.setText(source.getName());
-            viewHolder.mIvQuipSource.setVisibility(View.VISIBLE);
+            viewHolder.mQuipSourceIndicator.setVisibility(View.VISIBLE);
         }
     }
 
