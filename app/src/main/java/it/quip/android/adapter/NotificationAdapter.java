@@ -1,6 +1,7 @@
 package it.quip.android.adapter;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
@@ -96,6 +97,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         Notification notification = mNotifications.get(position);
         vh.getHeadLineText().setMovementMethod(LinkMovementMethod.getInstance());
         vh.getHeadLineText().setText(notification.getText().toString());
+        if (!notification.getViewed()) {
+            vh.getHeadLineText().setTypeface(null, Typeface.BOLD);
+        } else {
+            vh.getHeadLineText().setTypeface(null, Typeface.NORMAL);
+        }
         vh.getTimestampText().setText(FormatUtils.getRelativeTimeAgo(notification.getTimestamp()));
         vh.getNotificationImage().setImageResource(0);
 
