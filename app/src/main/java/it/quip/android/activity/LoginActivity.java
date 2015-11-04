@@ -57,6 +57,14 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        RotatingImageView mCarousel = (RotatingImageView) findViewById(R.id.iv_carousel);
+        mCarousel.setDrawables(new int[] {
+                R.drawable.nyc,
+                R.drawable.nyc_dusk,
+                R.drawable.tokyo,
+                R.drawable.vancouver,
+        });
+
         if (FacebookClient.getInstance() == null) {
             setupLoginButton();
 
