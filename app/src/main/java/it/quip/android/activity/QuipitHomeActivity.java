@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -62,6 +63,8 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
     private RelativeLayout mNotificationBar;
     private ProgressBar mProgressBar;
 
+    private ImageView mNotificationNavigationIcon;
+
     private OnActionRequestedListener mOnActionRequestedListener = new OnActionRequestedListener() {
         @Override
         public void onCreateQuip() {
@@ -90,7 +93,7 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
                 Notification notification = (Notification) intent.getExtras().get(Notification.MARSHALL_INTENT_KEY);
                 String sender = notification.getSenderUid();
                 if (mUser != null && !mUser.getObjectId().equals(sender)) {
-                    onNotificationToast(notification);
+                    onNotificationReceive(notification);
                 }
             }
         }
@@ -106,6 +109,7 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle("");
+        mNotificationNavigationIcon = (ImageView) mToolbar.findViewById(R.id.ivNotificationButton);
         setSupportActionBar(mToolbar);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -320,8 +324,8 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
         return mOnActionRequestedListener;
     }
 
-    public void onNotificationToast(Notification notification) {
-
+    public void onNotificationReceive(Notification notification) {
+        mNotificationNavigationIcon.setColorFilter(ContextCompat.getColor(this, R.color.quipit_brand));
     }
 
     public void showProgressBar() {

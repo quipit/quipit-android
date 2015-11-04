@@ -21,4 +21,12 @@
         android:layout_height="wrap_content"
         fontPath="fonts/Lato-Semibold.ttf" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_notification"
+        android:layout_gravity="right"
+        android:id="@+id/ivNotificationButton"
+        />
+
 </android.support.v7.widget.Toolbar>
