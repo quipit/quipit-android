@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.quip.android.QuipitApplication;
-import it.quip.android.adapter.CirclesArrayAdapter;
+import it.quip.android.adapter.CirclesSearchAdapter;
 import it.quip.android.adapter.SearchArrayAdapter;
 import it.quip.android.model.Circle;
 
@@ -29,7 +29,7 @@ public class CirclesSearchGridFragment extends SearchFragment<Circle> {
     }
 
     protected SearchArrayAdapter<Circle> getAdapter(List<Circle> circles) {
-        return new CirclesArrayAdapter(circles);
+        return new CirclesSearchAdapter(circles);
     }
 
     protected List<Circle> searchFor(String query) {

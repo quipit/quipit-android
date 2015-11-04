@@ -1,41 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
+    android:layout_marginTop="10dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    tools:ignore="MissingPrefix">
+    
+    <ImageView android:id="@+id/iv_avatar"
+        android:src="@drawable/quipit"
+        android:contentDescription="@string/description_avatar"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:layout_width="40dp"
+        android:layout_height="40dp" />
 
-    <FrameLayout
-        android:id="@+id/fl_search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        >
-
-        <ImageView
-            android:id="@+id/iv_search_pic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_gravity="bottom|right"
-            />
-
-        <ImageView
-            android:id="@+id/iv_search_checked"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_unchecked"
-            android:layout_gravity="bottom|right"
-            />
-
-    </FrameLayout>
-
-    <TextView android:id="@+id/tv_search_name"
+    <TextView android:id="@+id/tv_name"
+        android:text="SF Crew"
+        android:textColor="@color/quipit_text"
         android:textSize="16sp"
-        android:textColor="@android:color/black"
-        android:padding="10dp"
+        android:textStyle="bold"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="50dp"
+        android:layout_marginStart="50dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/fl_search"
-        android:layout_centerHorizontal="true"
-        />
+        fontPath="fonts/Lato-Semibold.ttf" />
 
-</RelativeLayout>
+</FrameLayout>

@@ -26,6 +26,8 @@ public abstract class QuipFeedFragment extends BaseFragment {
     private List<Quip> mQuips;
     private QuipsAdapter mQuipsAdapter;
 
+    private OnActionRequestedListener onActionRequestedListener;
+
     private SwipeRefreshLayout mSrlFeed;
     private RecyclerView mRvFeed;
     private LinearLayoutManager mLlManager;
@@ -46,6 +48,14 @@ public abstract class QuipFeedFragment extends BaseFragment {
     public void setQuips(List<Quip> quips) {
         mQuips.clear();
         addQuips(quips);
+    }
+
+    public OnActionRequestedListener getOnActionRequestedListener() {
+        return onActionRequestedListener;
+    }
+
+    public void setOnActionRequestedListener(OnActionRequestedListener onActionRequestedListener) {
+        this.onActionRequestedListener = onActionRequestedListener;
     }
 
     @Override

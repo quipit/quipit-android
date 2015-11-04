@@ -10,8 +10,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        />
+        android:layout_alignParentTop="true" />
 
     <Button
         android:id="@+id/bt_quip_create_share"
@@ -19,8 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:text="@string/share_quip"
-        android:textColor="@color/quipit_alt"
-    />
+        android:textColor="@color/quipit_alt" />
 
 </RelativeLayout>
 

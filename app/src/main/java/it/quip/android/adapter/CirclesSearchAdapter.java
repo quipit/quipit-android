@@ -10,9 +10,9 @@ import it.quip.android.R;
 import it.quip.android.model.Circle;
 
 
-public class CirclesArrayAdapter extends SearchArrayAdapter<Circle> {
+public class CirclesSearchAdapter extends SearchArrayAdapter<Circle> {
 
-    public CirclesArrayAdapter(List<Circle> values) {
+    public CirclesSearchAdapter(List<Circle> values) {
         super(values);
     }
 
@@ -25,7 +25,7 @@ public class CirclesArrayAdapter extends SearchArrayAdapter<Circle> {
     }
 
     protected SearchHolder getViewHolder(LayoutInflater inflater, ViewGroup parent) {
-        View contactView = inflater.inflate(R.layout.item_circle, parent, false);
+        View contactView = inflater.inflate(R.layout.item_search_circle, parent, false);
         return new SearchHolder(parent.getContext(), contactView);
     }
 
