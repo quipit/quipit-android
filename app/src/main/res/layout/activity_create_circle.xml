@@ -4,7 +4,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="it.quip.android.activity.CreateCircleActivity">
+    tools:context="it.quip.android.activity.CreateCircleActivity"
+    tools:ignore="MissingPrefix">
 
     <FrameLayout android:id="@+id/fl_circle_info"
         android:layout_width="match_parent"
@@ -24,6 +25,7 @@
         android:layout_alignParentBottom="true"
         android:background="@drawable/selector_action_button"
         android:textColor="@color/quipit_white"
-        android:text="@string/action_create" />
+        android:text="@string/action_create"
+        fontPath="fonts/Lato-Semibold.ttf" />
 
 </RelativeLayout>
