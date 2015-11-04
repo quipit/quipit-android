@@ -91,8 +91,8 @@ public class RotatingImageView extends FrameLayout {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                transitionViews();
                 if (running) {
+                    transitionViews();
                     doTransition();
                 }
             }
