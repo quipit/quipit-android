@@ -11,15 +11,17 @@
     fab:menu_colorPressed="@color/quipit_pressed"
     fab:menu_labels_ellipsize="end"
     fab:menu_labels_singleLine="true"
-    fab:menu_backgroundColor="#44ffffff">
+    fab:menu_backgroundColor="#44ffffff"
+    app:menu_colorNormal="@color/quipit_brand"
+    app:menu_colorPressed="@color/quipit_brand_light">
 
     <com.github.clans.fab.FloatingActionButton
         android:id="@+id/fab_circle_new"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_circle_new"
-        app:fab_colorNormal="@color/quipit_main"
-        app:fab_colorPressed="@color/quipit_pressed"
+        app:fab_colorNormal="@color/quipit_brand"
+        app:fab_colorPressed="@color/quipit_brand_light"
         fab:fab_size="mini" />
 
     <com.github.clans.fab.FloatingActionButton
@@ -27,8 +29,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_quip_new"
-        app:fab_colorNormal="@color/quipit_main"
-        app:fab_colorPressed="@color/quipit_pressed"
+        app:fab_colorNormal="@color/quipit_brand"
+        app:fab_colorPressed="@color/quipit_brand_light"
         fab:fab_size="mini" />
 
 </com.github.clans.fab.FloatingActionMenu>

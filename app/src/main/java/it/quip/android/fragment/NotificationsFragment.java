@@ -21,10 +21,10 @@ import it.quip.android.R;
 import it.quip.android.adapter.NotificationAdapter;
 import it.quip.android.listener.NotificationHandler;
 import it.quip.android.model.Circle;
-import it.quip.android.task.MarkAndRefreshJobData;
 import it.quip.android.model.Notification;
 import it.quip.android.model.Quip;
 import it.quip.android.model.User;
+import it.quip.android.task.MarkAndRefreshJobData;
 import it.quip.android.task.MarkCurrentAsReadAndRefreshNotifications;
 
 public class NotificationsFragment extends BaseFragment implements NotificationHandler {
@@ -34,12 +34,6 @@ public class NotificationsFragment extends BaseFragment implements NotificationH
     private NotificationAdapter mNotificationAdapter;
     private RecyclerView mRvContacts;
     private List<Notification> mNotifications;
-
-    @Override
-    public CharSequence getTitle() {
-        return stringRes(R.string.title_notifications);
-    }
-
 
     @Nullable
     @Override

@@ -17,8 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/quipit_main"
-        android:textColor="@color/quipit_alt"
+        android:background="@color/quipit_brand"
+        android:textColor="@color/quipit_white"
         android:text="@string/post_quip"
         />
 

@@ -104,6 +104,7 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
         mProgressBar = (ProgressBar) findViewById(R.id.pbProgressAction);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);

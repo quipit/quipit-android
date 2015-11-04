@@ -5,11 +5,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +17,6 @@ import it.quip.android.listener.EndlessScrollListener;
 import it.quip.android.model.Quip;
 
 public abstract class QuipFeedFragment extends BaseFragment {
-
-    @Override
-    public CharSequence getTitle() {
-        return "Quips";
-    }
 
     private List<Quip> mQuips;
     private QuipsAdapter mQuipsAdapter;
