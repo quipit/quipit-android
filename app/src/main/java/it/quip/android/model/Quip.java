@@ -166,6 +166,7 @@ public class Quip extends BaseParseObject implements Parcelable {
                 .circle(getCircle())
                 .type(Notification.STANDARD_NOTIFICATION)
                 .body(user.getName() + " just quipped to circle @" + getCircle().getName())
+                .imageUrl(user.getImageUrl())
                 .deliver();
     }
 }

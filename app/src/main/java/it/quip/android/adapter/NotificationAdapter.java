@@ -1,19 +1,19 @@
 package it.quip.android.adapter;
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
 import it.quip.android.R;
 import it.quip.android.graphics.CircleTransformation;
-import it.quip.android.listener.TagClickListener;
 import it.quip.android.listener.NotificationHandler;
 import it.quip.android.model.Notification;
 import it.quip.android.util.FormatUtils;
@@ -29,7 +29,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         mNotifications = notifications;
         mHandler = handler;
         mContext = context;
-
     }
 
     public List<Notification> getItems() {
@@ -56,14 +55,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         int layout;
         switch (viewType) {
-            case READ:
-                layout = R.layout.layout_navigation_card_read;
-                break;
             case UNREAD:
-                layout = R.layout.layout_navigation_card_unread;
+                layout = R.layout.item_notification_unread;
                 break;
             default:
-                layout = R.layout.layout_navigation_card_read;
+                layout = R.layout.item_notification_read;
                 break;
         }
 
@@ -86,6 +82,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 vh = (NotificationBaseViewHolder) viewHolder;
                 break;
         }
+
         configureViewHolder(vh, position);
     }
 
@@ -98,22 +95,21 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
          */
         Notification notification = mNotifications.get(position);
         vh.getHeadLineText().setMovementMethod(LinkMovementMethod.getInstance());
-        String headlineText =  notification.getText().toString();
-        vh.getHeadLineText().setText(vh.getCircleParser().tagParse(
-                        FormatUtils.CIRCLE_PATTERN,
-                        headlineText,
-                        (TagClickListener) mContext,
-                        false,
-                        FormatUtils.CIRCLE_MENTION_COLOR),
-                TextView.BufferType.SPANNABLE);
+        vh.getHeadLineText().setText(notification.getText().toString());
         vh.getTimestampText().setText(FormatUtils.getRelativeTimeAgo(notification.getTimestamp()));
         vh.getNotificationImage().setImageResource(0);
-        Picasso.with(mContext)
-                .load(notification.getNotificationImageUrl())
-                .centerCrop()
-                .transform(new CircleTransformation(4, Color.WHITE))
-                .fit()
-                .into(vh.getNotificationImage());
+
+        String imageUrl = notification.getNotificationImageUrl();
+        if (null != imageUrl) {
+            Picasso.with(mContext)
+                    .load(imageUrl)
+                    .centerCrop()
+                    .transform(new CircleTransformation(4, Color.WHITE))
+                    .fit()
+                    .into(vh.getNotificationImage());
+        } else {
+            vh.getNotificationImage().setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.quipit));
+        }
 
     }
 
