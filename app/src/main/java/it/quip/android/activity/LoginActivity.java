@@ -21,6 +21,8 @@ public class LoginActivity extends BaseActivity {
     private CallbackManager mCallbackManager;
     private LoginButton mBtnLogin;
 
+    private RotatingImageView mCarousel;
+
     private void setupLoginButton() {
         mCallbackManager = CallbackManager.Factory.create();
 
@@ -46,6 +48,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void startMainActivity() {
+        mCarousel.stop();
         User.setUserForSession();
         Intent intent = new Intent(this, QuipitHomeActivity.class);
         startActivity(intent);
@@ -57,13 +60,15 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        RotatingImageView mCarousel = (RotatingImageView) findViewById(R.id.iv_carousel);
+        mCarousel = (RotatingImageView) findViewById(R.id.iv_carousel);
         mCarousel.setDrawables(new int[] {
                 R.drawable.nyc,
                 R.drawable.nyc_dusk,
                 R.drawable.tokyo,
                 R.drawable.vancouver,
         });
+
+        mCarousel.start();
 
         if (FacebookClient.getInstance() == null) {
             setupLoginButton();

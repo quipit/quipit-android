@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
@@ -32,6 +33,8 @@ public class RotatingImageView extends FrameLayout {
     private int[] drawables;
     private int current = 0;
 
+    private boolean running = false;
+
     private long transitionDuration;
     private long transitionDelay;
 
@@ -41,6 +44,17 @@ public class RotatingImageView extends FrameLayout {
         ivOne = new ImageView(context, attrs);
         ivTwo = new ImageView(context, attrs);
         readAttributes(context, attrs);
+    }
+
+    public void start() {
+        running = true;
+        doTransition();
+    }
+
+    public void stop() {
+        running = false;
+        recycle(ivCurrent);
+        recycle(ivNext);
     }
 
     private void readAttributes(Context context, AttributeSet attrs) {
@@ -71,23 +85,23 @@ public class RotatingImageView extends FrameLayout {
         if (initialDrawable > 0) {
             ivCurrent.setImageResource(initialDrawable);
         }
-
-        doTransition();
     }
 
     private void doTransition() {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                transitionViews();
-                doTransition();
+                if (running) {
+                    transitionViews();
+                    doTransition();
+                }
             }
         }, transitionDelay);
     }
 
     private void updateViews() {
         rotateDrawables();
-        recycleCurrentImage();
+        recycle(ivCurrent);
         loadDrawable(getCurrentDrawable());
     }
 
@@ -109,8 +123,11 @@ public class RotatingImageView extends FrameLayout {
         ivNext.setImageResource(resId);
     }
 
-    private void recycleCurrentImage() {
-        ((BitmapDrawable) ivCurrent.getDrawable()).getBitmap().recycle();
+    private void recycle(ImageView imageView) {
+        Drawable drawable = imageView.getDrawable();
+        if (drawable != null) {
+            ((BitmapDrawable) drawable).getBitmap().recycle();
+        }
     }
 
     private void transitionViews() {
@@ -132,7 +149,7 @@ public class RotatingImageView extends FrameLayout {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                recycleCurrentImage();
+                recycle(ivCurrent);
                 swapViews();
                 ivNext.setVisibility(INVISIBLE);
             }

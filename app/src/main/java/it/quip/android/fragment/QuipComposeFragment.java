@@ -4,15 +4,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -29,11 +26,9 @@ public class QuipComposeFragment extends Fragment {
         void onSearchFriend();
     }
 
-    private LinearLayout mLlProfile;
     private ImageView mIvProfile;
     private TextView mTvUserName;
     private EditText mEtQuipBody;
-    private TextView mTvQuipCount;
     private TextView mTvQuipSource;
 
     public static QuipComposeFragment newInstance() {
@@ -49,8 +44,7 @@ public class QuipComposeFragment extends Fragment {
     @Override
     public void onViewCreated(View v, @Nullable Bundle savedInstanceState) {
         User user = QuipitApplication.getCurrentUser();
-        mLlProfile = (LinearLayout) v.findViewById(R.id.quip_create_profile);
-        mIvProfile = (ImageView) mLlProfile.findViewById(R.id.iv_profile);
+        mIvProfile = (ImageView) v.findViewById(R.id.iv_profile);
         try {
             Picasso.with(getActivity())
                     .load(user.getImageUrl())
@@ -63,29 +57,10 @@ public class QuipComposeFragment extends Fragment {
             Log.e("TweetsAdapter", "Unable to load!");
         }
 
-        mTvUserName = (TextView) mLlProfile.findViewById(R.id.tv_user_name);
+        mTvUserName = (TextView) v.findViewById(R.id.tv_user_name);
         mTvUserName.setText(user.getName());
 
         mEtQuipBody = (EditText) v.findViewById(R.id.et_quip_create_body);
-        mEtQuipBody.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mTvQuipCount.setText(String.valueOf(s.length()));
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        mTvQuipCount = (TextView) v.findViewById(R.id.tv_quip_create_count);
-        mTvQuipCount.setText("0");
 
         mTvQuipSource = (TextView) v.findViewById(R.id.et_quip_create_source);
         mTvQuipSource.setOnClickListener(
