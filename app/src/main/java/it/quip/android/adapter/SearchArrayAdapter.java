@@ -48,6 +48,7 @@ public abstract class SearchArrayAdapter <T extends ParseObject> extends Recycle
     public SearchArrayAdapter(List<T> values, List<String> preselectedValues) {
         mValues = values;
         mPreselectedValues = preselectedValues;
+        mSelected = new HashSet<>();
     }
 
     public void setOnClickListener(OnClickListener onClickListener) {
@@ -58,7 +59,6 @@ public abstract class SearchArrayAdapter <T extends ParseObject> extends Recycle
     public SearchHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        mSelected = new HashSet<>();
 
         return getViewHolder(inflater, parent);
     }

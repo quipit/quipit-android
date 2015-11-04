@@ -2,8 +2,6 @@ package it.quip.android.task;
 
 import android.os.AsyncTask;
 
-import com.parse.ParseException;
-
 import java.util.List;
 
 import it.quip.android.listener.NotificationHandler;
@@ -22,7 +20,7 @@ public class MarkCurrentAsReadAndRefreshNotifications extends AsyncTask<MarkAndR
         if (notifications.size() > 0) {
             for (Notification n : notifications) {
                 if (n.getViewed() == false) {
-                    n.setViewed(false);
+                    n.setViewed(true);
                     n.saveInBackground();
                 }
             }
