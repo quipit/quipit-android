@@ -86,6 +86,7 @@ public abstract class QuipFeedFragment extends BaseFragment {
         mLlManager = new LinearLayoutManager(getContext());
 
         mRvFeed = (RecyclerView) view.findViewById(R.id.rv_feed);
+
         mRvFeed.setAdapter(mQuipsAdapter);
         mRvFeed.setLayoutManager(mLlManager);
         mRvFeed.addOnScrollListener(new EndlessScrollListener(mLlManager) {

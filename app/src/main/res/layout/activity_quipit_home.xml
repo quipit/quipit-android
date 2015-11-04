@@ -42,8 +42,6 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/nav_drawer"
             android:background="@android:color/white"
-            android:divider="@null"
-            android:dividerHeight="8sp"
             android:layout_below="@id/nav_header"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

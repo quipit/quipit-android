@@ -48,14 +48,14 @@ public class CirclesAdapter extends RecyclerView.Adapter<CirclesAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, final int position) {
         Circle circle = mCircles.get(position);
 
-        holder.tvName.setText(circle.getName());
-        holder.tvName.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onItemClick(position);
             }
         });
 
+        holder.tvName.setText(circle.getName());
         Picasso.with(mContext)
                 .load(circle.getAvatarImageURL())
                 .transform(new CircleTransformation())

@@ -6,17 +6,15 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical">
 
-    <ImageView
+    <ImageView android:id="@+id/iv_profile"
+        android:contentDescription="@string/description_profile"
         android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/iv_profile"
-        />
+        android:layout_height="50dp" />
 
-    <TextView
+    <TextView android:id="@+id/tv_user_name"
         android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_user_name"
-        />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
