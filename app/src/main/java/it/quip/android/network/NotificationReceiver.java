@@ -100,6 +100,20 @@ public class NotificationReceiver extends ParsePushBroadcastReceiver {
             pupInt.setAction(Notification.NOTIFICATION_RECEIVED_ACTION);
             pupInt.putExtra(Notification.MARSHALL_INTENT_KEY, notification);
             LocalBroadcastManager.getInstance(context).sendBroadcast(pupInt);
+        } else {
+            QuipitApplication.notificationManager().cancelAll();
+            android.app.Notification mBuilder =
+                    new NotificationCompat.Builder(context)
+                            .setSmallIcon(R.drawable.quipit)
+                            .setContentTitle("Quipit")
+                            .setContentText(notification.getText())
+                            .setContentIntent(pIntent)
+                            .setAutoCancel(true)
+                            .build();
+
+
+            // mId allows you to update the notification later on.
+            QuipitApplication.notificationManager().notify(0, mBuilder);
         }
 
     }
