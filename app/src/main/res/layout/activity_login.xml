@@ -7,13 +7,9 @@
     android:orientation="vertical"
     tools:context=".LoginActivity">
 
-    <it.quip.android.view.RotatingImageView
-        android:id="@+id/iv_carousel"
-        app:initialSrc="@drawable/nyc"
-        app:transitionDuration="2000"
-        app:transitionDelay="15000"
+    <ImageView
+        android:src="@drawable/sf"
         android:scaleType="centerCrop"
-        android:adjustViewBounds="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

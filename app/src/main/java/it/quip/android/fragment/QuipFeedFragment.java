@@ -81,6 +81,7 @@ public abstract class QuipFeedFragment extends BaseFragment {
 
     private void setupViewDependencies(View view) {
         mSrlFeed = (SwipeRefreshLayout) view.findViewById(R.id.srlFeed);
+        mSrlFeed.setColorSchemeResources(R.color.quipit_brand, R.color.quipit_brand_light);
         mSrlFeed.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

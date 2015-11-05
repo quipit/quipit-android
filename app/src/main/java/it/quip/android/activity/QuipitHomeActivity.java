@@ -206,7 +206,7 @@ public class QuipitHomeActivity extends BaseActivity implements TagClickListener
 
     private FragmentTransaction prepareFragment(Fragment fragment, boolean addToBackStack) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.setCustomAnimations(R.anim.slide_up, R.anim.fade_out);
+        ft.setCustomAnimations(R.anim.slide_up, R.anim.fade_out, R.anim.slide_down, R.anim.fade_in);
         ft.replace(R.id.fl_content, fragment);
         if (addToBackStack) {
             ft.addToBackStack(null);

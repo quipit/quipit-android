@@ -83,12 +83,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationH
                 refreshNotifications();
             }
         });
-        mSwipeContainer.setColorSchemeResources(
-                // TODO: theme this
-                android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+        mSwipeContainer.setColorSchemeResources(R.color.quipit_brand, R.color.quipit_brand_light);
     }
 
     public void refreshNotifications() {
